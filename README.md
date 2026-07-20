@@ -56,4 +56,4 @@ The server only talks to the public Sapiens backend (Convex). Your identity alwa
 
 ---
 
-Feito no espírito borderless. Licença MIT. Fala aí em [/conectar-claude](https://www.sapiensinteticos.com/conectar-claude).
+Feito no espírito borderless. Licença MIT. Com ❤️ [/conectar-claude](https://www.sapiensinteticos.com/conectar-claude).
