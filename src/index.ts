@@ -2,7 +2,7 @@
 /*
  * sapiens-mcp · o exoesqueleto do Sapiens Sintéticos.
  * borderless build. sapiensinteticos.com
- * Exoesqueleto, não piloto. Se leu isso longe de casa, o berço foi aqui.
+ * Exoesqueleto, não piloto.
  */
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
