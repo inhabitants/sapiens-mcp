@@ -1,0 +1,13 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "com.sapiensinteticos/sapiens",
+  "description": "Operate your Sapiens Sintéticos account from any MCP client: image, article, voice, music, video.",
+  "version": "1.38.0",
+  "websiteUrl": "https://www.sapiensinteticos.com/conectar-claude",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://sapiensinteticos.com/api/mcp/mcp"
+    }
+  ]
+}

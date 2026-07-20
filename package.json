@@ -1,0 +1,58 @@
+{
+  "name": "sapiens-mcp",
+  "version": "1.38.0",
+  "description": "MCP server pra operar o Sapiens Sintéticos (sapiensinteticos.com) pelo Claude Code: gerar imagem, escrever artigo, voz, música e mais, na sua conta. Login pelo código de sapiensinteticos.com/conectar-claude.",
+  "type": "module",
+  "bin": {
+    "sapiens-mcp": "./dist/index.js"
+  },
+  "exports": {
+    "./remote": "./dist/remote.js",
+    "./registry": "./dist/registry.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "homepage": "https://www.sapiensinteticos.com/conectar-claude",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "sapiens",
+    "claude",
+    "claude-code",
+    "ai",
+    "image-generation"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js",
+    "pretest": "npm run build",
+    "test": "node --test --test-force-exit test/unit.test.mjs test/server.test.mjs test/remote.test.mjs test/remote-protect.test.mjs",
+    "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inhabitants/sapiens-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/inhabitants/sapiens-mcp/issues"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "convex": "^1.41.0",
+    "mcp-handler": "^1.1.0",
+    "zod": "^3.23.8",
+    "zod-to-json-schema": "^3.23.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}
