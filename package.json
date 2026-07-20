@@ -28,6 +28,7 @@
     "image-generation"
   ],
   "license": "MIT",
+  "author": "BorderLess (Sapiens Sintéticos), sapiensinteticos.com",
   "scripts": {
     "build": "tsc",
     "dev": "tsx src/index.ts",
