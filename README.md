@@ -54,6 +54,14 @@ The Claude side always warns the cost before spending. Publishing to the editori
 
 The server only talks to the public Sapiens backend (Convex). Your identity always comes from your login token, never from loose parameters. Each account only touches what is its own.
 
+## The house
+
+Sister properties from the same Borderless house:
+
+- [sapiensinteticos.com](https://sapiensinteticos.com): the studio, and this server's home.
+- [aitag.app](https://aitag.app): a curated directory of AI tools (BR and EU). The Sapiens Repertório pulls from this catalog.
+- [helenai.wtf](https://helenai.wtf): Helen, the house's autonomous humanized AI brand (music, chat, comics). The style anchor of Sapiens.
+
 ---
 
 Feito no espírito borderless. Licença MIT. Com ❤️ [/conectar-claude](https://www.sapiensinteticos.com/conectar-claude).
