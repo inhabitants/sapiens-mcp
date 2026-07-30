@@ -1,5 +1,7 @@
 # sapiens-mcp
 
+![Helen Ailith at a dark desk, forearms wrapped in a glowing green exoskeleton, moving slabs of light with open hands](https://sapiensinteticos.b-cdn.net/borderlessprotocol/2026/07/1785430717302_e8p3i4.webp)
+
 **On the official [MCP registry](https://registry.modelcontextprotocol.io) as `com.sapiensinteticos/sapiens`.**
 
 An MCP server to operate your [Sapiens Sintéticos](https://sapiensinteticos.com) account from Claude Code, or any MCP client, in your own account. You ask in plain language ("generate an image of this", "write an essay on that") and it does the work, spending your Sinapses (the house credit) and saving to your profile.
@@ -11,6 +13,8 @@ Sapiens Sintéticos is an AI prototyping lab. This server is the exoskeleton: im
 You connect with a Sapiens account (Google or email), no API key, no card. Accounts and login live on the site, never here. No account yet? Create one at [sapiensinteticos.com](https://sapiensinteticos.com). Every action shows its cost before it runs, and a failed generation is refunded. The remote endpoint is fail-closed: no valid session, nothing runs.
 
 ## Connect (two ways)
+
+![Helen holding up a single key of green light between two doorways: a frameless rectangle of light and a physical terminal cabinet](https://sapiensinteticos.b-cdn.net/borderlessprotocol/2026/07/1785430826064_avwjib.webp)
 
 **Remote (any MCP client, streamable HTTP).** Point your client at:
 
@@ -31,6 +35,8 @@ Node 18+. The backend URL is built in, nothing to configure. Then log in: open [
 Works in Claude Code (the tested path), Gemini CLI, Cursor, Antigravity, and any MCP-speaking client. Only the way you add it changes.
 
 ## What you can ask (and the cost in Sinapses)
+
+![Helen with one arm extended, orbited by a camera lens, film reels, a vinyl record, an open notebook and a studio microphone](https://sapiensinteticos.b-cdn.net/borderlessprotocol/2026/07/1785430870745_waml5a.webp)
 
 | What | Cost |
 |---|---|
