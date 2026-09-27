@@ -4,6 +4,11 @@
 
 **On the official [MCP registry](https://registry.modelcontextprotocol.io) as `com.sapiensinteticos/sapiens`.**
 
+<p align="center">
+  <a href="https://sapiensinteticos.b-cdn.net/videos/films/abre-alas/sapiens-mcp-intro-en-e17d0673.mp4"><img src="https://sapiensinteticos.b-cdn.net/videos/films/abre-alas/sapiens-mcp-intro-en-db494de3.jpg" width="720" alt="sapiens-mcp in 15 seconds: you talk, your AI does it"></a><br>
+  <a href="https://sapiensinteticos.b-cdn.net/videos/films/abre-alas/sapiens-mcp-intro-en-e17d0673.mp4"><b>Watch it in 15 seconds, sound on</b></a> · <a href="https://sapiensinteticos.b-cdn.net/videos/films/abre-alas/sapiens-mcp-intro-9x16-en-2e67ed46.mp4">vertical cut</a> · <a href="https://sapiensinteticos.b-cdn.net/videos/films/abre-alas/sapiens-mcp-intro-pt-3e96346c.mp4">em português</a>
+</p>
+
 An MCP server to operate your [Sapiens Sintéticos](https://sapiensinteticos.com) account from Claude Code, or any MCP client, in your own account. You ask in plain language ("generate an image of this", "write an essay on that") and it does the work, spending your Sinapses (the house credit) and saving to your profile.
 
 Sapiens Sintéticos is an AI prototyping lab. This server is the exoskeleton: image, video, article, voice, music, a personal Repertório (the creative memory the rest reads from), and the community, all from a single conversation.
