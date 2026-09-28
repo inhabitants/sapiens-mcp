@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "sapiens": {
+      "command": "node",
+      "args": [
+        "${CLAUDE_PLUGIN_ROOT}/server/index.mjs"
+      ],
+      "env": {
+        "SAPIENS_MCP_CANAL": "plugin",
+        "SAPIENS_FAL_KEY": "${user_config.fal_key}",
+        "SAPIENS_KIE_API_KEY": "${user_config.kie_api_key}"
+      }
+    }
+  }
+}

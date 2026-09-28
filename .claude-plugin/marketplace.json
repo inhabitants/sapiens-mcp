@@ -1,0 +1,15 @@
+{
+  "name": "sapiens-sinteticos",
+  "description": "O plugin do Sapiens Sintéticos para o Claude Code.",
+  "owner": {
+    "name": "Sapiens Sintéticos",
+    "url": "https://www.sapiensinteticos.com"
+  },
+  "plugins": [
+    {
+      "name": "sapiens-sinteticos",
+      "source": "./plugins/sapiens-sinteticos",
+      "description": "Para o Claude Code: as skills do Sapiens Sintéticos e o servidor da sua conta, rodando no seu computador. Gera em Sinapse ou com a sua chave da fal e da Kie, guardada na sua máquina."
+    }
+  ]
+}

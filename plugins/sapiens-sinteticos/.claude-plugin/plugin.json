@@ -1,0 +1,41 @@
+{
+  "name": "sapiens-sinteticos",
+  "displayName": "Sapiens Sintéticos",
+  "version": "1.80.0",
+  "description": "Para o Claude Code: as skills do Sapiens Sintéticos e o servidor da sua conta, rodando no seu computador. Gera em Sinapse ou com a sua chave da fal e da Kie, guardada na sua máquina.",
+  "author": {
+    "name": "Sapiens Sintéticos",
+    "url": "https://www.sapiensinteticos.com"
+  },
+  "homepage": "https://www.sapiensinteticos.com/conectar-claude",
+  "repository": "https://github.com/inhabitants/sapiens-mcp",
+  "license": "MIT",
+  "keywords": [
+    "sapiens",
+    "claude-code",
+    "personagem",
+    "imagem",
+    "video",
+    "musica",
+    "fal",
+    "kie"
+  ],
+  "userConfig": {
+    "fal_key": {
+      "type": "string",
+      "title": "Chave da fal (opcional)",
+      "description": "Em branco, você gera em Sinapse. Preenchida, gera no seu crédito da fal.ai, sem margem da casa. Vai pro cofre do sistema e sai daqui só pra fal.",
+      "sensitive": true,
+      "required": false,
+      "default": ""
+    },
+    "kie_api_key": {
+      "type": "string",
+      "title": "Chave da Kie (opcional)",
+      "description": "Em branco, você gera em Sinapse. Preenchida, gera no seu crédito da Kie, sem margem da casa. Vai pro cofre do sistema e sai daqui só pra Kie.",
+      "sensitive": true,
+      "required": false,
+      "default": ""
+    }
+  }
+}
