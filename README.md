@@ -17,19 +17,35 @@ Sapiens Sintéticos is an AI prototyping lab. This server is the exoskeleton: im
 
 You connect with a Sapiens account (Google or email), no API key, no card. Accounts and login live on the site, never here. No account yet? Create one at [sapiensinteticos.com](https://sapiensinteticos.com). Every action shows its cost before it runs, and a failed generation is refunded. The remote endpoint is fail-closed: no valid session, nothing runs.
 
-## Connect (two ways)
+## Connect
 
 ![Helen holding up a single key of green light between two doorways: a frameless rectangle of light and a physical terminal cabinet](https://sapiensinteticos.b-cdn.net/borderlessprotocol/2026/07/1785430826064_avwjib.webp)
+
+| Where you use Claude | What to install |
+| --- | --- |
+| Claude Code (terminal, desktop app, VS Code) | the plugin, right below |
+| Claude chat (web, desktop, mobile) | the connector at [/conectar-claude](https://www.sapiensinteticos.com/conectar-claude) |
+| Claude Desktop chat with your own key | the desktop extension, [sapiens.mcpb](https://sapiensinteticos.b-cdn.net/mcpb/sapiens.mcpb) |
+| Cursor, Gemini CLI and other MCP clients | `npx -y sapiens-mcp` |
+
+**Claude Code: the plugin.** One install brings the house skills, native to Claude Code (they load when the topic matches and show up under `/`), and the Sapiens server, running on your computer:
+
+```
+/plugin marketplace add inhabitants/sapiens-mcp
+/plugin install sapiens-sinteticos@sapiens-sinteticos
+```
+
+Node 18+. On enable, Claude Code asks for two optional keys, fal and Kie. Blank, you generate with Sinapses. Filled in, you generate on your own provider credit, with no house margin, and the key stays in your system's credential store. To connect your account, generate a code at [/conectar-claude](https://www.sapiensinteticos.com/conectar-claude) and tell Claude "connect my Sapiens account, code XXXX-XXXX". More in [plugins/sapiens-sinteticos](plugins/sapiens-sinteticos).
 
 **Remote (any MCP client, streamable HTTP).** Point your client at:
 
 ```
-https://sapiensinteticos.com/api/mcp/mcp
+https://www.sapiensinteticos.com/api/mcp/mcp
 ```
 
-with the header `Authorization: Bearer <sessionToken>`. Generate the token at [sapiensinteticos.com/conectar-claude](https://www.sapiensinteticos.com/conectar-claude). Identity is always the bearer, so there is no local login on the remote transport.
+with the header `Authorization: Bearer <sessionToken>`. Generate the token at [sapiensinteticos.com/conectar-claude](https://www.sapiensinteticos.com/conectar-claude). Identity is always the bearer, so there is no local login on the remote transport. Keep the `www`: the bare domain redirects, and the redirect drops the header.
 
-**Local (Claude Code, npm / stdio).**
+**Local (any MCP client, npm / stdio).** Your client runs `npx -y sapiens-mcp`. In Claude Code, without the plugin:
 
 ```bash
 claude mcp add sapiens -- npx -y sapiens-mcp
@@ -37,7 +53,7 @@ claude mcp add sapiens -- npx -y sapiens-mcp
 
 Node 18+. The backend URL is built in, nothing to configure. Then log in: open [/conectar-claude](https://www.sapiensinteticos.com/conectar-claude) while signed in, generate the code (`XXXX-XXXX`, valid for 5 minutes), and run `sapiens_meta` with `action: "login"` and `code: "XXXX-XXXX"`. The 30-day token is saved to `~/.sapiens-mcp/session.json`.
 
-Works in Claude Code (the tested path), Gemini CLI, Cursor, Antigravity, and any MCP-speaking client. Only the way you add it changes.
+Works in Gemini CLI, Cursor, Antigravity, Claude Code and any MCP-speaking client. Only the way you add it changes.
 
 ## What you can ask (and the cost in Sinapses)
 
@@ -57,13 +73,13 @@ The Claude side always warns the cost before spending. Publishing to the editori
 ## Troubleshooting
 
 - **"sessionToken expired" / "Sapiens account not connected".** The 30-day token lapsed or was never saved. Open [/conectar-claude](https://www.sapiensinteticos.com/conectar-claude) signed in, generate a fresh code, and run `sapiens_meta action=login code=XXXX-XXXX`.
-- **A tool or a new capability went missing after an update.** The client runs via `npx -y sapiens-mcp` (unpinned) and may be stuck on an old cache. Check what is running with `sapiens_meta action=version` (binary version, latest on npm, and `upToDate`). If `upToDate:false`, clear the npx cache and restart the client.
+- **A tool or a new capability went missing after an update.** The client runs via `npx -y sapiens-mcp` (unpinned) and may be stuck on an old cache. Check what is running with `sapiens_meta action=version` (binary version, latest on npm, and `upToDate`). If `upToDate:false`, clear the npx cache and restart the client. With the plugin: `/plugin`, Installed tab, Sapiens Sintéticos, Update now, then `/reload-plugins`.
 - **"Invalid arguments".** The message already names the field that is missing or wrong, redo the call with what it asks. Do not repeat the same failing call (3 failures in a row make the client mark the server unreachable for about a minute, an anti-loop breaker).
 - **Low balance before generating.** `sapiens_meta action=credits` (or `action=subscription` for the per-bucket detail) shows what is left before you spend on image, music, or video.
 
 ## Privacy
 
-The server only talks to the public Sapiens backend (Convex). Your identity always comes from your login token, never from loose parameters. Each account only touches what is its own.
+The server only talks to the public Sapiens backend (Convex). With your own fal or Kie key, generations go from your computer straight to that provider. Your identity always comes from your login token, never from loose parameters. Each account only touches what is its own.
 
 ## The house
 
