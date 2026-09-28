@@ -8,7 +8,9 @@
       "env": {
         "SAPIENS_MCP_CANAL": "plugin",
         "SAPIENS_FAL_KEY": "${user_config.fal_key}",
-        "SAPIENS_KIE_API_KEY": "${user_config.kie_api_key}"
+        "SAPIENS_KIE_API_KEY": "${user_config.kie_api_key}",
+        "SAPIENS_WAVESPEED_API_KEY": "${user_config.wavespeed_api_key}",
+        "SAPIENS_REPLICATE_API_TOKEN": "${user_config.replicate_api_token}"
       }
     }
   }

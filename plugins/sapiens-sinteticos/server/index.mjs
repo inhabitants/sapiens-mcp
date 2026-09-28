@@ -43,10 +43,10 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 ));
 
-// ../../node_modules/zod/v3/helpers/util.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod/v3/helpers/util.js
 var util, objectUtil, ZodParsedType, getParsedType2;
 var init_util = __esm({
-  "../../node_modules/zod/v3/helpers/util.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod/v3/helpers/util.js"() {
     (function(util2) {
       util2.assertEqual = (_) => {
       };
@@ -180,10 +180,10 @@ var init_util = __esm({
   }
 });
 
-// ../../node_modules/zod/v3/ZodError.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod/v3/ZodError.js
 var ZodIssueCode, quotelessJson, ZodError;
 var init_ZodError = __esm({
-  "../../node_modules/zod/v3/ZodError.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod/v3/ZodError.js"() {
     init_util();
     ZodIssueCode = util.arrayToEnum([
       "invalid_type",
@@ -304,10 +304,10 @@ var init_ZodError = __esm({
   }
 });
 
-// ../../node_modules/zod/v3/locales/en.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod/v3/locales/en.js
 var errorMap, en_default2;
 var init_en = __esm({
-  "../../node_modules/zod/v3/locales/en.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod/v3/locales/en.js"() {
     init_ZodError();
     init_util();
     errorMap = (issue2, _ctx) => {
@@ -414,7 +414,7 @@ var init_en = __esm({
   }
 });
 
-// ../../node_modules/zod/v3/errors.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod/v3/errors.js
 function setErrorMap(map) {
   overrideErrorMap = map;
 }
@@ -423,13 +423,13 @@ function getErrorMap() {
 }
 var overrideErrorMap;
 var init_errors = __esm({
-  "../../node_modules/zod/v3/errors.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod/v3/errors.js"() {
     init_en();
     overrideErrorMap = en_default2;
   }
 });
 
-// ../../node_modules/zod/v3/helpers/parseUtil.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod/v3/helpers/parseUtil.js
 function addIssueToContext(ctx, issueData) {
   const overrideMap = getErrorMap();
   const issue2 = makeIssue({
@@ -451,7 +451,7 @@ function addIssueToContext(ctx, issueData) {
 }
 var makeIssue, EMPTY_PATH, ParseStatus, INVALID, DIRTY, OK, isAborted, isDirty, isValid, isAsync;
 var init_parseUtil = __esm({
-  "../../node_modules/zod/v3/helpers/parseUtil.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod/v3/helpers/parseUtil.js"() {
     init_errors();
     init_en();
     makeIssue = (params) => {
@@ -546,16 +546,16 @@ var init_parseUtil = __esm({
   }
 });
 
-// ../../node_modules/zod/v3/helpers/typeAliases.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod/v3/helpers/typeAliases.js
 var init_typeAliases = __esm({
-  "../../node_modules/zod/v3/helpers/typeAliases.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod/v3/helpers/typeAliases.js"() {
   }
 });
 
-// ../../node_modules/zod/v3/helpers/errorUtil.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod/v3/helpers/errorUtil.js
 var errorUtil;
 var init_errorUtil = __esm({
-  "../../node_modules/zod/v3/helpers/errorUtil.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod/v3/helpers/errorUtil.js"() {
     (function(errorUtil2) {
       errorUtil2.errToObj = (message) => typeof message === "string" ? { message } : message || {};
       errorUtil2.toString = (message) => typeof message === "string" ? message : message?.message;
@@ -563,7 +563,7 @@ var init_errorUtil = __esm({
   }
 });
 
-// ../../node_modules/zod/v3/types.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod/v3/types.js
 function processCreateParams(params) {
   if (!params)
     return {};
@@ -757,7 +757,7 @@ function custom2(check, _params = {}, fatal) {
 }
 var ParseInputLazyPath, handleResult, ZodType2, cuidRegex, cuid2Regex, ulidRegex, uuidRegex, nanoidRegex, jwtRegex, durationRegex, emailRegex, _emojiRegex, emojiRegex, ipv4Regex, ipv4CidrRegex, ipv6Regex, ipv6CidrRegex, base64Regex, base64urlRegex, dateRegexSource, dateRegex, ZodString2, ZodNumber2, ZodBigInt, ZodBoolean2, ZodDate, ZodSymbol, ZodUndefined, ZodNull2, ZodAny, ZodUnknown2, ZodNever2, ZodVoid, ZodArray2, ZodObject2, ZodUnion2, getDiscriminator, ZodDiscriminatedUnion2, ZodIntersection2, ZodTuple, ZodRecord2, ZodMap, ZodSet, ZodFunction, ZodLazy, ZodLiteral2, ZodEnum2, ZodNativeEnum, ZodPromise, ZodEffects, ZodOptional2, ZodNullable2, ZodDefault2, ZodCatch2, ZodNaN, BRAND, ZodBranded, ZodPipeline, ZodReadonly2, late, ZodFirstPartyTypeKind, instanceOfType, stringType, numberType, nanType, bigIntType, booleanType, dateType, symbolType, undefinedType, nullType, anyType, unknownType, neverType, voidType, arrayType, objectType, strictObjectType, unionType, discriminatedUnionType, intersectionType, tupleType, recordType, mapType, setType, functionType, lazyType, literalType, enumType, nativeEnumType, promiseType, effectsType, optionalType, nullableType, preprocessType, pipelineType, ostring, onumber, oboolean, coerce, NEVER;
 var init_types = __esm({
-  "../../node_modules/zod/v3/types.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod/v3/types.js"() {
     init_ZodError();
     init_errors();
     init_errorUtil();
@@ -4019,7 +4019,7 @@ var init_types = __esm({
   }
 });
 
-// ../../node_modules/zod/v3/external.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod/v3/external.js
 var external_exports = {};
 __export(external_exports, {
   BRAND: () => BRAND,
@@ -4131,7 +4131,7 @@ __export(external_exports, {
   void: () => voidType
 });
 var init_external = __esm({
-  "../../node_modules/zod/v3/external.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod/v3/external.js"() {
     init_errors();
     init_parseUtil();
     init_typeAliases();
@@ -4141,9 +4141,9 @@ var init_external = __esm({
   }
 });
 
-// node_modules/ajv/dist/compile/codegen/code.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/compile/codegen/code.js
 var require_code = __commonJS({
-  "node_modules/ajv/dist/compile/codegen/code.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/compile/codegen/code.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.regexpCode = exports.getEsmExportName = exports.getProperty = exports.safeStringify = exports.stringify = exports.strConcat = exports.addCodeArg = exports.str = exports._ = exports.nil = exports._Code = exports.Name = exports.IDENTIFIER = exports._CodeOrName = void 0;
@@ -4295,9 +4295,9 @@ var require_code = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/compile/codegen/scope.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/compile/codegen/scope.js
 var require_scope = __commonJS({
-  "node_modules/ajv/dist/compile/codegen/scope.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/compile/codegen/scope.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ValueScope = exports.ValueScopeName = exports.Scope = exports.varKinds = exports.UsedValueState = void 0;
@@ -4440,9 +4440,9 @@ var require_scope = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/compile/codegen/index.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/compile/codegen/index.js
 var require_codegen = __commonJS({
-  "node_modules/ajv/dist/compile/codegen/index.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/compile/codegen/index.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.or = exports.and = exports.not = exports.CodeGen = exports.operators = exports.varKinds = exports.ValueScopeName = exports.ValueScope = exports.Scope = exports.Name = exports.regexpCode = exports.stringify = exports.getProperty = exports.nil = exports.strConcat = exports.str = exports._ = void 0;
@@ -5160,9 +5160,9 @@ var require_codegen = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/compile/util.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/compile/util.js
 var require_util = __commonJS({
-  "node_modules/ajv/dist/compile/util.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/compile/util.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.checkStrictMode = exports.getErrorPath = exports.Type = exports.useFunc = exports.setEvaluated = exports.evaluatedPropsToName = exports.mergeEvaluated = exports.eachItem = exports.unescapeJsonPointer = exports.escapeJsonPointer = exports.escapeFragment = exports.unescapeFragment = exports.schemaRefOrVal = exports.schemaHasRulesButRef = exports.schemaHasRules = exports.checkUnknownRules = exports.alwaysValidSchema = exports.toHash = void 0;
@@ -5327,9 +5327,9 @@ var require_util = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/compile/names.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/compile/names.js
 var require_names = __commonJS({
-  "node_modules/ajv/dist/compile/names.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/compile/names.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var codegen_1 = require_codegen();
@@ -5366,9 +5366,9 @@ var require_names = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/compile/errors.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/compile/errors.js
 var require_errors = __commonJS({
-  "node_modules/ajv/dist/compile/errors.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/compile/errors.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.extendErrors = exports.resetErrorsCount = exports.reportExtraError = exports.reportError = exports.keyword$DataError = exports.keywordError = void 0;
@@ -5488,9 +5488,9 @@ var require_errors = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/compile/validate/boolSchema.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/compile/validate/boolSchema.js
 var require_boolSchema = __commonJS({
-  "node_modules/ajv/dist/compile/validate/boolSchema.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/compile/validate/boolSchema.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.boolOrEmptySchema = exports.topBoolOrEmptySchema = void 0;
@@ -5539,9 +5539,9 @@ var require_boolSchema = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/compile/rules.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/compile/rules.js
 var require_rules = __commonJS({
-  "node_modules/ajv/dist/compile/rules.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/compile/rules.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getRules = exports.isJSONType = void 0;
@@ -5570,9 +5570,9 @@ var require_rules = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/compile/validate/applicability.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/compile/validate/applicability.js
 var require_applicability = __commonJS({
-  "node_modules/ajv/dist/compile/validate/applicability.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/compile/validate/applicability.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.shouldUseRule = exports.shouldUseGroup = exports.schemaHasRulesForType = void 0;
@@ -5593,9 +5593,9 @@ var require_applicability = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/compile/validate/dataType.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/compile/validate/dataType.js
 var require_dataType = __commonJS({
-  "node_modules/ajv/dist/compile/validate/dataType.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/compile/validate/dataType.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.reportTypeError = exports.checkDataTypes = exports.checkDataType = exports.coerceAndCheckDataType = exports.getJSONTypes = exports.getSchemaTypes = exports.DataType = void 0;
@@ -5777,9 +5777,9 @@ var require_dataType = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/compile/validate/defaults.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/compile/validate/defaults.js
 var require_defaults = __commonJS({
-  "node_modules/ajv/dist/compile/validate/defaults.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/compile/validate/defaults.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.assignDefaults = void 0;
@@ -5814,9 +5814,9 @@ var require_defaults = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/code.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/code.js
 var require_code2 = __commonJS({
-  "node_modules/ajv/dist/vocabularies/code.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/code.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.validateUnion = exports.validateArray = exports.usePattern = exports.callValidateCode = exports.schemaProperties = exports.allSchemaProperties = exports.noPropertyInData = exports.propertyInData = exports.isOwnProperty = exports.hasPropFunc = exports.reportMissingProp = exports.checkMissingProp = exports.checkReportMissingProp = void 0;
@@ -5947,9 +5947,9 @@ var require_code2 = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/compile/validate/keyword.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/compile/validate/keyword.js
 var require_keyword = __commonJS({
-  "node_modules/ajv/dist/compile/validate/keyword.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/compile/validate/keyword.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.validateKeywordUsage = exports.validSchemaType = exports.funcKeywordCode = exports.macroKeywordCode = void 0;
@@ -6065,9 +6065,9 @@ var require_keyword = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/compile/validate/subschema.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/compile/validate/subschema.js
 var require_subschema = __commonJS({
-  "node_modules/ajv/dist/compile/validate/subschema.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/compile/validate/subschema.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.extendSubschemaMode = exports.extendSubschemaData = exports.getSubschema = void 0;
@@ -6148,9 +6148,9 @@ var require_subschema = __commonJS({
   }
 });
 
-// ../../node_modules/fast-deep-equal/index.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/fast-deep-equal/index.js
 var require_fast_deep_equal = __commonJS({
-  "../../node_modules/fast-deep-equal/index.js"(exports, module) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/fast-deep-equal/index.js"(exports, module) {
     "use strict";
     module.exports = function equal(a, b) {
       if (a === b) return true;
@@ -6183,9 +6183,9 @@ var require_fast_deep_equal = __commonJS({
   }
 });
 
-// node_modules/json-schema-traverse/index.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/json-schema-traverse/index.js
 var require_json_schema_traverse = __commonJS({
-  "node_modules/json-schema-traverse/index.js"(exports, module) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/json-schema-traverse/index.js"(exports, module) {
     "use strict";
     var traverse = module.exports = function(schema, opts, cb) {
       if (typeof opts == "function") {
@@ -6271,9 +6271,9 @@ var require_json_schema_traverse = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/compile/resolve.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/compile/resolve.js
 var require_resolve = __commonJS({
-  "node_modules/ajv/dist/compile/resolve.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/compile/resolve.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getSchemaRefs = exports.resolveUrl = exports.normalizeId = exports._getFullPath = exports.getFullPath = exports.inlineRef = void 0;
@@ -6427,9 +6427,9 @@ var require_resolve = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/compile/validate/index.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/compile/validate/index.js
 var require_validate = __commonJS({
-  "node_modules/ajv/dist/compile/validate/index.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/compile/validate/index.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getData = exports.KeywordCxt = exports.validateFunctionCode = void 0;
@@ -6935,9 +6935,9 @@ var require_validate = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/runtime/validation_error.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/runtime/validation_error.js
 var require_validation_error = __commonJS({
-  "node_modules/ajv/dist/runtime/validation_error.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/runtime/validation_error.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var ValidationError = class extends Error {
@@ -6951,9 +6951,9 @@ var require_validation_error = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/compile/ref_error.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/compile/ref_error.js
 var require_ref_error = __commonJS({
-  "node_modules/ajv/dist/compile/ref_error.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/compile/ref_error.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var resolve_1 = require_resolve();
@@ -6968,9 +6968,9 @@ var require_ref_error = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/compile/index.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/compile/index.js
 var require_compile = __commonJS({
-  "node_modules/ajv/dist/compile/index.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/compile/index.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.resolveSchema = exports.getCompilingSchema = exports.resolveRef = exports.compileSchema = exports.SchemaEnv = void 0;
@@ -7192,9 +7192,9 @@ var require_compile = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/refs/data.json
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/refs/data.json
 var require_data = __commonJS({
-  "node_modules/ajv/dist/refs/data.json"(exports, module) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/refs/data.json"(exports, module) {
     module.exports = {
       $id: "https://raw.githubusercontent.com/ajv-validator/ajv/master/lib/refs/data.json#",
       description: "Meta-schema for $data reference (JSON AnySchema extension proposal)",
@@ -7211,9 +7211,9 @@ var require_data = __commonJS({
   }
 });
 
-// ../../node_modules/fast-uri/lib/utils.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/fast-uri/lib/utils.js
 var require_utils = __commonJS({
-  "../../node_modules/fast-uri/lib/utils.js"(exports, module) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/fast-uri/lib/utils.js"(exports, module) {
     "use strict";
     var isUUID = RegExp.prototype.test.bind(/^[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/iu);
     var isIPv4 = RegExp.prototype.test.bind(/^(?:(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]\d|\d)\.){3}(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]\d|\d)$/u);
@@ -7524,9 +7524,9 @@ var require_utils = __commonJS({
   }
 });
 
-// ../../node_modules/fast-uri/lib/schemes.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/fast-uri/lib/schemes.js
 var require_schemes = __commonJS({
-  "../../node_modules/fast-uri/lib/schemes.js"(exports, module) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/fast-uri/lib/schemes.js"(exports, module) {
     "use strict";
     var { isUUID } = require_utils();
     var URN_REG = /([\da-z][\d\-a-z]{0,31}):((?:[\w!$'()*+,\-.:;=@]|%[\da-f]{2})+)/iu;
@@ -7734,9 +7734,9 @@ var require_schemes = __commonJS({
   }
 });
 
-// ../../node_modules/fast-uri/index.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/fast-uri/index.js
 var require_fast_uri = __commonJS({
-  "../../node_modules/fast-uri/index.js"(exports, module) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/fast-uri/index.js"(exports, module) {
     "use strict";
     var { normalizeIPv6, removeDotSegments, recomposeAuthority, normalizePercentEncoding, normalizePathEncoding, escapePreservingEscapes, reescapeHostDelimiters, isIPv4, nonSimpleDomain } = require_utils();
     var { SCHEMES, getSchemeHandler } = require_schemes();
@@ -8046,9 +8046,9 @@ var require_fast_uri = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/runtime/uri.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/runtime/uri.js
 var require_uri = __commonJS({
-  "node_modules/ajv/dist/runtime/uri.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/runtime/uri.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var uri = require_fast_uri();
@@ -8057,9 +8057,9 @@ var require_uri = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/core.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/core.js
 var require_core = __commonJS({
-  "node_modules/ajv/dist/core.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/core.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CodeGen = exports.Name = exports.nil = exports.stringify = exports.str = exports._ = exports.KeywordCxt = void 0;
@@ -8668,9 +8668,9 @@ var require_core = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/core/id.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/core/id.js
 var require_id = __commonJS({
-  "node_modules/ajv/dist/vocabularies/core/id.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/core/id.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var def = {
@@ -8683,9 +8683,9 @@ var require_id = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/core/ref.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/core/ref.js
 var require_ref = __commonJS({
-  "node_modules/ajv/dist/vocabularies/core/ref.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/core/ref.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.callRef = exports.getValidate = void 0;
@@ -8805,9 +8805,9 @@ var require_ref = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/core/index.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/core/index.js
 var require_core2 = __commonJS({
-  "node_modules/ajv/dist/vocabularies/core/index.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/core/index.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var id_1 = require_id();
@@ -8826,9 +8826,9 @@ var require_core2 = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/validation/limitNumber.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/validation/limitNumber.js
 var require_limitNumber = __commonJS({
-  "node_modules/ajv/dist/vocabularies/validation/limitNumber.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/validation/limitNumber.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var codegen_1 = require_codegen();
@@ -8858,9 +8858,9 @@ var require_limitNumber = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/validation/multipleOf.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/validation/multipleOf.js
 var require_multipleOf = __commonJS({
-  "node_modules/ajv/dist/vocabularies/validation/multipleOf.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/validation/multipleOf.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var codegen_1 = require_codegen();
@@ -8886,9 +8886,9 @@ var require_multipleOf = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/runtime/ucs2length.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/runtime/ucs2length.js
 var require_ucs2length = __commonJS({
-  "node_modules/ajv/dist/runtime/ucs2length.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/runtime/ucs2length.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     function ucs2length(str) {
@@ -8912,9 +8912,9 @@ var require_ucs2length = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/validation/limitLength.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/validation/limitLength.js
 var require_limitLength = __commonJS({
-  "node_modules/ajv/dist/vocabularies/validation/limitLength.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/validation/limitLength.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var codegen_1 = require_codegen();
@@ -8944,9 +8944,9 @@ var require_limitLength = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/validation/pattern.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/validation/pattern.js
 var require_pattern = __commonJS({
-  "node_modules/ajv/dist/vocabularies/validation/pattern.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/validation/pattern.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var code_1 = require_code2();
@@ -8981,9 +8981,9 @@ var require_pattern = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/validation/limitProperties.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/validation/limitProperties.js
 var require_limitProperties = __commonJS({
-  "node_modules/ajv/dist/vocabularies/validation/limitProperties.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/validation/limitProperties.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var codegen_1 = require_codegen();
@@ -9010,9 +9010,9 @@ var require_limitProperties = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/validation/required.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/validation/required.js
 var require_required = __commonJS({
-  "node_modules/ajv/dist/vocabularies/validation/required.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/validation/required.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var code_1 = require_code2();
@@ -9092,9 +9092,9 @@ var require_required = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/validation/limitItems.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/validation/limitItems.js
 var require_limitItems = __commonJS({
-  "node_modules/ajv/dist/vocabularies/validation/limitItems.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/validation/limitItems.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var codegen_1 = require_codegen();
@@ -9121,9 +9121,9 @@ var require_limitItems = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/runtime/equal.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/runtime/equal.js
 var require_equal = __commonJS({
-  "node_modules/ajv/dist/runtime/equal.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/runtime/equal.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var equal = require_fast_deep_equal();
@@ -9132,9 +9132,9 @@ var require_equal = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/validation/uniqueItems.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/validation/uniqueItems.js
 var require_uniqueItems = __commonJS({
-  "node_modules/ajv/dist/vocabularies/validation/uniqueItems.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/validation/uniqueItems.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var dataType_1 = require_dataType();
@@ -9199,9 +9199,9 @@ var require_uniqueItems = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/validation/const.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/validation/const.js
 var require_const = __commonJS({
-  "node_modules/ajv/dist/vocabularies/validation/const.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/validation/const.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var codegen_1 = require_codegen();
@@ -9228,9 +9228,9 @@ var require_const = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/validation/enum.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/validation/enum.js
 var require_enum = __commonJS({
-  "node_modules/ajv/dist/vocabularies/validation/enum.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/validation/enum.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var codegen_1 = require_codegen();
@@ -9277,9 +9277,9 @@ var require_enum = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/validation/index.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/validation/index.js
 var require_validation = __commonJS({
-  "node_modules/ajv/dist/vocabularies/validation/index.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/validation/index.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var limitNumber_1 = require_limitNumber();
@@ -9315,9 +9315,9 @@ var require_validation = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/applicator/additionalItems.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/applicator/additionalItems.js
 var require_additionalItems = __commonJS({
-  "node_modules/ajv/dist/vocabularies/applicator/additionalItems.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/applicator/additionalItems.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.validateAdditionalItems = void 0;
@@ -9368,9 +9368,9 @@ var require_additionalItems = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/applicator/items.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/applicator/items.js
 var require_items = __commonJS({
-  "node_modules/ajv/dist/vocabularies/applicator/items.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/applicator/items.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.validateTuple = void 0;
@@ -9425,9 +9425,9 @@ var require_items = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/applicator/prefixItems.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/applicator/prefixItems.js
 var require_prefixItems = __commonJS({
-  "node_modules/ajv/dist/vocabularies/applicator/prefixItems.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/applicator/prefixItems.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var items_1 = require_items();
@@ -9442,9 +9442,9 @@ var require_prefixItems = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/applicator/items2020.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/applicator/items2020.js
 var require_items2020 = __commonJS({
-  "node_modules/ajv/dist/vocabularies/applicator/items2020.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/applicator/items2020.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var codegen_1 = require_codegen();
@@ -9477,9 +9477,9 @@ var require_items2020 = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/applicator/contains.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/applicator/contains.js
 var require_contains = __commonJS({
-  "node_modules/ajv/dist/vocabularies/applicator/contains.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/applicator/contains.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var codegen_1 = require_codegen();
@@ -9571,9 +9571,9 @@ var require_contains = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/applicator/dependencies.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/applicator/dependencies.js
 var require_dependencies = __commonJS({
-  "node_modules/ajv/dist/vocabularies/applicator/dependencies.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/applicator/dependencies.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.validateSchemaDeps = exports.validatePropertyDeps = exports.error = void 0;
@@ -9665,9 +9665,9 @@ var require_dependencies = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/applicator/propertyNames.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/applicator/propertyNames.js
 var require_propertyNames = __commonJS({
-  "node_modules/ajv/dist/vocabularies/applicator/propertyNames.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/applicator/propertyNames.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var codegen_1 = require_codegen();
@@ -9708,9 +9708,9 @@ var require_propertyNames = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/applicator/additionalProperties.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/applicator/additionalProperties.js
 var require_additionalProperties = __commonJS({
-  "node_modules/ajv/dist/vocabularies/applicator/additionalProperties.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/applicator/additionalProperties.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var code_1 = require_code2();
@@ -9814,9 +9814,9 @@ var require_additionalProperties = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/applicator/properties.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/applicator/properties.js
 var require_properties = __commonJS({
-  "node_modules/ajv/dist/vocabularies/applicator/properties.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/applicator/properties.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var validate_1 = require_validate();
@@ -9872,9 +9872,9 @@ var require_properties = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/applicator/patternProperties.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/applicator/patternProperties.js
 var require_patternProperties = __commonJS({
-  "node_modules/ajv/dist/vocabularies/applicator/patternProperties.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/applicator/patternProperties.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var code_1 = require_code2();
@@ -9946,9 +9946,9 @@ var require_patternProperties = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/applicator/not.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/applicator/not.js
 var require_not = __commonJS({
-  "node_modules/ajv/dist/vocabularies/applicator/not.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/applicator/not.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var util_1 = require_util();
@@ -9977,9 +9977,9 @@ var require_not = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/applicator/anyOf.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/applicator/anyOf.js
 var require_anyOf = __commonJS({
-  "node_modules/ajv/dist/vocabularies/applicator/anyOf.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/applicator/anyOf.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var code_1 = require_code2();
@@ -9994,9 +9994,9 @@ var require_anyOf = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/applicator/oneOf.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/applicator/oneOf.js
 var require_oneOf = __commonJS({
-  "node_modules/ajv/dist/vocabularies/applicator/oneOf.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/applicator/oneOf.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var codegen_1 = require_codegen();
@@ -10052,9 +10052,9 @@ var require_oneOf = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/applicator/allOf.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/applicator/allOf.js
 var require_allOf = __commonJS({
-  "node_modules/ajv/dist/vocabularies/applicator/allOf.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/applicator/allOf.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var util_1 = require_util();
@@ -10079,9 +10079,9 @@ var require_allOf = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/applicator/if.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/applicator/if.js
 var require_if = __commonJS({
-  "node_modules/ajv/dist/vocabularies/applicator/if.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/applicator/if.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var codegen_1 = require_codegen();
@@ -10148,9 +10148,9 @@ var require_if = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/applicator/thenElse.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/applicator/thenElse.js
 var require_thenElse = __commonJS({
-  "node_modules/ajv/dist/vocabularies/applicator/thenElse.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/applicator/thenElse.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var util_1 = require_util();
@@ -10166,9 +10166,9 @@ var require_thenElse = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/applicator/index.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/applicator/index.js
 var require_applicator = __commonJS({
-  "node_modules/ajv/dist/vocabularies/applicator/index.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/applicator/index.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var additionalItems_1 = require_additionalItems();
@@ -10214,9 +10214,9 @@ var require_applicator = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/format/format.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/format/format.js
 var require_format = __commonJS({
-  "node_modules/ajv/dist/vocabularies/format/format.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/format/format.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var codegen_1 = require_codegen();
@@ -10304,9 +10304,9 @@ var require_format = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/format/index.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/format/index.js
 var require_format2 = __commonJS({
-  "node_modules/ajv/dist/vocabularies/format/index.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/format/index.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var format_1 = require_format();
@@ -10315,9 +10315,9 @@ var require_format2 = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/metadata.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/metadata.js
 var require_metadata = __commonJS({
-  "node_modules/ajv/dist/vocabularies/metadata.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/metadata.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.contentVocabulary = exports.metadataVocabulary = void 0;
@@ -10338,9 +10338,9 @@ var require_metadata = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/draft7.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/draft7.js
 var require_draft7 = __commonJS({
-  "node_modules/ajv/dist/vocabularies/draft7.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/draft7.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var core_1 = require_core2();
@@ -10360,9 +10360,9 @@ var require_draft7 = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/discriminator/types.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/discriminator/types.js
 var require_types = __commonJS({
-  "node_modules/ajv/dist/vocabularies/discriminator/types.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/discriminator/types.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DiscrError = void 0;
@@ -10374,9 +10374,9 @@ var require_types = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/vocabularies/discriminator/index.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/discriminator/index.js
 var require_discriminator = __commonJS({
-  "node_modules/ajv/dist/vocabularies/discriminator/index.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/vocabularies/discriminator/index.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var codegen_1 = require_codegen();
@@ -10479,9 +10479,9 @@ var require_discriminator = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/refs/json-schema-draft-07.json
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/refs/json-schema-draft-07.json
 var require_json_schema_draft_07 = __commonJS({
-  "node_modules/ajv/dist/refs/json-schema-draft-07.json"(exports, module) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/refs/json-schema-draft-07.json"(exports, module) {
     module.exports = {
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "http://json-schema.org/draft-07/schema#",
@@ -10636,9 +10636,9 @@ var require_json_schema_draft_07 = __commonJS({
   }
 });
 
-// node_modules/ajv/dist/ajv.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/ajv.js
 var require_ajv = __commonJS({
-  "node_modules/ajv/dist/ajv.js"(exports, module) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/ajv/dist/ajv.js"(exports, module) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.MissingRefError = exports.ValidationError = exports.CodeGen = exports.Name = exports.nil = exports.stringify = exports.str = exports._ = exports.KeywordCxt = exports.Ajv = void 0;
@@ -10706,9 +10706,9 @@ var require_ajv = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/dist/formats.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/dist/formats.js
 var require_formats = __commonJS({
-  "../../node_modules/ajv-formats/dist/formats.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/dist/formats.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.formatNames = exports.fastFormats = exports.fullFormats = void 0;
@@ -10909,9 +10909,9 @@ var require_formats = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/compile/codegen/code.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/compile/codegen/code.js
 var require_code3 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/compile/codegen/code.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/compile/codegen/code.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.regexpCode = exports.getEsmExportName = exports.getProperty = exports.safeStringify = exports.stringify = exports.strConcat = exports.addCodeArg = exports.str = exports._ = exports.nil = exports._Code = exports.Name = exports.IDENTIFIER = exports._CodeOrName = void 0;
@@ -11063,9 +11063,9 @@ var require_code3 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/compile/codegen/scope.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/compile/codegen/scope.js
 var require_scope2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/compile/codegen/scope.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/compile/codegen/scope.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ValueScope = exports.ValueScopeName = exports.Scope = exports.varKinds = exports.UsedValueState = void 0;
@@ -11208,9 +11208,9 @@ var require_scope2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/compile/codegen/index.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/compile/codegen/index.js
 var require_codegen2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/compile/codegen/index.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/compile/codegen/index.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.or = exports.and = exports.not = exports.CodeGen = exports.operators = exports.varKinds = exports.ValueScopeName = exports.ValueScope = exports.Scope = exports.Name = exports.regexpCode = exports.stringify = exports.getProperty = exports.nil = exports.strConcat = exports.str = exports._ = void 0;
@@ -11928,9 +11928,9 @@ var require_codegen2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/compile/util.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/compile/util.js
 var require_util2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/compile/util.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/compile/util.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.checkStrictMode = exports.getErrorPath = exports.Type = exports.useFunc = exports.setEvaluated = exports.evaluatedPropsToName = exports.mergeEvaluated = exports.eachItem = exports.unescapeJsonPointer = exports.escapeJsonPointer = exports.escapeFragment = exports.unescapeFragment = exports.schemaRefOrVal = exports.schemaHasRulesButRef = exports.schemaHasRules = exports.checkUnknownRules = exports.alwaysValidSchema = exports.toHash = void 0;
@@ -12095,9 +12095,9 @@ var require_util2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/compile/names.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/compile/names.js
 var require_names2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/compile/names.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/compile/names.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var codegen_1 = require_codegen2();
@@ -12134,9 +12134,9 @@ var require_names2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/compile/errors.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/compile/errors.js
 var require_errors2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/compile/errors.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/compile/errors.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.extendErrors = exports.resetErrorsCount = exports.reportExtraError = exports.reportError = exports.keyword$DataError = exports.keywordError = void 0;
@@ -12256,9 +12256,9 @@ var require_errors2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/compile/validate/boolSchema.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/compile/validate/boolSchema.js
 var require_boolSchema2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/compile/validate/boolSchema.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/compile/validate/boolSchema.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.boolOrEmptySchema = exports.topBoolOrEmptySchema = void 0;
@@ -12307,9 +12307,9 @@ var require_boolSchema2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/compile/rules.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/compile/rules.js
 var require_rules2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/compile/rules.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/compile/rules.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getRules = exports.isJSONType = void 0;
@@ -12338,9 +12338,9 @@ var require_rules2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/compile/validate/applicability.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/compile/validate/applicability.js
 var require_applicability2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/compile/validate/applicability.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/compile/validate/applicability.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.shouldUseRule = exports.shouldUseGroup = exports.schemaHasRulesForType = void 0;
@@ -12361,9 +12361,9 @@ var require_applicability2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/compile/validate/dataType.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/compile/validate/dataType.js
 var require_dataType2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/compile/validate/dataType.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/compile/validate/dataType.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.reportTypeError = exports.checkDataTypes = exports.checkDataType = exports.coerceAndCheckDataType = exports.getJSONTypes = exports.getSchemaTypes = exports.DataType = void 0;
@@ -12545,9 +12545,9 @@ var require_dataType2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/compile/validate/defaults.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/compile/validate/defaults.js
 var require_defaults2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/compile/validate/defaults.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/compile/validate/defaults.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.assignDefaults = void 0;
@@ -12582,9 +12582,9 @@ var require_defaults2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/code.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/code.js
 var require_code4 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/code.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/code.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.validateUnion = exports.validateArray = exports.usePattern = exports.callValidateCode = exports.schemaProperties = exports.allSchemaProperties = exports.noPropertyInData = exports.propertyInData = exports.isOwnProperty = exports.hasPropFunc = exports.reportMissingProp = exports.checkMissingProp = exports.checkReportMissingProp = void 0;
@@ -12715,9 +12715,9 @@ var require_code4 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/compile/validate/keyword.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/compile/validate/keyword.js
 var require_keyword2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/compile/validate/keyword.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/compile/validate/keyword.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.validateKeywordUsage = exports.validSchemaType = exports.funcKeywordCode = exports.macroKeywordCode = void 0;
@@ -12833,9 +12833,9 @@ var require_keyword2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/compile/validate/subschema.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/compile/validate/subschema.js
 var require_subschema2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/compile/validate/subschema.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/compile/validate/subschema.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.extendSubschemaMode = exports.extendSubschemaData = exports.getSubschema = void 0;
@@ -12916,9 +12916,9 @@ var require_subschema2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/json-schema-traverse/index.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/json-schema-traverse/index.js
 var require_json_schema_traverse2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/json-schema-traverse/index.js"(exports, module) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/json-schema-traverse/index.js"(exports, module) {
     "use strict";
     var traverse = module.exports = function(schema, opts, cb) {
       if (typeof opts == "function") {
@@ -13004,9 +13004,9 @@ var require_json_schema_traverse2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/compile/resolve.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/compile/resolve.js
 var require_resolve2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/compile/resolve.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/compile/resolve.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getSchemaRefs = exports.resolveUrl = exports.normalizeId = exports._getFullPath = exports.getFullPath = exports.inlineRef = void 0;
@@ -13160,9 +13160,9 @@ var require_resolve2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/compile/validate/index.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/compile/validate/index.js
 var require_validate2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/compile/validate/index.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/compile/validate/index.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getData = exports.KeywordCxt = exports.validateFunctionCode = void 0;
@@ -13668,9 +13668,9 @@ var require_validate2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/runtime/validation_error.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/runtime/validation_error.js
 var require_validation_error2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/runtime/validation_error.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/runtime/validation_error.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var ValidationError = class extends Error {
@@ -13684,9 +13684,9 @@ var require_validation_error2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/compile/ref_error.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/compile/ref_error.js
 var require_ref_error2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/compile/ref_error.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/compile/ref_error.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var resolve_1 = require_resolve2();
@@ -13701,9 +13701,9 @@ var require_ref_error2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/compile/index.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/compile/index.js
 var require_compile2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/compile/index.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/compile/index.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.resolveSchema = exports.getCompilingSchema = exports.resolveRef = exports.compileSchema = exports.SchemaEnv = void 0;
@@ -13925,9 +13925,9 @@ var require_compile2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/refs/data.json
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/refs/data.json
 var require_data2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/refs/data.json"(exports, module) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/refs/data.json"(exports, module) {
     module.exports = {
       $id: "https://raw.githubusercontent.com/ajv-validator/ajv/master/lib/refs/data.json#",
       description: "Meta-schema for $data reference (JSON AnySchema extension proposal)",
@@ -13944,9 +13944,9 @@ var require_data2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/runtime/uri.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/runtime/uri.js
 var require_uri2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/runtime/uri.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/runtime/uri.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var uri = require_fast_uri();
@@ -13955,9 +13955,9 @@ var require_uri2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/core.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/core.js
 var require_core3 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/core.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/core.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CodeGen = exports.Name = exports.nil = exports.stringify = exports.str = exports._ = exports.KeywordCxt = void 0;
@@ -14566,9 +14566,9 @@ var require_core3 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/core/id.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/core/id.js
 var require_id2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/core/id.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/core/id.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var def = {
@@ -14581,9 +14581,9 @@ var require_id2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/core/ref.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/core/ref.js
 var require_ref2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/core/ref.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/core/ref.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.callRef = exports.getValidate = void 0;
@@ -14703,9 +14703,9 @@ var require_ref2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/core/index.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/core/index.js
 var require_core4 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/core/index.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/core/index.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var id_1 = require_id2();
@@ -14724,9 +14724,9 @@ var require_core4 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/limitNumber.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/limitNumber.js
 var require_limitNumber2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/limitNumber.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/limitNumber.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var codegen_1 = require_codegen2();
@@ -14756,9 +14756,9 @@ var require_limitNumber2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/multipleOf.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/multipleOf.js
 var require_multipleOf2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/multipleOf.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/multipleOf.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var codegen_1 = require_codegen2();
@@ -14784,9 +14784,9 @@ var require_multipleOf2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/runtime/ucs2length.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/runtime/ucs2length.js
 var require_ucs2length2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/runtime/ucs2length.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/runtime/ucs2length.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     function ucs2length(str) {
@@ -14810,9 +14810,9 @@ var require_ucs2length2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/limitLength.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/limitLength.js
 var require_limitLength2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/limitLength.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/limitLength.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var codegen_1 = require_codegen2();
@@ -14842,9 +14842,9 @@ var require_limitLength2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/pattern.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/pattern.js
 var require_pattern2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/pattern.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/pattern.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var code_1 = require_code4();
@@ -14879,9 +14879,9 @@ var require_pattern2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/limitProperties.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/limitProperties.js
 var require_limitProperties2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/limitProperties.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/limitProperties.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var codegen_1 = require_codegen2();
@@ -14908,9 +14908,9 @@ var require_limitProperties2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/required.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/required.js
 var require_required2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/required.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/required.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var code_1 = require_code4();
@@ -14990,9 +14990,9 @@ var require_required2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/limitItems.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/limitItems.js
 var require_limitItems2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/limitItems.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/limitItems.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var codegen_1 = require_codegen2();
@@ -15019,9 +15019,9 @@ var require_limitItems2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/runtime/equal.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/runtime/equal.js
 var require_equal2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/runtime/equal.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/runtime/equal.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var equal = require_fast_deep_equal();
@@ -15030,9 +15030,9 @@ var require_equal2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/uniqueItems.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/uniqueItems.js
 var require_uniqueItems2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/uniqueItems.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/uniqueItems.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var dataType_1 = require_dataType2();
@@ -15097,9 +15097,9 @@ var require_uniqueItems2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/const.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/const.js
 var require_const2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/const.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/const.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var codegen_1 = require_codegen2();
@@ -15126,9 +15126,9 @@ var require_const2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/enum.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/enum.js
 var require_enum2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/enum.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/enum.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var codegen_1 = require_codegen2();
@@ -15175,9 +15175,9 @@ var require_enum2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/index.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/index.js
 var require_validation2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/index.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/validation/index.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var limitNumber_1 = require_limitNumber2();
@@ -15213,9 +15213,9 @@ var require_validation2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/additionalItems.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/additionalItems.js
 var require_additionalItems2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/additionalItems.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/additionalItems.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.validateAdditionalItems = void 0;
@@ -15266,9 +15266,9 @@ var require_additionalItems2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/items.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/items.js
 var require_items2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/items.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/items.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.validateTuple = void 0;
@@ -15323,9 +15323,9 @@ var require_items2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/prefixItems.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/prefixItems.js
 var require_prefixItems2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/prefixItems.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/prefixItems.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var items_1 = require_items2();
@@ -15340,9 +15340,9 @@ var require_prefixItems2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/items2020.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/items2020.js
 var require_items20202 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/items2020.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/items2020.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var codegen_1 = require_codegen2();
@@ -15375,9 +15375,9 @@ var require_items20202 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/contains.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/contains.js
 var require_contains2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/contains.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/contains.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var codegen_1 = require_codegen2();
@@ -15469,9 +15469,9 @@ var require_contains2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/dependencies.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/dependencies.js
 var require_dependencies2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/dependencies.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/dependencies.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.validateSchemaDeps = exports.validatePropertyDeps = exports.error = void 0;
@@ -15563,9 +15563,9 @@ var require_dependencies2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/propertyNames.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/propertyNames.js
 var require_propertyNames2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/propertyNames.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/propertyNames.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var codegen_1 = require_codegen2();
@@ -15606,9 +15606,9 @@ var require_propertyNames2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/additionalProperties.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/additionalProperties.js
 var require_additionalProperties2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/additionalProperties.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/additionalProperties.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var code_1 = require_code4();
@@ -15712,9 +15712,9 @@ var require_additionalProperties2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/properties.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/properties.js
 var require_properties2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/properties.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/properties.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var validate_1 = require_validate2();
@@ -15770,9 +15770,9 @@ var require_properties2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/patternProperties.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/patternProperties.js
 var require_patternProperties2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/patternProperties.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/patternProperties.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var code_1 = require_code4();
@@ -15844,9 +15844,9 @@ var require_patternProperties2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/not.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/not.js
 var require_not2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/not.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/not.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var util_1 = require_util2();
@@ -15875,9 +15875,9 @@ var require_not2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/anyOf.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/anyOf.js
 var require_anyOf2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/anyOf.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/anyOf.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var code_1 = require_code4();
@@ -15892,9 +15892,9 @@ var require_anyOf2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/oneOf.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/oneOf.js
 var require_oneOf2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/oneOf.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/oneOf.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var codegen_1 = require_codegen2();
@@ -15950,9 +15950,9 @@ var require_oneOf2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/allOf.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/allOf.js
 var require_allOf2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/allOf.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/allOf.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var util_1 = require_util2();
@@ -15977,9 +15977,9 @@ var require_allOf2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/if.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/if.js
 var require_if2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/if.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/if.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var codegen_1 = require_codegen2();
@@ -16046,9 +16046,9 @@ var require_if2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/thenElse.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/thenElse.js
 var require_thenElse2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/thenElse.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/thenElse.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var util_1 = require_util2();
@@ -16064,9 +16064,9 @@ var require_thenElse2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/index.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/index.js
 var require_applicator2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/index.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/applicator/index.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var additionalItems_1 = require_additionalItems2();
@@ -16112,9 +16112,9 @@ var require_applicator2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/format/format.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/format/format.js
 var require_format3 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/format/format.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/format/format.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var codegen_1 = require_codegen2();
@@ -16202,9 +16202,9 @@ var require_format3 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/format/index.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/format/index.js
 var require_format4 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/format/index.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/format/index.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var format_1 = require_format3();
@@ -16213,9 +16213,9 @@ var require_format4 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/metadata.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/metadata.js
 var require_metadata2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/metadata.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/metadata.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.contentVocabulary = exports.metadataVocabulary = void 0;
@@ -16236,9 +16236,9 @@ var require_metadata2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/draft7.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/draft7.js
 var require_draft72 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/draft7.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/draft7.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var core_1 = require_core4();
@@ -16258,9 +16258,9 @@ var require_draft72 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/discriminator/types.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/discriminator/types.js
 var require_types2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/discriminator/types.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/discriminator/types.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DiscrError = void 0;
@@ -16272,9 +16272,9 @@ var require_types2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/discriminator/index.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/discriminator/index.js
 var require_discriminator2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/discriminator/index.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/vocabularies/discriminator/index.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var codegen_1 = require_codegen2();
@@ -16377,9 +16377,9 @@ var require_discriminator2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/refs/json-schema-draft-07.json
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/refs/json-schema-draft-07.json
 var require_json_schema_draft_072 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/refs/json-schema-draft-07.json"(exports, module) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/refs/json-schema-draft-07.json"(exports, module) {
     module.exports = {
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "http://json-schema.org/draft-07/schema#",
@@ -16534,9 +16534,9 @@ var require_json_schema_draft_072 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/node_modules/ajv/dist/ajv.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/ajv.js
 var require_ajv2 = __commonJS({
-  "../../node_modules/ajv-formats/node_modules/ajv/dist/ajv.js"(exports, module) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/node_modules/ajv/dist/ajv.js"(exports, module) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.MissingRefError = exports.ValidationError = exports.CodeGen = exports.Name = exports.nil = exports.stringify = exports.str = exports._ = exports.KeywordCxt = exports.Ajv = void 0;
@@ -16604,9 +16604,9 @@ var require_ajv2 = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/dist/limit.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/dist/limit.js
 var require_limit = __commonJS({
-  "../../node_modules/ajv-formats/dist/limit.js"(exports) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/dist/limit.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.formatLimitDefinition = void 0;
@@ -16676,9 +16676,9 @@ var require_limit = __commonJS({
   }
 });
 
-// ../../node_modules/ajv-formats/dist/index.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/dist/index.js
 var require_dist = __commonJS({
-  "../../node_modules/ajv-formats/dist/index.js"(exports, module) {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/ajv-formats/dist/index.js"(exports, module) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var formats_1 = require_formats();
@@ -16718,24 +16718,24 @@ var require_dist = __commonJS({
   }
 });
 
-// ../../node_modules/zod/index.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod/index.js
 var init_zod = __esm({
-  "../../node_modules/zod/index.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod/index.js"() {
     init_external();
     init_external();
   }
 });
 
-// ../../node_modules/convex/dist/esm/index.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/index.js
 var version2;
 var init_esm = __esm({
-  "../../node_modules/convex/dist/esm/index.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/index.js"() {
     "use strict";
     version2 = "1.46.0";
   }
 });
 
-// ../../node_modules/convex/dist/esm/values/base64.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/values/base64.js
 function getLens(b64) {
   var len2 = b64.length;
   if (len2 % 4 > 0) {
@@ -16815,7 +16815,7 @@ function fromByteArray(uint8) {
 }
 var lookup, revLookup, Arr, code, i, len;
 var init_base64 = __esm({
-  "../../node_modules/convex/dist/esm/values/base64.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/values/base64.js"() {
     "use strict";
     lookup = [];
     revLookup = [];
@@ -16830,7 +16830,7 @@ var init_base64 = __esm({
   }
 });
 
-// ../../node_modules/convex/dist/esm/common/index.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/common/index.js
 function parseArgs(args) {
   if (args === void 0) {
     return {};
@@ -16880,12 +16880,12 @@ function isSimpleObject(value) {
   return isObject2 && isSimple;
 }
 var init_common = __esm({
-  "../../node_modules/convex/dist/esm/common/index.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/common/index.js"() {
     "use strict";
   }
 });
 
-// ../../node_modules/convex/dist/esm/values/value.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/values/value.js
 function isSpecial(n) {
   return Number.isNaN(n) || !Number.isFinite(n) || Object.is(n, -0);
 }
@@ -17168,7 +17168,7 @@ function convexToJson(value) {
 }
 var LITTLE_ENDIAN, MIN_INT64, MAX_INT64, ZERO, EIGHT, TWOFIFTYSIX, COMMIT_TS_UNRESOLVED, CommitTsPlaceholder, commitTsPlaceholder, bigIntToBase64, base64ToBigInt, MAX_IDENTIFIER_LEN, MAX_VALUE_FOR_ERROR_LEN;
 var init_value = __esm({
-  "../../node_modules/convex/dist/esm/values/value.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/values/value.js"() {
     "use strict";
     init_base64();
     init_common();
@@ -17204,26 +17204,26 @@ var init_value = __esm({
   }
 });
 
-// ../../node_modules/convex/dist/esm/values/validators.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/values/validators.js
 var init_validators = __esm({
-  "../../node_modules/convex/dist/esm/values/validators.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/values/validators.js"() {
     "use strict";
     init_value();
   }
 });
 
-// ../../node_modules/convex/dist/esm/values/validator.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/values/validator.js
 var init_validator = __esm({
-  "../../node_modules/convex/dist/esm/values/validator.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/values/validator.js"() {
     "use strict";
     init_validators();
   }
 });
 
-// ../../node_modules/convex/dist/esm/values/errors.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/values/errors.js
 var __defProp2, __defNormalProp, __publicField, _a3, _b, IDENTIFYING_FIELD, ConvexError;
 var init_errors2 = __esm({
-  "../../node_modules/convex/dist/esm/values/errors.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/values/errors.js"() {
     "use strict";
     init_value();
     __defProp2 = Object.defineProperty;
@@ -17242,10 +17242,10 @@ var init_errors2 = __esm({
   }
 });
 
-// ../../node_modules/convex/dist/esm/values/compare_utf8.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/values/compare_utf8.js
 var arr, aBytes, bBytes;
 var init_compare_utf8 = __esm({
-  "../../node_modules/convex/dist/esm/values/compare_utf8.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/values/compare_utf8.js"() {
     "use strict";
     arr = () => Array.from({ length: 4 }, () => 0);
     aBytes = arr();
@@ -17253,27 +17253,27 @@ var init_compare_utf8 = __esm({
   }
 });
 
-// ../../node_modules/convex/dist/esm/values/compare.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/values/compare.js
 var init_compare = __esm({
-  "../../node_modules/convex/dist/esm/values/compare.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/values/compare.js"() {
     "use strict";
     init_value();
     init_compare_utf8();
   }
 });
 
-// ../../node_modules/convex/dist/esm/values/size.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/values/size.js
 var init_size = __esm({
-  "../../node_modules/convex/dist/esm/values/size.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/values/size.js"() {
     "use strict";
     init_value();
     init_common();
   }
 });
 
-// ../../node_modules/convex/dist/esm/values/index.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/values/index.js
 var init_values = __esm({
-  "../../node_modules/convex/dist/esm/values/index.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/values/index.js"() {
     "use strict";
     init_value();
     init_validator();
@@ -17284,7 +17284,7 @@ var init_values = __esm({
   }
 });
 
-// ../../node_modules/convex/dist/esm/browser/logging.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/logging.js
 function prefix_for_source(source) {
   switch (source) {
     case "query":
@@ -17346,7 +17346,7 @@ function logForFunction(logger, type, source, udfPath, message) {
 }
 var __defProp3, __defNormalProp2, __publicField2, INFO_COLOR, DefaultLogger;
 var init_logging = __esm({
-  "../../node_modules/convex/dist/esm/browser/logging.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/logging.js"() {
     "use strict";
     __defProp3 = Object.defineProperty;
     __defNormalProp2 = (obj, key, value) => key in obj ? __defProp3(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
@@ -17398,42 +17398,42 @@ var init_logging = __esm({
   }
 });
 
-// ../../node_modules/convex/dist/esm/browser/sync/udf_path_utils.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/sync/udf_path_utils.js
 var init_udf_path_utils = __esm({
-  "../../node_modules/convex/dist/esm/browser/sync/udf_path_utils.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/sync/udf_path_utils.js"() {
     "use strict";
     init_values();
   }
 });
 
-// ../../node_modules/convex/dist/esm/browser/sync/local_state.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/sync/local_state.js
 var init_local_state = __esm({
-  "../../node_modules/convex/dist/esm/browser/sync/local_state.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/sync/local_state.js"() {
     "use strict";
     init_values();
     init_udf_path_utils();
   }
 });
 
-// ../../node_modules/convex/dist/esm/browser/sync/request_manager.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/sync/request_manager.js
 var init_request_manager = __esm({
-  "../../node_modules/convex/dist/esm/browser/sync/request_manager.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/sync/request_manager.js"() {
     "use strict";
     init_values();
     init_logging();
   }
 });
 
-// ../../node_modules/convex/dist/esm/server/functionName.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/server/functionName.js
 var functionName;
 var init_functionName = __esm({
-  "../../node_modules/convex/dist/esm/server/functionName.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/server/functionName.js"() {
     "use strict";
     functionName = /* @__PURE__ */ Symbol.for("functionName");
   }
 });
 
-// ../../node_modules/convex/dist/esm/server/components/paths.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/server/components/paths.js
 function extractReferencePath(reference2) {
   return reference2[toReferencePath] ?? null;
 }
@@ -17461,14 +17461,14 @@ function getFunctionAddress(functionReference) {
 }
 var toReferencePath;
 var init_paths = __esm({
-  "../../node_modules/convex/dist/esm/server/components/paths.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/server/components/paths.js"() {
     "use strict";
     init_functionName();
     toReferencePath = /* @__PURE__ */ Symbol.for("toReferencePath");
   }
 });
 
-// ../../node_modules/convex/dist/esm/server/api.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/server/api.js
 function getFunctionName(functionReference) {
   const address = getFunctionAddress(functionReference);
   if (address.name === void 0) {
@@ -17523,7 +17523,7 @@ function createApi(pathParts = []) {
 }
 var anyApi;
 var init_api = __esm({
-  "../../node_modules/convex/dist/esm/server/api.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/server/api.js"() {
     "use strict";
     init_functionName();
     init_paths();
@@ -17531,9 +17531,9 @@ var init_api = __esm({
   }
 });
 
-// ../../node_modules/convex/dist/esm/browser/sync/optimistic_updates_impl.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/sync/optimistic_updates_impl.js
 var init_optimistic_updates_impl = __esm({
-  "../../node_modules/convex/dist/esm/browser/sync/optimistic_updates_impl.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/sync/optimistic_updates_impl.js"() {
     "use strict";
     init_api();
     init_common();
@@ -17543,10 +17543,10 @@ var init_optimistic_updates_impl = __esm({
   }
 });
 
-// ../../node_modules/convex/dist/esm/vendor/long.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/vendor/long.js
 var __defProp4, __defNormalProp3, __publicField3, Long, UZERO, TWO_PWR_16_DBL, TWO_PWR_32_DBL, TWO_PWR_64_DBL, MAX_UNSIGNED_VALUE;
 var init_long = __esm({
-  "../../node_modules/convex/dist/esm/vendor/long.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/vendor/long.js"() {
     "use strict";
     __defProp4 = Object.defineProperty;
     __defNormalProp3 = (obj, key, value) => key in obj ? __defProp4(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
@@ -17626,9 +17626,9 @@ var init_long = __esm({
   }
 });
 
-// ../../node_modules/convex/dist/esm/browser/sync/remote_query_set.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/sync/remote_query_set.js
 var init_remote_query_set = __esm({
-  "../../node_modules/convex/dist/esm/browser/sync/remote_query_set.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/sync/remote_query_set.js"() {
     "use strict";
     init_values();
     init_long();
@@ -17636,34 +17636,34 @@ var init_remote_query_set = __esm({
   }
 });
 
-// ../../node_modules/convex/dist/esm/browser/sync/protocol.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/sync/protocol.js
 var init_protocol = __esm({
-  "../../node_modules/convex/dist/esm/browser/sync/protocol.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/sync/protocol.js"() {
     "use strict";
     init_values();
     init_long();
   }
 });
 
-// ../../node_modules/convex/dist/esm/browser/sync/web_socket_manager.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/sync/web_socket_manager.js
 var init_web_socket_manager = __esm({
-  "../../node_modules/convex/dist/esm/browser/sync/web_socket_manager.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/sync/web_socket_manager.js"() {
     "use strict";
     init_protocol();
   }
 });
 
-// ../../node_modules/convex/dist/esm/browser/sync/session.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/sync/session.js
 var init_session = __esm({
-  "../../node_modules/convex/dist/esm/browser/sync/session.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/sync/session.js"() {
     "use strict";
   }
 });
 
-// ../../node_modules/convex/dist/esm/vendor/jwt-decode/index.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/vendor/jwt-decode/index.js
 var InvalidTokenError;
 var init_jwt_decode = __esm({
-  "../../node_modules/convex/dist/esm/vendor/jwt-decode/index.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/vendor/jwt-decode/index.js"() {
     "use strict";
     InvalidTokenError = class extends Error {
     };
@@ -17671,26 +17671,26 @@ var init_jwt_decode = __esm({
   }
 });
 
-// ../../node_modules/convex/dist/esm/browser/sync/authentication_manager.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/sync/authentication_manager.js
 var MAXIMUM_REFRESH_DELAY;
 var init_authentication_manager = __esm({
-  "../../node_modules/convex/dist/esm/browser/sync/authentication_manager.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/sync/authentication_manager.js"() {
     "use strict";
     init_jwt_decode();
     MAXIMUM_REFRESH_DELAY = 20 * 24 * 60 * 60 * 1e3;
   }
 });
 
-// ../../node_modules/convex/dist/esm/browser/sync/metrics.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/sync/metrics.js
 var init_metrics = __esm({
-  "../../node_modules/convex/dist/esm/browser/sync/metrics.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/sync/metrics.js"() {
     "use strict";
   }
 });
 
-// ../../node_modules/convex/dist/esm/browser/sync/client.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/sync/client.js
 var init_client = __esm({
-  "../../node_modules/convex/dist/esm/browser/sync/client.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/sync/client.js"() {
     "use strict";
     init_esm();
     init_values();
@@ -17710,16 +17710,16 @@ var init_client = __esm({
   }
 });
 
-// ../../node_modules/convex/dist/esm/browser/sync/pagination.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/sync/pagination.js
 var init_pagination = __esm({
-  "../../node_modules/convex/dist/esm/browser/sync/pagination.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/sync/pagination.js"() {
     "use strict";
   }
 });
 
-// ../../node_modules/convex/dist/esm/browser/sync/paginated_query_client.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/sync/paginated_query_client.js
 var init_paginated_query_client = __esm({
-  "../../node_modules/convex/dist/esm/browser/sync/paginated_query_client.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/sync/paginated_query_client.js"() {
     "use strict";
     init_udf_path_utils();
     init_pagination();
@@ -17727,13 +17727,13 @@ var init_paginated_query_client = __esm({
   }
 });
 
-// ../../node_modules/convex/dist/esm/browser/simple_client.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/simple_client.js
 function setDefaultWebSocketConstructor(ws) {
   defaultWebSocketConstructor = ws;
 }
 var defaultWebSocketConstructor;
 var init_simple_client = __esm({
-  "../../node_modules/convex/dist/esm/browser/simple_client.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/simple_client.js"() {
     "use strict";
     init_common();
     init_api();
@@ -17743,12 +17743,12 @@ var init_simple_client = __esm({
   }
 });
 
-// ../../node_modules/convex/dist/esm/browser/simple_client-node.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/simple_client-node.js
 import { createRequire } from "module";
 import { resolve as nodePathResolve } from "path";
 var require2, __create2, __defProp5, __getOwnPropDesc2, __getOwnPropNames2, __getProtoOf2, __hasOwnProp2, __require, __commonJS2, __copyProps2, __toESM2, require_constants, require_node_gyp_build, require_node_gyp_build2, require_fallback, require_bufferutil, require_buffer_util, require_limiter, require_permessage_deflate, require_validation3, require_receiver, require_sender, require_event_target, require_extension, require_websocket, require_stream, require_subprotocol, require_websocket_server, import_stream, import_extension, import_permessage_deflate, import_receiver, import_sender, import_subprotocol, import_websocket, import_websocket_server, wrapper_default, nodeWebSocket;
 var init_simple_client_node = __esm({
-  "../../node_modules/convex/dist/esm/browser/simple_client-node.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/simple_client-node.js"() {
     init_simple_client();
     require2 = createRequire(nodePathResolve("."));
     __create2 = Object.create;
@@ -21653,14 +21653,14 @@ var init_simple_client_node = __esm({
   }
 });
 
-// ../../node_modules/convex/dist/esm/browser/http_client.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/http_client.js
 function forwardErrorData(errorData, error2) {
   error2.data = jsonToConvex(errorData);
   return error2;
 }
 var __defProp6, __defNormalProp4, __publicField4, STATUS_CODE_UDF_FAILED, specifiedFetch, ConvexHttpClient;
 var init_http_client = __esm({
-  "../../node_modules/convex/dist/esm/browser/http_client.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/http_client.js"() {
     "use strict";
     init_api();
     init_common();
@@ -22107,16 +22107,16 @@ var init_http_client = __esm({
   }
 });
 
-// ../../node_modules/convex/dist/esm/browser/query_options.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/query_options.js
 var init_query_options = __esm({
-  "../../node_modules/convex/dist/esm/browser/query_options.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/query_options.js"() {
     "use strict";
   }
 });
 
-// ../../node_modules/convex/dist/esm/browser/index-node.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/index-node.js
 var init_index_node = __esm({
-  "../../node_modules/convex/dist/esm/browser/index-node.js"() {
+  "../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/convex/dist/esm/browser/index-node.js"() {
     "use strict";
     init_client();
     init_simple_client_node();
@@ -22358,7 +22358,7 @@ var init_convexClient = __esm({
   }
 });
 
-// node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/core/core.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/core/core.js
 var _a;
 // @__NO_SIDE_EFFECTS__
 function $constructor(name, initializer3, params) {
@@ -22431,7 +22431,7 @@ function config(newConfig) {
   return globalConfig;
 }
 
-// node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/core/util.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/core/util.js
 var util_exports = {};
 __export(util_exports, {
   BIGINT_FORMAT_RANGES: () => BIGINT_FORMAT_RANGES,
@@ -23127,7 +23127,7 @@ var Class = class {
   }
 };
 
-// node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/core/errors.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/core/errors.js
 var initializer = (inst, def) => {
   inst.name = "$ZodError";
   Object.defineProperty(inst, "_zod", {
@@ -23196,7 +23196,7 @@ function formatError(error2, mapper = (issue2) => issue2.message) {
   return fieldErrors;
 }
 
-// node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/core/parse.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/core/parse.js
 var _parse = (_Err) => (schema, value, _ctx, _params) => {
   const ctx = _ctx ? { ..._ctx, async: false } : { async: false };
   const result = schema._zod.run({ value, issues: [] }, ctx);
@@ -23274,7 +23274,7 @@ var _safeDecodeAsync = (_Err) => async (schema, value, _ctx) => {
   return _safeParseAsync(_Err)(schema, value, _ctx);
 };
 
-// node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/core/regexes.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/core/regexes.js
 var cuid = /^[cC][0-9a-z]{6,}$/;
 var cuid2 = /^[0-9a-z]+$/;
 var ulid = /^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$/;
@@ -23332,7 +23332,7 @@ var _null = /^null$/i;
 var lowercase = /^[^A-Z]*$/;
 var uppercase = /^[^a-z]*$/;
 
-// node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/core/checks.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/core/checks.js
 var $ZodCheck = /* @__PURE__ */ $constructor("$ZodCheck", (inst, def) => {
   var _a4;
   inst._zod ?? (inst._zod = {});
@@ -23722,7 +23722,7 @@ var $ZodCheckOverwrite = /* @__PURE__ */ $constructor("$ZodCheckOverwrite", (ins
   };
 });
 
-// node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/core/doc.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/core/doc.js
 var Doc = class {
   constructor(args = []) {
     this.content = [];
@@ -23758,14 +23758,14 @@ var Doc = class {
   }
 };
 
-// node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/core/versions.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/core/versions.js
 var version = {
   major: 4,
   minor: 4,
   patch: 3
 };
 
-// node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/core/schemas.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/core/schemas.js
 var $ZodType = /* @__PURE__ */ $constructor("$ZodType", (inst, def) => {
   var _a4;
   inst ?? (inst = {});
@@ -25245,7 +25245,7 @@ function handleRefineResult(result, payload, input, inst) {
   }
 }
 
-// node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/locales/en.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/locales/en.js
 var error = () => {
   const Sizable = {
     string: { unit: "characters", verb: "to have" },
@@ -25358,7 +25358,7 @@ function en_default() {
   };
 }
 
-// node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/core/registries.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/core/registries.js
 var _a2;
 var $ZodRegistry = class {
   constructor() {
@@ -25406,7 +25406,7 @@ function registry() {
 (_a2 = globalThis).__zod_globalRegistry ?? (_a2.__zod_globalRegistry = registry());
 var globalRegistry = globalThis.__zod_globalRegistry;
 
-// node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/core/api.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/core/api.js
 // @__NO_SIDE_EFFECTS__
 function _string(Class2, params) {
   return new Class2({
@@ -25934,7 +25934,7 @@ function _check(fn, params) {
   return ch;
 }
 
-// node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/core/to-json-schema.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/core/to-json-schema.js
 function initializeContext(params) {
   let target = params?.target ?? "draft-2020-12";
   if (target === "draft-4")
@@ -26293,7 +26293,7 @@ var createStandardJSONSchemaMethod = (schema, io, processors = {}) => (params) =
   return finalize(ctx, schema);
 };
 
-// node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/core/json-schema-processors.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/core/json-schema-processors.js
 var formatMap = {
   guid: "uuid",
   url: "uri",
@@ -26626,7 +26626,7 @@ var optionalProcessor = (schema, ctx, _json, params) => {
   seen.ref = def.innerType;
 };
 
-// node_modules/@modelcontextprotocol/sdk/dist/esm/server/zod-compat.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/@modelcontextprotocol/sdk/dist/esm/server/zod-compat.js
 function isZ4Schema(s) {
   const schema = s;
   return !!schema._zod;
@@ -26689,7 +26689,7 @@ function getLiteralValue(schema) {
   return void 0;
 }
 
-// node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/classic/iso.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/classic/iso.js
 var iso_exports = {};
 __export(iso_exports, {
   ZodISODate: () => ZodISODate,
@@ -26730,7 +26730,7 @@ function duration2(params) {
   return _isoDuration(ZodISODuration, params);
 }
 
-// node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/classic/errors.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/classic/errors.js
 var initializer2 = (inst, issues) => {
   $ZodError.init(inst, issues);
   inst.name = "ZodError";
@@ -26769,7 +26769,7 @@ var ZodRealError = /* @__PURE__ */ $constructor("ZodError", initializer2, {
   Parent: Error
 });
 
-// node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/classic/parse.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/classic/parse.js
 var parse2 = /* @__PURE__ */ _parse(ZodRealError);
 var parseAsync2 = /* @__PURE__ */ _parseAsync(ZodRealError);
 var safeParse3 = /* @__PURE__ */ _safeParse(ZodRealError);
@@ -26783,7 +26783,7 @@ var safeDecode2 = /* @__PURE__ */ _safeDecode(ZodRealError);
 var safeEncodeAsync2 = /* @__PURE__ */ _safeEncodeAsync(ZodRealError);
 var safeDecodeAsync2 = /* @__PURE__ */ _safeDecodeAsync(ZodRealError);
 
-// node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/classic/schemas.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/classic/schemas.js
 var _installedGroups = /* @__PURE__ */ new WeakMap();
 function _installLazyMethods(inst, group, methods) {
   const proto = Object.getPrototypeOf(inst);
@@ -27625,10 +27625,10 @@ function preprocess(fn, schema) {
   });
 }
 
-// node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/classic/external.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/@modelcontextprotocol/sdk/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// node_modules/@modelcontextprotocol/sdk/dist/esm/types.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/@modelcontextprotocol/sdk/dist/esm/types.js
 var LATEST_PROTOCOL_VERSION = "2025-11-25";
 var SUPPORTED_PROTOCOL_VERSIONS = [LATEST_PROTOCOL_VERSION, "2025-06-18", "2025-03-26", "2024-11-05", "2024-10-07"];
 var RELATED_TASK_META_KEY = "io.modelcontextprotocol/related-task";
@@ -29134,12 +29134,12 @@ var UrlElicitationRequiredError = class extends McpError {
   }
 };
 
-// node_modules/@modelcontextprotocol/sdk/dist/esm/experimental/tasks/interfaces.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/@modelcontextprotocol/sdk/dist/esm/experimental/tasks/interfaces.js
 function isTerminal(status2) {
   return status2 === "completed" || status2 === "failed" || status2 === "cancelled";
 }
 
-// ../../node_modules/zod-to-json-schema/dist/esm/Options.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/Options.js
 var ignoreOverride = /* @__PURE__ */ Symbol("Let zodToJsonSchema decide on which parser to use");
 var defaultOptions = {
   name: void 0,
@@ -29173,7 +29173,7 @@ var getDefaultOptions = (options) => typeof options === "string" ? {
   ...options
 };
 
-// ../../node_modules/zod-to-json-schema/dist/esm/Refs.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/Refs.js
 var getRefs = (options) => {
   const _options = getDefaultOptions(options);
   const currentPath = _options.name !== void 0 ? [..._options.basePath, _options.definitionPath, _options.name] : _options.basePath;
@@ -29194,7 +29194,7 @@ var getRefs = (options) => {
   };
 };
 
-// ../../node_modules/zod-to-json-schema/dist/esm/errorMessages.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/errorMessages.js
 function addErrorMessage(res, key, errorMessage, refs) {
   if (!refs?.errorMessages)
     return;
@@ -29210,7 +29210,7 @@ function setResponseValueAndErrors(res, key, value, errorMessage, refs) {
   addErrorMessage(res, key, errorMessage, refs);
 }
 
-// ../../node_modules/zod-to-json-schema/dist/esm/getRelativePath.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/getRelativePath.js
 var getRelativePath = (pathA, pathB) => {
   let i2 = 0;
   for (; i2 < pathA.length && i2 < pathB.length; i2++) {
@@ -29220,7 +29220,7 @@ var getRelativePath = (pathA, pathB) => {
   return [(pathA.length - i2).toString(), ...pathB.slice(i2)].join("/");
 };
 
-// ../../node_modules/zod-to-json-schema/dist/esm/parsers/any.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/parsers/any.js
 function parseAnyDef(refs) {
   if (refs.target !== "openAi") {
     return {};
@@ -29236,7 +29236,7 @@ function parseAnyDef(refs) {
   };
 }
 
-// ../../node_modules/zod-to-json-schema/dist/esm/parsers/array.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/parsers/array.js
 function parseArrayDef(def, refs) {
   const res = {
     type: "array"
@@ -29260,7 +29260,7 @@ function parseArrayDef(def, refs) {
   return res;
 }
 
-// ../../node_modules/zod-to-json-schema/dist/esm/parsers/bigint.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/parsers/bigint.js
 function parseBigintDef(def, refs) {
   const res = {
     type: "integer",
@@ -29306,24 +29306,24 @@ function parseBigintDef(def, refs) {
   return res;
 }
 
-// ../../node_modules/zod-to-json-schema/dist/esm/parsers/boolean.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/parsers/boolean.js
 function parseBooleanDef() {
   return {
     type: "boolean"
   };
 }
 
-// ../../node_modules/zod-to-json-schema/dist/esm/parsers/branded.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/parsers/branded.js
 function parseBrandedDef(_def, refs) {
   return parseDef(_def.type._def, refs);
 }
 
-// ../../node_modules/zod-to-json-schema/dist/esm/parsers/catch.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/parsers/catch.js
 var parseCatchDef = (def, refs) => {
   return parseDef(def.innerType._def, refs);
 };
 
-// ../../node_modules/zod-to-json-schema/dist/esm/parsers/date.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/parsers/date.js
 function parseDateDef(def, refs, overrideDateStrategy) {
   const strategy = overrideDateStrategy ?? refs.dateStrategy;
   if (Array.isArray(strategy)) {
@@ -29382,7 +29382,7 @@ var integerDateParser = (def, refs) => {
   return res;
 };
 
-// ../../node_modules/zod-to-json-schema/dist/esm/parsers/default.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/parsers/default.js
 function parseDefaultDef(_def, refs) {
   return {
     ...parseDef(_def.innerType._def, refs),
@@ -29390,12 +29390,12 @@ function parseDefaultDef(_def, refs) {
   };
 }
 
-// ../../node_modules/zod-to-json-schema/dist/esm/parsers/effects.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/parsers/effects.js
 function parseEffectsDef(_def, refs) {
   return refs.effectStrategy === "input" ? parseDef(_def.schema._def, refs) : parseAnyDef(refs);
 }
 
-// ../../node_modules/zod-to-json-schema/dist/esm/parsers/enum.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/parsers/enum.js
 function parseEnumDef(def) {
   return {
     type: "string",
@@ -29403,7 +29403,7 @@ function parseEnumDef(def) {
   };
 }
 
-// ../../node_modules/zod-to-json-schema/dist/esm/parsers/intersection.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/parsers/intersection.js
 var isJsonSchema7AllOfType = (type) => {
   if ("type" in type && type.type === "string")
     return false;
@@ -29445,7 +29445,7 @@ function parseIntersectionDef(def, refs) {
   } : void 0;
 }
 
-// ../../node_modules/zod-to-json-schema/dist/esm/parsers/literal.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/parsers/literal.js
 function parseLiteralDef(def, refs) {
   const parsedType2 = typeof def.value;
   if (parsedType2 !== "bigint" && parsedType2 !== "number" && parsedType2 !== "boolean" && parsedType2 !== "string") {
@@ -29465,7 +29465,7 @@ function parseLiteralDef(def, refs) {
   };
 }
 
-// ../../node_modules/zod-to-json-schema/dist/esm/parsers/string.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/parsers/string.js
 var emojiRegex2 = void 0;
 var zodPatterns = {
   /**
@@ -29790,7 +29790,7 @@ function stringifyRegExpWithFlags(regex, refs) {
   return pattern;
 }
 
-// ../../node_modules/zod-to-json-schema/dist/esm/parsers/record.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/parsers/record.js
 function parseRecordDef(def, refs) {
   if (refs.target === "openAi") {
     console.warn("Warning: OpenAI may not support records in schemas! Try an array of key-value pairs instead.");
@@ -29842,7 +29842,7 @@ function parseRecordDef(def, refs) {
   return schema;
 }
 
-// ../../node_modules/zod-to-json-schema/dist/esm/parsers/map.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/parsers/map.js
 function parseMapDef(def, refs) {
   if (refs.mapStrategy === "record") {
     return parseRecordDef(def, refs);
@@ -29867,7 +29867,7 @@ function parseMapDef(def, refs) {
   };
 }
 
-// ../../node_modules/zod-to-json-schema/dist/esm/parsers/nativeEnum.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/parsers/nativeEnum.js
 function parseNativeEnumDef(def) {
   const object3 = def.values;
   const actualKeys = Object.keys(def.values).filter((key) => {
@@ -29881,7 +29881,7 @@ function parseNativeEnumDef(def) {
   };
 }
 
-// ../../node_modules/zod-to-json-schema/dist/esm/parsers/never.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/parsers/never.js
 function parseNeverDef(refs) {
   return refs.target === "openAi" ? void 0 : {
     not: parseAnyDef({
@@ -29891,7 +29891,7 @@ function parseNeverDef(refs) {
   };
 }
 
-// ../../node_modules/zod-to-json-schema/dist/esm/parsers/null.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/parsers/null.js
 function parseNullDef(refs) {
   return refs.target === "openApi3" ? {
     enum: ["null"],
@@ -29901,7 +29901,7 @@ function parseNullDef(refs) {
   };
 }
 
-// ../../node_modules/zod-to-json-schema/dist/esm/parsers/union.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/parsers/union.js
 var primitiveMappings = {
   ZodString: "string",
   ZodNumber: "number",
@@ -29969,7 +29969,7 @@ var asAnyOf = (def, refs) => {
   return anyOf.length ? { anyOf } : void 0;
 };
 
-// ../../node_modules/zod-to-json-schema/dist/esm/parsers/nullable.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/parsers/nullable.js
 function parseNullableDef(def, refs) {
   if (["ZodString", "ZodNumber", "ZodBigInt", "ZodBoolean", "ZodNull"].includes(def.innerType._def.typeName) && (!def.innerType._def.checks || !def.innerType._def.checks.length)) {
     if (refs.target === "openApi3") {
@@ -30001,7 +30001,7 @@ function parseNullableDef(def, refs) {
   return base && { anyOf: [base, { type: "null" }] };
 }
 
-// ../../node_modules/zod-to-json-schema/dist/esm/parsers/number.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/parsers/number.js
 function parseNumberDef(def, refs) {
   const res = {
     type: "number"
@@ -30050,7 +30050,7 @@ function parseNumberDef(def, refs) {
   return res;
 }
 
-// ../../node_modules/zod-to-json-schema/dist/esm/parsers/object.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/parsers/object.js
 function parseObjectDef(def, refs) {
   const forceOptionalIntoNullable = refs.target === "openAi";
   const result = {
@@ -30120,7 +30120,7 @@ function safeIsOptional(schema) {
   }
 }
 
-// ../../node_modules/zod-to-json-schema/dist/esm/parsers/optional.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/parsers/optional.js
 var parseOptionalDef = (def, refs) => {
   if (refs.currentPath.toString() === refs.propertyPath?.toString()) {
     return parseDef(def.innerType._def, refs);
@@ -30139,7 +30139,7 @@ var parseOptionalDef = (def, refs) => {
   } : parseAnyDef(refs);
 };
 
-// ../../node_modules/zod-to-json-schema/dist/esm/parsers/pipeline.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/parsers/pipeline.js
 var parsePipelineDef = (def, refs) => {
   if (refs.pipeStrategy === "input") {
     return parseDef(def.in._def, refs);
@@ -30159,12 +30159,12 @@ var parsePipelineDef = (def, refs) => {
   };
 };
 
-// ../../node_modules/zod-to-json-schema/dist/esm/parsers/promise.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/parsers/promise.js
 function parsePromiseDef(def, refs) {
   return parseDef(def.type._def, refs);
 }
 
-// ../../node_modules/zod-to-json-schema/dist/esm/parsers/set.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/parsers/set.js
 function parseSetDef(def, refs) {
   const items = parseDef(def.valueType._def, {
     ...refs,
@@ -30184,7 +30184,7 @@ function parseSetDef(def, refs) {
   return schema;
 }
 
-// ../../node_modules/zod-to-json-schema/dist/esm/parsers/tuple.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/parsers/tuple.js
 function parseTupleDef(def, refs) {
   if (def.rest) {
     return {
@@ -30212,24 +30212,24 @@ function parseTupleDef(def, refs) {
   }
 }
 
-// ../../node_modules/zod-to-json-schema/dist/esm/parsers/undefined.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/parsers/undefined.js
 function parseUndefinedDef(refs) {
   return {
     not: parseAnyDef(refs)
   };
 }
 
-// ../../node_modules/zod-to-json-schema/dist/esm/parsers/unknown.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/parsers/unknown.js
 function parseUnknownDef(refs) {
   return parseAnyDef(refs);
 }
 
-// ../../node_modules/zod-to-json-schema/dist/esm/parsers/readonly.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/parsers/readonly.js
 var parseReadonlyDef = (def, refs) => {
   return parseDef(def.innerType._def, refs);
 };
 
-// ../../node_modules/zod-to-json-schema/dist/esm/selectParser.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/selectParser.js
 var selectParser = (def, typeName, refs) => {
   switch (typeName) {
     case ZodFirstPartyTypeKind.ZodString:
@@ -30305,7 +30305,7 @@ var selectParser = (def, typeName, refs) => {
   }
 };
 
-// ../../node_modules/zod-to-json-schema/dist/esm/parseDef.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/parseDef.js
 function parseDef(def, refs, forceResolution = false) {
   const seenItem = refs.seen.get(def);
   if (refs.override) {
@@ -30361,7 +30361,7 @@ var addMeta = (def, refs, jsonSchema) => {
   return jsonSchema;
 };
 
-// ../../node_modules/zod-to-json-schema/dist/esm/zodToJsonSchema.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/node_modules/zod-to-json-schema/dist/esm/zodToJsonSchema.js
 var zodToJsonSchema = (schema, options) => {
   const refs = getRefs(options);
   let definitions = typeof options === "object" && options.definitions ? Object.entries(options.definitions).reduce((acc, [name2, schema2]) => ({
@@ -30423,7 +30423,7 @@ var zodToJsonSchema = (schema, options) => {
   return combined;
 };
 
-// node_modules/@modelcontextprotocol/sdk/dist/esm/server/zod-json-schema-compat.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/@modelcontextprotocol/sdk/dist/esm/server/zod-json-schema-compat.js
 function getMethodLiteral(schema) {
   const shape = getObjectShape(schema);
   const methodSchema = shape?.method;
@@ -30444,7 +30444,7 @@ function parseWithCompat(schema, data) {
   return result.data;
 }
 
-// node_modules/@modelcontextprotocol/sdk/dist/esm/shared/protocol.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/@modelcontextprotocol/sdk/dist/esm/shared/protocol.js
 var DEFAULT_REQUEST_TIMEOUT_MSEC = 6e4;
 var Protocol = class {
   constructor(_options) {
@@ -31392,7 +31392,7 @@ function mergeCapabilities(base, additional) {
   return result;
 }
 
-// node_modules/@modelcontextprotocol/sdk/dist/esm/validation/ajv-provider.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/@modelcontextprotocol/sdk/dist/esm/validation/ajv-provider.js
 var import_ajv = __toESM(require_ajv(), 1);
 var import_ajv_formats = __toESM(require_dist(), 1);
 function createDefaultAjvInstance() {
@@ -31460,7 +31460,7 @@ var AjvJsonSchemaValidator = class {
   }
 };
 
-// node_modules/@modelcontextprotocol/sdk/dist/esm/experimental/tasks/server.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/@modelcontextprotocol/sdk/dist/esm/experimental/tasks/server.js
 var ExperimentalServerTasks = class {
   constructor(_server) {
     this._server = _server;
@@ -31532,7 +31532,7 @@ var ExperimentalServerTasks = class {
   }
 };
 
-// node_modules/@modelcontextprotocol/sdk/dist/esm/experimental/tasks/helpers.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/@modelcontextprotocol/sdk/dist/esm/experimental/tasks/helpers.js
 function assertToolsCallTaskCapability(requests, method, entityName) {
   if (!requests) {
     throw new Error(`${entityName} does not support task creation (required for ${method})`);
@@ -31567,7 +31567,7 @@ function assertClientRequestTaskCapability(requests, method, entityName) {
   }
 }
 
-// node_modules/@modelcontextprotocol/sdk/dist/esm/server/index.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/@modelcontextprotocol/sdk/dist/esm/server/index.js
 var Server = class extends Protocol {
   /**
    * Initializes this server with the given name and version information.
@@ -31947,10 +31947,10 @@ var Server = class extends Protocol {
   }
 };
 
-// node_modules/@modelcontextprotocol/sdk/dist/esm/server/stdio.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/@modelcontextprotocol/sdk/dist/esm/server/stdio.js
 import process3 from "node:process";
 
-// node_modules/@modelcontextprotocol/sdk/dist/esm/shared/stdio.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/@modelcontextprotocol/sdk/dist/esm/shared/stdio.js
 var ReadBuffer = class {
   append(chunk) {
     this._buffer = this._buffer ? Buffer.concat([this._buffer, chunk]) : chunk;
@@ -31978,7 +31978,7 @@ function serializeMessage(message) {
   return JSON.stringify(message) + "\n";
 }
 
-// node_modules/@modelcontextprotocol/sdk/dist/esm/server/stdio.js
+// ../../../../../../../../../../../../tools/DEV/sapiensinteticos/tools/mcp-sapiens/node_modules/@modelcontextprotocol/sdk/dist/esm/server/stdio.js
 var StdioServerTransport = class {
   constructor(_stdin = process3.stdin, _stdout = process3.stdout) {
     this._stdin = _stdin;
@@ -32045,7 +32045,7 @@ import { fileURLToPath } from "node:url";
 import path from "node:path";
 var __dirname2 = path.dirname(fileURLToPath(import.meta.url));
 function getMcpVersion() {
-  if (true) return "1.80.0";
+  if (true) return "1.81.0";
   try {
     const pkgPath = path.resolve(__dirname2, "..", "package.json");
     const pkg = JSON.parse(readFileSync(pkgPath, "utf8"));
@@ -32904,11 +32904,11 @@ var ENDERECO_SUAS_CHAVES = "https://www.sapiensinteticos.com/conectar-claude#sua
 function ondeFicaAChave() {
   switch (CANAL) {
     case "mcpb":
-      return "No Claude Desktop: Configura\xE7\xF5es, Extens\xF5es, Sapiens Sint\xE9ticos. Os campos da fal e da Kie ficam ali, e o que voc\xEA colar fica guardado no seu computador.";
+      return "No Claude Desktop: Configura\xE7\xF5es, Extens\xF5es, Sapiens Sint\xE9ticos. Os campos de chave (fal, Kie, WaveSpeed, Replicate) ficam ali, s\xF3 os que voc\xEA tem, e o que voc\xEA colar fica guardado no seu computador.";
     case "plugin":
-      return 'No Claude Code: /plugin, aba Installed, Sapiens Sint\xE9ticos, "Configure options". Os campos da fal e da Kie ficam ali e v\xE3o pro cofre do sistema; depois, /reload-plugins.';
+      return 'No Claude Code: /plugin, aba Installed, Sapiens Sint\xE9ticos, "Configure options". Os campos de chave (fal, Kie, WaveSpeed, Replicate) ficam ali, s\xF3 os que voc\xEA tem, e v\xE3o pro cofre do sistema; depois, /reload-plugins.';
     default:
-      return `No config do cliente MCP, no bloco do sapiens: "env": { "FAL_KEY": "<sua chave da fal>", "KIE_API_KEY": "<sua chave da Kie>" }, e reinicie o cliente. No Claude Code o plugin p\xF5e a chave num campo, e no Claude Desktop a extens\xE3o (.mcpb), sem editar config. Passo a passo: ${ENDERECO_SUAS_CHAVES}`;
+      return `No config do cliente MCP, no bloco do sapiens, s\xF3 as que voc\xEA tem: "env": { "FAL_KEY": "...", "KIE_API_KEY": "...", "WAVESPEED_API_KEY": "...", "REPLICATE_API_TOKEN": "..." }, e reinicie o cliente. No Claude Code o plugin p\xF5e a chave num campo, e no Claude Desktop a extens\xE3o (.mcpb), sem editar config. Passo a passo: ${ENDERECO_SUAS_CHAVES}`;
   }
 }
 function comoAtualizar(latest) {
@@ -33536,10 +33536,18 @@ async function gallery(args) {
 }
 
 // src/tools/pontes.ts
+var PROVEDORES = ["fal", "kie", "wavespeed", "replicate"];
 var BALCOES = {
-  fal: { nome: "fal.ai", envVar: "FAL_KEY" },
-  kie: { nome: "Kie", envVar: "KIE_API_KEY" }
+  fal: { nome: "fal.ai", envVar: "FAL_KEY", artigo: "a" },
+  kie: { nome: "Kie", envVar: "KIE_API_KEY", artigo: "a" },
+  wavespeed: { nome: "WaveSpeed", envVar: "WAVESPEED_API_KEY", artigo: "a" },
+  replicate: { nome: "Replicate", envVar: "REPLICATE_API_TOKEN", artigo: "o" }
 };
+function balcaoCom(p, prep) {
+  const { nome, artigo } = BALCOES[p];
+  const forma = { em: { a: "na", o: "no" }, de: { a: "da", o: "do" }, para: { a: "pra", o: "pro" }, "": { a: "A", o: "O" } };
+  return `${forma[prep][artigo]} ${nome}`;
+}
 var NOMES_DE_CHAVE = [
   "FAL_KEY",
   "KIE_API_KEY",
@@ -33548,9 +33556,11 @@ var NOMES_DE_CHAVE = [
   "KREA_API_KEY",
   "REPLICATE_API_TOKEN"
 ];
-var CAMPO_DO_PLUGIN = {
+var CAMPO_DO_APP = {
   FAL_KEY: "SAPIENS_FAL_KEY",
-  KIE_API_KEY: "SAPIENS_KIE_API_KEY"
+  KIE_API_KEY: "SAPIENS_KIE_API_KEY",
+  WAVESPEED_API_KEY: "SAPIENS_WAVESPEED_API_KEY",
+  REPLICATE_API_TOKEN: "SAPIENS_REPLICATE_API_TOKEN"
 };
 var JANELA_REPETIDO_MS = 30 * 60 * 1e3;
 var MAX_JOBS_GUARDADOS = 200;
@@ -33561,11 +33571,11 @@ var ESPERA_MAX_S = 75;
 var INGEST_SO_ATE_MS = 6e4;
 var pontesSchema = external_exports.object({
   action: external_exports.enum(["balcoes", "gerar", "status", "jobs"]),
-  provedor: external_exports.enum(["fal", "kie"]).optional().describe(
-    "action=gerar: o balc\xE3o. 'fal' l\xEA FAL_KEY; 'kie' l\xEA KIE_API_KEY. As duas moram no env do config do cliente MCP, nesta m\xE1quina."
+  provedor: external_exports.enum(PROVEDORES).optional().describe(
+    "action=gerar: o balc\xE3o. 'fal' (FAL_KEY), 'kie' (KIE_API_KEY), 'wavespeed' (WAVESPEED_API_KEY) ou 'replicate' (REPLICATE_API_TOKEN). A chave mora nesta m\xE1quina: no campo do plugin ou da extens\xE3o, ou no env do config do cliente MCP. action=balcoes diz quais est\xE3o configuradas."
   ),
   modelo: external_exports.string().max(200).optional().describe(
-    "action=gerar: o slug do modelo NO PROVEDOR, igual \xE0 p\xE1gina dele. fal: o id do endpoint (ex: 'fal-ai/flux/dev'), que vai no caminho de queue.fal.run. Kie: o campo 'model' do Market (ex: 'kling/v2-1-standard'), que vai no corpo do createTask. N\xE3o invente: confira na p\xE1gina do modelo."
+    "action=gerar: o slug do modelo NO PROVEDOR, igual \xE0 p\xE1gina dele. fal: o id do endpoint (ex: 'fal-ai/flux/dev'), que vai no caminho de queue.fal.run. Kie: o campo 'model' do Market (ex: 'kling/v2-1-standard'), que vai no corpo do createTask. WaveSpeed: o slug da p\xE1gina do modelo (ex: 'wavespeed-ai/flux-2-klein-9b/text-to-image'), que vai no caminho de api.wavespeed.ai/api/v3. Replicate: 'dono/nome' pra modelo oficial (ex: 'black-forest-labs/flux-schnell') ou 'dono/nome:<vers\xE3o de 64 caracteres>' pra modelo de comunidade. N\xE3o invente: confira na p\xE1gina do modelo."
   ),
   input: external_exports.union([external_exports.record(external_exports.any()), external_exports.string()]).optional().describe(
     'action=gerar: o corpo que a doc do provedor descreve pra esse modelo, com o prompt DENTRO (ex: {"prompt": "...", "image_urls": ["..."]}). A ficha do personagem entra aqui: passportPrompt no come\xE7o do prompt e mainImageUrl/imageUrls no campo de refer\xEAncia que o modelo aceita. A chave NUNCA vai aqui.'
@@ -33587,7 +33597,7 @@ var pontesSchema = external_exports.object({
     "action=gerar: o nome do motor na ficha, formato provedor-motor ('fal-krea-2'). Omitido, sai do slug do modelo. O prefixo do provedor \xE9 sempre o de verdade: \xE9 ele que decide o carimbo +18 da classe."
   ),
   externalCost: external_exports.string().max(200).optional().describe(
-    "action=gerar: o custo pra ficha, quando voc\xEA sabe ('US$ 0,35 na fal'). Omitido, a Kie informa os cr\xE9ditos consumidos e a fal fica como 'pago na fal com a sua chave'."
+    "action=gerar: o custo pra ficha, quando voc\xEA sabe ('US$ 0,35 na fal'). Omitido, a Kie informa os cr\xE9ditos consumidos e os outros balc\xF5es ficam como 'pago na <balc\xE3o> com a sua chave'."
   ),
   characterId: external_exports.string().optional().describe("action=gerar: o personagem de quem \xE9 a pe\xE7a (influencers:_id). A pe\xE7a nasce ligada \xE0 ficha dele."),
   characterIds: external_exports.union([external_exports.array(external_exports.string()), external_exports.string()]).optional().describe("action=gerar: quem est\xE1 em cena, em ordem (o protagonista primeiro), quando \xE9 mais de uma criatura."),
@@ -33599,7 +33609,7 @@ var pontesSchema = external_exports.object({
   limit: external_exports.number().int().positive().max(50).optional().describe("action=jobs: quantos (padr\xE3o 10).")
 });
 function valorDeChave(nome) {
-  const campo = CAMPO_DO_PLUGIN[nome];
+  const campo = CAMPO_DO_APP[nome];
   return campo && lerChave(campo) || lerChave(nome);
 }
 function lerChave(nome) {
@@ -33610,7 +33620,7 @@ function lerChave(nome) {
 }
 function segredosConfigurados() {
   const out = /* @__PURE__ */ new Set();
-  for (const nome of [...NOMES_DE_CHAVE, ...Object.values(CAMPO_DO_PLUGIN)]) {
+  for (const nome of [...NOMES_DE_CHAVE, ...Object.values(CAMPO_DO_APP)]) {
     const valor = lerChave(nome);
     if (!valor) continue;
     out.add(valor);
@@ -33627,11 +33637,11 @@ function limpo(valor) {
   return JSON.parse(semChave(JSON.stringify(valor)));
 }
 function chaveDo(provedor) {
-  const { nome, envVar } = BALCOES[provedor];
+  const { envVar } = BALCOES[provedor];
   const valor = valorDeChave(envVar);
   if (!valor) {
     throw new Error(
-      `Falta a chave da ${nome} (${envVar}) nesta m\xE1quina. ${ondeFicaAChave()} A chave fica no seu computador; nunca mande ela no chat.`
+      `Falta a chave ${balcaoCom(provedor, "de")} (${envVar}) nesta m\xE1quina. ${ondeFicaAChave()} A chave fica no seu computador; nunca mande ela no chat.`
     );
   }
   return valor;
@@ -33713,16 +33723,18 @@ ${modelo}
 ${canonico(input)}`).digest("hex");
 }
 var MODELO_VALIDO = /^[a-z0-9][a-z0-9._-]*(\/[a-z0-9][a-z0-9._-]*)*$/i;
-function confereModelo(modelo) {
-  if (!MODELO_VALIDO.test(modelo) || modelo.includes("..")) {
+var MODELO_REPLICATE = /^[a-z0-9][a-z0-9._-]*\/[a-z0-9][a-z0-9._-]*(:[a-f0-9]{64})?$/i;
+function confereModelo(provedor, modelo) {
+  const forma = provedor === "replicate" ? MODELO_REPLICATE : MODELO_VALIDO;
+  if (!forma.test(modelo) || modelo.includes("..")) {
     throw new Error(
-      `modelo inv\xE1lido: "${modelo.slice(0, 80)}". Use o slug como est\xE1 na p\xE1gina do modelo no provedor (ex: 'fal-ai/flux/dev', 'kling/v2-1-standard').`
+      `modelo inv\xE1lido: "${modelo.slice(0, 80)}". Use o slug como est\xE1 na p\xE1gina do modelo no provedor (ex: 'fal-ai/flux/dev', 'kling/v2-1-standard', 'wavespeed-ai/flux-2-klein-9b/text-to-image', 'black-forest-labs/flux-schnell').`
     );
   }
 }
 function motorDaFicha(provedor, modelo, pedido2) {
-  const limpa = (s) => s.toLowerCase().replace(/^fal-ai\//, "").replace(/[\s/]+/g, "-").replace(/[^a-z0-9._-]/g, "").replace(/-{2,}/g, "-").replace(/^-|-$/g, "").slice(0, 80);
-  const base = pedido2?.trim() ? limpa(pedido2) : limpa(modelo);
+  const limpa = (s) => s.toLowerCase().replace(/^(fal-ai|wavespeed-ai)\//, "").replace(/[\s/]+/g, "-").replace(/[^a-z0-9._-]/g, "").replace(/-{2,}/g, "-").replace(/^-|-$/g, "").slice(0, 80);
+  const base = pedido2?.trim() ? limpa(pedido2) : limpa(modelo.split(":")[0]);
   if (base.startsWith(`${provedor}-`)) return base;
   return `${provedor}-${base || "modelo"}`;
 }
@@ -33793,14 +33805,19 @@ function urlsDeMidia(v2, out = [], fundo = 0) {
   return out;
 }
 var FAL_FILA = "https://queue.fal.run";
-function urlDaFilaFal(u) {
+function urlNoHost(u, host) {
   if (typeof u !== "string") return null;
   try {
     const url = new URL(u);
-    return url.protocol === "https:" && url.hostname === "queue.fal.run" ? url.toString() : null;
+    return url.protocol === "https:" && url.hostname === host ? url.toString() : null;
   } catch {
     return null;
   }
+}
+var urlDaFilaFal = (u) => urlNoHost(u, "queue.fal.run");
+function urlsSoltas(v2) {
+  const lista = Array.isArray(v2) ? v2 : [v2];
+  return lista.filter((u) => typeof u === "string" && u.startsWith("https://"));
 }
 async function falEnviar(chave, modelo, input) {
   const res = await fetch(`${FAL_FILA}/${modelo}`, {
@@ -33916,6 +33933,99 @@ async function kieLer(chave, job) {
   }
   return { estado: d.state === "generating" ? "rodando" : "fila" };
 }
+var WAVESPEED_API = "https://api.wavespeed.ai/api/v3";
+async function wavespeedEnviar(chave, modelo, input) {
+  const res = await fetch(`${WAVESPEED_API}/${modelo}`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${chave}`, "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+    signal: AbortSignal.timeout(3e4)
+  });
+  const json = await res.json().catch(() => null);
+  const id = json?.data?.id;
+  if (!res.ok || typeof id !== "string") {
+    throw new Error(
+      `A WaveSpeed recusou o pedido (HTTP ${res.status}): ${detalheDoErro(json) || "resposta sem detalhe"}. ` + (res.ok ? "Confira no painel da WaveSpeed se o pedido entrou antes de repetir." : "Nada entrou na fila.")
+    );
+  }
+  return {
+    requestId: id,
+    statusUrl: urlNoHost(json.data.urls?.get, "api.wavespeed.ai") ?? `${WAVESPEED_API}/predictions/${encodeURIComponent(id)}/result`
+  };
+}
+async function wavespeedLer(chave, job) {
+  const aindaNao = { estado: job.estado === "rodando" ? "rodando" : "fila" };
+  const statusUrl = urlNoHost(job.statusUrl, "api.wavespeed.ai");
+  if (!statusUrl) return { estado: "falhou", erro: "job sem endere\xE7o de consulta da WaveSpeed" };
+  let res;
+  try {
+    res = await fetch(statusUrl, {
+      headers: { Authorization: `Bearer ${chave}` },
+      signal: AbortSignal.timeout(2e4)
+    });
+  } catch {
+    return aindaNao;
+  }
+  if (!res.ok) return aindaNao;
+  const json = await res.json().catch(() => null);
+  const d = json?.data ?? json;
+  if (d?.status === "failed") {
+    return { estado: "falhou", erro: detalheDoErro(d) || "a WaveSpeed marcou falha sem motivo" };
+  }
+  if (d?.status !== "completed") return { estado: d?.status === "processing" ? "rodando" : "fila" };
+  const urls = urlsSoltas(d.outputs);
+  if (!urls.length) return { estado: "falhou", erro: "a WaveSpeed terminou mas n\xE3o devolveu arquivo" };
+  return { estado: "pronto", urls, custo: "pago na WaveSpeed com a sua chave" };
+}
+var REPLICATE_API = "https://api.replicate.com/v1";
+async function replicateEnviar(chave, modelo, input) {
+  const [nome, versao] = modelo.split(":");
+  const res = await fetch(versao ? `${REPLICATE_API}/predictions` : `${REPLICATE_API}/models/${nome}/predictions`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${chave}`, "Content-Type": "application/json" },
+    body: JSON.stringify(versao ? { version: versao, input } : { input }),
+    signal: AbortSignal.timeout(3e4)
+  });
+  const json = await res.json().catch(() => null);
+  if (!res.ok || typeof json?.id !== "string") {
+    throw new Error(
+      `O Replicate recusou o pedido (HTTP ${res.status}): ${detalheDoErro(json) || "resposta sem detalhe"}. ` + (res.ok ? "Confira no painel do Replicate se o pedido entrou antes de repetir." : "Nada entrou na fila.")
+    );
+  }
+  return {
+    requestId: json.id,
+    statusUrl: urlNoHost(json.urls?.get, "api.replicate.com") ?? `${REPLICATE_API}/predictions/${encodeURIComponent(json.id)}`
+  };
+}
+async function replicateLer(chave, job) {
+  const aindaNao = { estado: job.estado === "rodando" ? "rodando" : "fila" };
+  const statusUrl = urlNoHost(job.statusUrl, "api.replicate.com");
+  if (!statusUrl) return { estado: "falhou", erro: "job sem endere\xE7o de consulta do Replicate" };
+  let res;
+  try {
+    res = await fetch(statusUrl, {
+      headers: { Authorization: `Bearer ${chave}` },
+      signal: AbortSignal.timeout(2e4)
+    });
+  } catch {
+    return aindaNao;
+  }
+  if (!res.ok) return aindaNao;
+  const p = await res.json().catch(() => null);
+  if (p?.status === "failed" || p?.status === "canceled") {
+    return { estado: "falhou", erro: String(p.error || `o Replicate marcou ${p.status}`).slice(0, 400) };
+  }
+  if (p?.status !== "succeeded") return { estado: p?.status === "processing" ? "rodando" : "fila" };
+  const urls = urlsSoltas(p.output);
+  if (!urls.length) return { estado: "falhou", erro: "o Replicate terminou mas n\xE3o devolveu arquivo" };
+  return { estado: "pronto", urls, custo: "pago no Replicate com a sua chave" };
+}
+var ADAPTADORES = {
+  fal: { enviar: falEnviar, ler: falLer, intervaloMs: 2500 },
+  kie: { enviar: kieEnviar, ler: kieLer, intervaloMs: 3e3 },
+  wavespeed: { enviar: wavespeedEnviar, ler: wavespeedLer, intervaloMs: 2500 },
+  replicate: { enviar: replicateEnviar, ler: replicateLer, intervaloMs: 2500 }
+};
 function dormir(ms) {
   return new Promise((r) => setTimeout(r, ms));
 }
@@ -33972,12 +34082,11 @@ async function ingerirPecas(job) {
 async function avancar(job, segundos) {
   const inicio = Date.now();
   const prazo = inicio + Math.max(0, Math.min(segundos, ESPERA_MAX_S)) * 1e3;
-  const intervalo = job.provedor === "kie" ? 3e3 : 2500;
+  const { ler, intervaloMs: intervalo } = ADAPTADORES[job.provedor];
   let atual = job;
   for (; ; ) {
     if (atual.estado === "fila" || atual.estado === "rodando") {
-      const chave = chaveDo(atual.provedor);
-      const leitura = atual.provedor === "fal" ? await falLer(chave, atual) : await kieLer(chave, atual);
+      const leitura = await ler(chaveDo(atual.provedor), atual);
       atual = aplicar(atual, leitura);
       await salvarJob(atual);
     }
@@ -33992,20 +34101,20 @@ async function avancar(job, segundos) {
   }
 }
 function proximoPasso(job) {
-  const nome = BALCOES[job.provedor].nome;
+  const p = job.provedor;
   switch (job.estado) {
     case "fila":
     case "rodando":
-      return `Ainda renderizando na ${nome}. Chame sapiens_pontes action=status jobId=${job.id} (aguardarSegundos at\xE9 ${ESPERA_MAX_S}). N\xC3O chame gerar de novo: isso cria outro job e cobra outra vez na conta da pessoa.`;
+      return `Ainda renderizando ${balcaoCom(p, "em")}. Chame sapiens_pontes action=status jobId=${job.id} (aguardarSegundos at\xE9 ${ESPERA_MAX_S}). N\xC3O chame gerar de novo: isso cria outro job e cobra outra vez na conta da pessoa.`;
     case "pronto":
       if (!job.ingerir) {
         return "Pronto no provedor, fora do acervo (ingerir=false). A URL do render expira: pra trazer, chame action=status com ingerir=true.";
       }
-      return job.pecas?.some((p) => p.erro) ? `Gerou, mas a volta pro acervo falhou (ver pecas[].erro). Chame action=status jobId=${job.id} de novo: o ingest \xE9 idempotente, n\xE3o duplica.` : `Gerou. Chame action=status jobId=${job.id} pra trazer pro acervo (a URL do render expira).`;
+      return job.pecas?.some((p2) => p2.erro) ? `Gerou, mas a volta pro acervo falhou (ver pecas[].erro). Chame action=status jobId=${job.id} de novo: o ingest \xE9 idempotente, n\xE3o duplica.` : `Gerou. Chame action=status jobId=${job.id} pra trazer pro acervo (a URL do render expira).`;
     case "ingerido":
       return "No acervo, privada e com custo 0 em Sinapses. Mostre com sapiens_gallery action=list (kind=video pra v\xEDdeo). Publicar \xE9 ato da pessoa (sapiens_gallery action=publish).";
     case "falhou":
-      return `A ${nome} marcou falha. Confira o painel da ${nome} antes de tentar de novo (a regra de cobran\xE7a de job que falha \xE9 deles).`;
+      return `${balcaoCom(p, "")} marcou falha. Confira o painel ${balcaoCom(p, "de")} antes de tentar de novo (a regra de cobran\xE7a de job que falha \xE9 deles).`;
   }
 }
 function resumo(job, extra = {}) {
@@ -34019,19 +34128,19 @@ function resumo(job, extra = {}) {
     resultUrls: job.estado === "pronto" ? job.resultUrls : void 0,
     custo: job.custo,
     erro: job.erro,
-    chave: `A chave ficou nesta m\xE1quina: o pedido saiu daqui direto pra ${BALCOES[job.provedor].nome}. A casa n\xE3o viu a chave.`,
+    chave: `A chave ficou nesta m\xE1quina: o pedido saiu daqui direto ${balcaoCom(job.provedor, "para")}. A casa n\xE3o viu a chave.`,
     proximoPasso: proximoPasso(job),
     ...extra
   };
 }
 async function gerar(args) {
   const provedor = args.provedor;
-  if (!provedor) throw new Error("action=gerar exige provedor: 'fal' ou 'kie'.");
+  if (!provedor) throw new Error(`action=gerar exige provedor: ${PROVEDORES.map((p) => `'${p}'`).join(", ")}.`);
   const modelo = args.modelo?.trim();
   if (!modelo) {
     throw new Error("action=gerar exige modelo: o slug do modelo no provedor, igual \xE0 p\xE1gina dele.");
   }
-  confereModelo(modelo);
+  confereModelo(provedor, modelo);
   const chave = chaveDo(provedor);
   const input = lerInput(args.input);
   confereSemChaveNoPedido(input, args.prompt);
@@ -34059,7 +34168,7 @@ async function gerar(args) {
     }
   }
   const promptDaFicha = args.prompt?.trim() || (typeof input.prompt === "string" && input.prompt.trim() ? input.prompt : JSON.stringify(input).slice(0, 4e3));
-  const enviado = provedor === "fal" ? await falEnviar(chave, modelo, input) : await kieEnviar(chave, modelo, input);
+  const enviado = await ADAPTADORES[provedor].enviar(chave, modelo, input);
   const agora = Date.now();
   const job = {
     id: novoId(),
@@ -34103,7 +34212,7 @@ async function status(args) {
 function balcoes() {
   return {
     regra: "A chave mora nesta m\xE1quina e sai daqui s\xF3 pro provedor. A casa n\xE3o recebe, n\xE3o guarda e n\xE3o v\xEA. Gerar com a sua chave custa zero em Sinapses: voc\xEA paga o pre\xE7o do provedor, sem margem da casa.",
-    balcoes: Object.keys(BALCOES).map((k) => ({
+    balcoes: PROVEDORES.map((k) => ({
       provedor: k,
       nome: BALCOES[k].nome,
       variavel: BALCOES[k].envVar,
@@ -34111,8 +34220,8 @@ function balcoes() {
     })),
     canal: CANAL,
     comoConfigurar: ondeFicaAChave(),
-    ondeAcharOModelo: "fal: o id do endpoint na p\xE1gina do modelo em fal.ai/models (ex: 'fal-ai/flux/dev'). Kie: o 'model' da p\xE1gina do modelo no Market da Kie. O input \xE9 o corpo que a mesma p\xE1gina descreve.",
-    outrosBalcoes: "Sogni, Krea, Magnific, WaveSpeed, Replicate e a pr\xF3pria placa seguem pelo seu harness + sapiens_gallery action=ingest (cat\xE1logo em sapiens_meta action=pontes)."
+    ondeAcharOModelo: "fal: o id do endpoint na p\xE1gina do modelo em fal.ai/models (ex: 'fal-ai/flux/dev'). Kie: o 'model' da p\xE1gina do modelo no Market da Kie. WaveSpeed: o slug da p\xE1gina do modelo em wavespeed.ai/models (ex: 'wavespeed-ai/flux-2-klein-9b/text-to-image'). Replicate: 'dono/nome' do modelo oficial (ex: 'black-forest-labs/flux-schnell'), ou 'dono/nome:<vers\xE3o>' pra modelo de comunidade. O input \xE9 o corpo que a mesma p\xE1gina descreve.",
+    outrosBalcoes: "Sogni, Krea, Magnific e a pr\xF3pria placa seguem pelo seu harness + sapiens_gallery action=ingest (cat\xE1logo em sapiens_meta action=pontes). Balc\xE3o novo na porta local entra por c\xF3digo, n\xE3o por campo livre: cada chave s\xF3 vai pro endere\xE7o do pr\xF3prio provedor."
   };
 }
 function jobs(args) {
@@ -34331,7 +34440,7 @@ var PONTES = [
     nota: "Custo zero em dinheiro, pago em tempo. Entra por filePath, slug 'bancada-<motor>'."
   }
 ];
-var PORTA_LOCAL = ["fal", "kie"];
+var PORTA_LOCAL = ["fal", "kie", "wavespeed", "replicate"];
 var FIRST_POWERS = [
   {
     icon: "\u{1F4DA}",
@@ -34473,7 +34582,7 @@ async function meta2(args) {
       tier: isAdmin ? "admin" : "user",
       balance,
       ...lowBalance ? {
-        balanceWarning: "Saldo abaixo de 500 Sinapses: o que \xE9 gr\xE1tis roda tranquilo, mas pra imagem/m\xFAsica/v\xEDdeo talvez precise recarregar. Outra sa\xEDda \xE9 a outra porta: com a chave dela num provedor (Kie, fal, Magnific, Sogni), gera l\xE1 com a ficha do personagem daqui e a pe\xE7a volta pro acervo, custo zero em Sinapses. No MCP instalado, fal e Kie saem daqui mesmo por sapiens_pontes action=gerar; o resto volta por sapiens_gallery action=ingest (skill 'pontes'; sapiens_meta action=pontes diz o que ela j\xE1 tem configurado)."
+        balanceWarning: "Saldo abaixo de 500 Sinapses: o que \xE9 gr\xE1tis roda tranquilo, mas pra imagem/m\xFAsica/v\xEDdeo talvez precise recarregar. Outra sa\xEDda \xE9 a outra porta: com a chave dela num provedor (Kie, fal, Magnific, Sogni), gera l\xE1 com a ficha do personagem daqui e a pe\xE7a volta pro acervo, custo zero em Sinapses. No MCP instalado, fal, Kie, WaveSpeed e Replicate saem daqui mesmo por sapiens_pontes action=gerar; o resto volta por sapiens_gallery action=ingest (skill 'pontes'; sapiens_meta action=pontes diz o que ela j\xE1 tem configurado)."
       } : {},
       firstPowers: FIRST_POWERS,
       startHere,
@@ -34596,7 +34705,7 @@ async function meta2(args) {
     return {
       regra: "A chave de provedor NUNCA passa pelo Sapiens: ela mora no ambiente da m\xE1quina da pessoa e quem chama o motor \xE9 um processo de l\xE1 (o harness dela, ou o sapiens-mcp instalado pela sapiens_pontes). A casa entra com a ficha do personagem (sapiens_character action=get: passportPrompt + imageUrls) e recebe a pe\xE7a de volta pelo ingest, que grava motor, prompt verbatim, custo real e personagem. Com a chave dela, gerar custa zero em Sinapses: ela paga o pre\xE7o do provedor, sem margem da casa. Passo a passo: sapiens_skill action=get name=pontes.",
       detectadas,
-      detectadasNota: remoto ? "No MCP remoto n\xE3o d\xE1 pra olhar o ambiente da pessoa, e gerar com a chave dela pede o MCP instalado (a chave n\xE3o sobe pro conector remoto). Pergunte onde ela tem cr\xE9dito (Kie, fal, Magnific, Sogni, Krea...) ou olhe os conectores que j\xE1 est\xE3o nesta conversa." : detectadas.length ? `Achei chave configurada (pelo NOME da vari\xE1vel, sem ler o valor) pra: ${detectadas.join(", ")}. Ofere\xE7a as duas portas antes de gastar Sinapse.${naPortaLocal.length ? ` ${naPortaLocal.join(" e ")} a casa gera daqui mesmo: sapiens_pontes action=gerar.` : ""}` : `Nenhuma vari\xE1vel de provedor no ambiente deste MCP. Pergunte onde a pessoa tem cr\xE9dito, ou olhe os conectores j\xE1 ligados nesta conversa (Magnific, Krea, Sogni). Pra fal e Kie: ${ondeFicaAChave()}`,
+      detectadasNota: remoto ? "No MCP remoto n\xE3o d\xE1 pra olhar o ambiente da pessoa, e gerar com a chave dela pede o MCP instalado (a chave n\xE3o sobe pro conector remoto). Pergunte onde ela tem cr\xE9dito (Kie, fal, Magnific, Sogni, Krea...) ou olhe os conectores que j\xE1 est\xE3o nesta conversa." : detectadas.length ? `Achei chave configurada (pelo NOME da vari\xE1vel, sem ler o valor) pra: ${detectadas.join(", ")}. Ofere\xE7a as duas portas antes de gastar Sinapse.${naPortaLocal.length ? ` ${naPortaLocal.join(" e ")} a casa gera daqui mesmo: sapiens_pontes action=gerar.` : ""}` : `Nenhuma vari\xE1vel de provedor no ambiente deste MCP. Pergunte onde a pessoa tem cr\xE9dito, ou olhe os conectores j\xE1 ligados nesta conversa (Magnific, Krea, Sogni). Pra fal, Kie, WaveSpeed e Replicate: ${ondeFicaAChave()}`,
       portaLocal: {
         tool: "sapiens_pontes",
         balcoes: PORTA_LOCAL,
@@ -40404,7 +40513,7 @@ A foto NUNCA vai pra banco nenhum, nem da casa nem de terceiro:
   {
     name: "pontes",
     title: "Pontes: gerar com a sua chave e trazer pro acervo",
-    description: "A pessoa tem cr\xE9dito na Kie, na fal, na Magnific, na Sogni ou na pr\xF3pria placa e quer usar o personagem dela l\xE1, quer gerar com a chave dela em vez de Sinapse, ou est\xE1 sem Sinapse pra v\xEDdeo. Como levar a ficha, gerar no balc\xE3o dela (no MCP instalado, fal e Kie saem pela sapiens_pontes; a chave nunca passa pelo Sapiens) e a pe\xE7a voltar pro acervo com a ficha inteira. Puxe quando ouvir 'gera com a minha chave', 'tenho FAL_KEY', 'tem Kie a\xED?', 'uso a fal', 'gastei minhas Sinapses', 'gero na Magnific', 'tenho ComfyUI'.",
+    description: "A pessoa tem cr\xE9dito na Kie, na fal, na WaveSpeed, no Replicate, na Magnific, na Sogni ou na pr\xF3pria placa e quer usar o personagem dela l\xE1, quer gerar com a chave dela em vez de Sinapse, ou est\xE1 sem Sinapse pra v\xEDdeo. Como levar a ficha, gerar no balc\xE3o dela (no MCP instalado, fal, Kie, WaveSpeed e Replicate saem pela sapiens_pontes; a chave nunca passa pelo Sapiens) e a pe\xE7a voltar pro acervo com a ficha inteira. Puxe quando ouvir 'gera com a minha chave', 'tenho FAL_KEY', 'tem Kie a\xED?', 'uso a fal', 'tenho WaveSpeed', 'uso o Replicate', 'gastei minhas Sinapses', 'gero na Magnific', 'tenho ComfyUI'.",
     body: `## O que \xE9 uma ponte
 
 O Sapiens \xE9 uma das pontes, n\xE3o um muro. A pessoa monta o personagem aqui (ficha, passaporte, refer\xEAncias) e gera a pe\xE7a ONDE TEM CR\xC9DITO: Kie, fal, Magnific, Sogni, Krea, Replicate, a pr\xF3pria placa. A pe\xE7a volta pro acervo dela como NATIVA, com motor, prompt, custo real e personagem na ficha, custo 0 em Sinapses. O portf\xF3lio dela cresce aqui; o dinheiro dela sai de onde ela j\xE1 p\xF4s.
@@ -40435,13 +40544,13 @@ Confirme com ela ANTES de disparar em qualquer balc\xE3o pago. Gera\xE7\xE3o de 
 
 Regras que valem fora igual dentro: prompt SEM idade em n\xFAmero; personagem nunca menor (a casa trabalha com 23+ no foco e 18 \xE9 piso absoluto); motor citado pelo nome que ele tem no provedor. Prompt novo que funcionar l\xE1 fora: grave de volta com \`sapiens_character action=set_passport\` (campo \`recipes\`, prompt verbatim + note com o que provou). \xC9 isso que faz a pr\xF3xima rodada n\xE3o redescobrir.
 
-## Passo 3a: gerar pela porta local (fal e Kie, MCP instalado)
+## Passo 3a: gerar pela porta local (fal, Kie, WaveSpeed e Replicate, MCP instalado)
 
 Com o \`sapiens-mcp\` instalado (plugin do Claude Code, extens\xE3o do Claude Desktop ou npx) e a chave configurada, \xE9 a porta mais curta:
 
 1. \`sapiens_pontes action=balcoes\` diz quais chaves est\xE3o configuradas (pelo nome, sem ler o valor). Faltando, repasse o \`comoConfigurar\` da mesma resposta: ele diz onde a chave entra no jeito que o Sapiens foi instalado.
 2. Confirme com ela o modelo e o custo no provedor. \xC9 dinheiro dela.
-3. \`sapiens_pontes action=gerar\` com \`provedor\` ('fal' ou 'kie'), \`modelo\` (o slug como est\xE1 na p\xE1gina do modelo no provedor) e \`input\` (o corpo que a doc do modelo descreve, com o prompt DENTRO), mais \`characterId\` e \`referenceImageIds\` pra ficha. O descritor do passaporte vai no come\xE7o do prompt; o bloco NEGATIVE vai no campo \`negative_prompt\` quando o modelo tem um (no corpo do prompt, nega\xE7\xE3o acende o que pro\xEDbe, e o piso de idade da casa recusa palavra de menor ali). As imagens da ficha v\xE3o no campo de refer\xEAncia do modelo (\`image_url\`, \`image_urls\`).
+3. \`sapiens_pontes action=gerar\` com \`provedor\` ('fal', 'kie', 'wavespeed' ou 'replicate'), \`modelo\` (o slug como est\xE1 na p\xE1gina do modelo no provedor; no Replicate, 'dono/nome' ou 'dono/nome:<vers\xE3o>' pra modelo de comunidade) e \`input\` (o corpo que a doc do modelo descreve, com o prompt DENTRO), mais \`characterId\` e \`referenceImageIds\` pra ficha. O descritor do passaporte vai no come\xE7o do prompt; o bloco NEGATIVE vai no campo \`negative_prompt\` quando o modelo tem um (no corpo do prompt, nega\xE7\xE3o acende o que pro\xEDbe, e o piso de idade da casa recusa palavra de menor ali). As imagens da ficha v\xE3o no campo de refer\xEAncia do modelo (\`image_url\`, \`image_urls\`).
 4. Voltou \`rodando\`? Chame \`sapiens_pontes action=status jobId=...\`, nunca \`gerar\` de novo: o job est\xE1 gravado na m\xE1quina dela, e o pedido id\xEAntico em 30 minutos devolve o job que existe em vez de cobrar outra vez.
 5. Terminado, a pe\xE7a entra sozinha no acervo, privada, custo 0 em Sinapses, com motor, prompt verbatim e custo na ficha. Mostre com \`sapiens_gallery action=list\`.
 
@@ -41668,7 +41777,7 @@ var TOOLS = {
     handler: gallery
   },
   sapiens_pontes: {
-    description: "GERAR COM A CHAVE DA PESSOA (s\xF3 no MCP instalado): a outra porta ao lado da Sinapse. Chama o provedor com a chave que mora no ambiente DESTA m\xE1quina (o env do config do cliente MCP: FAL_KEY, KIE_API_KEY) e traz a pe\xE7a pro acervo como nativa, custo 0 em Sinapses: a pessoa paga o pre\xE7o do provedor, sem margem da casa. A chave NUNCA vai em arg, prompt ou chat, nunca volta no resultado e nunca passa pelo Sapiens: a tool l\xEA do ambiente e o pedido sai daqui direto pro provedor. No conector remoto (claude.ai, ChatGPT) esta tool n\xE3o existe; l\xE1 \xE9 Sinapse (sapiens_image, sapiens_video) ou o harness da pessoa + sapiens_gallery action=ingest. Sub-actions: 'balcoes' (quais chaves est\xE3o configuradas, pelo NOME, e como configurar; gr\xE1tis, sem rede), 'gerar' (provedor 'fal' ou 'kie' + modelo = o slug NO PROVEDOR, igual \xE0 p\xE1gina do modelo (fal: o id do endpoint, ex 'fal-ai/flux/dev'; Kie: o 'model' do Market) + input = o corpo que a doc do provedor descreve pra esse modelo, com o prompt DENTRO. COBRA NA CONTA DA PESSOA no provedor: confirme modelo e custo com ela antes. O job fica gravado nesta m\xE1quina ANTES de esperar o render, e o pedido id\xEAntico em 30 minutos devolve o job que j\xE1 existe em vez de cobrar de novo (forcar=true repete de prop\xF3sito). Espera at\xE9 aguardarSegundos (padr\xE3o 45) e, pronto, ingere sozinho com characterId, referenceImageIds, prompt verbatim e o custo quando o provedor diz), 'status' (jobId: consulta o provedor e, se terminou, traz pro acervo; \xE9 o que se chama depois de um gerar que voltou 'rodando', NUNCA gerar de novo), 'jobs' (os jobs desta m\xE1quina, sem rede). A FICHA DO PERSONAGEM entra no input: pegue passportPrompt e mainImageUrl/imageUrls em sapiens_character action=get, ponha o descritor no come\xE7o do prompt e as imagens no campo de refer\xEAncia que o modelo aceita (image_url, image_urls, conforme a doc dele); o bloco NEGATIVE do passaporte vai no campo negative_prompt quando o modelo tem um. O prompt passa pelo piso de idade da casa antes de sair (18 \xE9 o piso). Pe\xE7a de fal entra com o carimbo +18 por classe (peso aberto), igual ao ingest manual; Kie entra sem. Passo a passo na skill 'pontes'.",
+    description: "GERAR COM A CHAVE DA PESSOA (s\xF3 no MCP instalado): a outra porta ao lado da Sinapse. Chama o provedor com a chave que mora no ambiente DESTA m\xE1quina (o campo do plugin ou da extens\xE3o, ou o env do config do cliente MCP: FAL_KEY, KIE_API_KEY, WAVESPEED_API_KEY, REPLICATE_API_TOKEN) e traz a pe\xE7a pro acervo como nativa, custo 0 em Sinapses: a pessoa paga o pre\xE7o do provedor, sem margem da casa. A chave NUNCA vai em arg, prompt ou chat, nunca volta no resultado e nunca passa pelo Sapiens: a tool l\xEA do ambiente e o pedido sai daqui direto pro provedor. No conector remoto (claude.ai, ChatGPT) esta tool n\xE3o existe; l\xE1 \xE9 Sinapse (sapiens_image, sapiens_video) ou o harness da pessoa + sapiens_gallery action=ingest. Sub-actions: 'balcoes' (quais chaves est\xE3o configuradas, pelo NOME, e como configurar; gr\xE1tis, sem rede), 'gerar' (provedor 'fal', 'kie', 'wavespeed' ou 'replicate' + modelo = o slug NO PROVEDOR, igual \xE0 p\xE1gina do modelo (fal: o id do endpoint, ex 'fal-ai/flux/dev'; Kie: o 'model' do Market; WaveSpeed: o slug da p\xE1gina, ex 'wavespeed-ai/flux-2-klein-9b/text-to-image'; Replicate: 'dono/nome', ou 'dono/nome:<vers\xE3o>' pra modelo de comunidade) + input = o corpo que a doc do provedor descreve pra esse modelo, com o prompt DENTRO. COBRA NA CONTA DA PESSOA no provedor: confirme modelo e custo com ela antes. O job fica gravado nesta m\xE1quina ANTES de esperar o render, e o pedido id\xEAntico em 30 minutos devolve o job que j\xE1 existe em vez de cobrar de novo (forcar=true repete de prop\xF3sito). Espera at\xE9 aguardarSegundos (padr\xE3o 45) e, pronto, ingere sozinho com characterId, referenceImageIds, prompt verbatim e o custo quando o provedor diz), 'status' (jobId: consulta o provedor e, se terminou, traz pro acervo; \xE9 o que se chama depois de um gerar que voltou 'rodando', NUNCA gerar de novo), 'jobs' (os jobs desta m\xE1quina, sem rede). A FICHA DO PERSONAGEM entra no input: pegue passportPrompt e mainImageUrl/imageUrls em sapiens_character action=get, ponha o descritor no come\xE7o do prompt e as imagens no campo de refer\xEAncia que o modelo aceita (image_url, image_urls, conforme a doc dele); o bloco NEGATIVE do passaporte vai no campo negative_prompt quando o modelo tem um. O prompt passa pelo piso de idade da casa antes de sair (18 \xE9 o piso). Pe\xE7a de fal, WaveSpeed ou Replicate entra com o carimbo +18 por classe (peso aberto), igual ao ingest manual; Kie entra sem. Passo a passo na skill 'pontes'.",
     schema: pontesSchema,
     handler: pontes
   },
@@ -41837,7 +41946,7 @@ REGRA DE OURO:
 - PRIMEIRO CONTATO ou "o que voc\xEA faz?"/"como come\xE7o?"/"o que d\xE1 pra fazer?": chame sapiens_meta action=start e MOSTRE o resultado na sua voz. Sem login, ele ensina a conectar; logado, traz saldo + primeiros poderes com exemplos. \xC9 a porta de entrada: n\xE3o despeje a lista inteira de tools, deixe o start guiar.
 - LOGO AP\xD3S UM LOGIN BEM-SUCEDIDO (action=login retornou ok): chame action=start na sequ\xEAncia e mostre a porta de entrada. O rec\xE9m-chegado n\xE3o sabe o que pedir; n\xE3o o deixe na tela em branco, guie a primeira jogada sem ele precisar perguntar.
 - Antes de gerar algo caro (imagem/m\xFAsica/v\xEDdeo), cheque saldo: sapiens_meta action=credits (ou subscription). Saldo baixo, avise o usu\xE1rio antes. V\xEDdeo \xE9 o mais caro da casa: confirme com ele antes de disparar.
-- DUAS PORTAS, lado a lado: Sinapse (sapiens_image, sapiens_video: nada pra configurar) ou a CHAVE DA PESSOA num provedor (fal, Kie, Sogni, a pr\xF3pria placa), que custa zero aqui. No MCP instalado, sapiens_pontes gera com a chave que mora no config dela e traz a pe\xE7a pro acervo; no remoto, ela gera no harness dela e traz por sapiens_gallery action=ingest. sapiens_meta action=pontes diz o que ela j\xE1 tem configurado: se tiver chave, ofere\xE7a as duas portas antes de gastar Sinapse. A chave NUNCA passa pelo Sapiens (nem em arg, nem no chat). Skill 'pontes'.
+- DUAS PORTAS, lado a lado: Sinapse (sapiens_image, sapiens_video: nada pra configurar) ou a CHAVE DA PESSOA num provedor (fal, Kie, WaveSpeed, Replicate, Sogni, a pr\xF3pria placa), que custa zero aqui. No MCP instalado, sapiens_pontes gera com a chave que mora na m\xE1quina dela (fal, Kie, WaveSpeed, Replicate) e traz a pe\xE7a pro acervo; no remoto, ela gera no harness dela e traz por sapiens_gallery action=ingest. sapiens_meta action=pontes diz o que ela j\xE1 tem configurado: se tiver chave, ofere\xE7a as duas portas antes de gastar Sinapse. A chave NUNCA passa pelo Sapiens (nem em arg, nem no chat). Skill 'pontes'.
 - REGRA DO TIMEOUT: gera\xE7\xE3o S\xCDNCRONA pode estourar o teto de ~120s do cliente e voltar 'Timeout' MESMO tendo gerado e COBRADO. Nunca repita \xE0s cegas: confira antes onde o resultado cairia (a tabela de onde conferir est\xE1 na skill 'primeiros-passos').
 - "sessionToken expirado" = refa\xE7a login: sapiens_meta action=login com o c\xF3digo de sapiensinteticos.com/conectar-claude.
 - sapiens_meta action=formats devolve os schemas por formato; action=whoami diz tier (user/admin) + saldo. sapiens_image e sapiens_video action=models trazem o cat\xE1logo com o pre\xE7o ATUAL: consulte em vez de chutar custo.

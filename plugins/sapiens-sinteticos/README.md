@@ -17,7 +17,7 @@ Needs Node.js 18 or newer. From a terminal it works too: `claude plugin marketpl
 
 ## Sinapses or your own key
 
-When you enable the plugin, Claude Code asks for two optional keys, fal and Kie.
+When you enable the plugin, Claude Code asks for optional keys: fal, Kie, WaveSpeed and Replicate. Fill in only the ones you have.
 
 - Blank: you generate with Sinapses, the house credit.
 - Filled in: you generate on your own provider credit, with no house margin.
@@ -57,4 +57,4 @@ Ask Claude "what can Sapiens do?". To connect your account, generate a code at h
 
 ## Data
 
-The server runs on your computer and reaches your Sapiens account with the session you authorize. Generations with your key go from your computer straight to fal or Kie. Skills are instructions and send nothing. Privacy: https://www.sapiensinteticos.com/privacidade
+The server runs on your computer and reaches your Sapiens account with the session you authorize. Generations with your key go from your computer straight to the provider, and each key only ever goes to its own provider's address. Skills are instructions and send nothing. Privacy: https://www.sapiensinteticos.com/privacidade

@@ -17,7 +17,7 @@ Precisa do Node.js 18 ou mais novo. Pelo terminal também vai: `claude plugin ma
 
 ## Sinapse ou a sua chave
 
-Ao ativar o plugin, o Claude Code pede duas chaves opcionais, da fal e da Kie.
+Ao ativar o plugin, o Claude Code pede as chaves opcionais: fal, Kie, WaveSpeed e Replicate. Preencha só as que você tem.
 
 - Em branco: você gera em Sinapse, o crédito da casa.
 - Preenchidas: você gera no seu crédito do provedor, sem margem da casa.
@@ -57,4 +57,4 @@ Pergunte "o que o Sapiens faz?". Pra conectar a conta, gere o código em https:/
 
 ## Dados
 
-O servidor roda no seu computador e fala com a sua conta do Sapiens pela sessão que você autorizar. Geração com a sua chave sai do seu computador direto pra fal ou pra Kie. As skills são instruções e não mandam dado nenhum. Privacidade: https://www.sapiensinteticos.com/privacidade
+O servidor roda no seu computador e fala com a sua conta do Sapiens pela sessão que você autorizar. Geração com a sua chave sai do seu computador direto pro provedor, e cada chave só vai pro endereço do próprio provedor. As skills são instruções e não mandam dado nenhum. Privacidade: https://www.sapiensinteticos.com/privacidade

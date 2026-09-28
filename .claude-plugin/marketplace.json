@@ -9,7 +9,7 @@
     {
       "name": "sapiens-sinteticos",
       "source": "./plugins/sapiens-sinteticos",
-      "description": "Para o Claude Code: as skills do Sapiens Sintéticos e o servidor da sua conta, rodando no seu computador. Gera em Sinapse ou com a sua chave da fal e da Kie, guardada na sua máquina."
+      "description": "Para o Claude Code: as skills do Sapiens Sintéticos e o servidor da sua conta, rodando no seu computador. Gera em Sinapse ou com a sua chave (fal, Kie, WaveSpeed ou Replicate), guardada na sua máquina."
     }
   ]
 }

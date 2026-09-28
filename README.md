@@ -35,7 +35,7 @@ You connect with a Sapiens account (Google or email), no API key, no card. Accou
 /plugin install sapiens-sinteticos@sapiens-sinteticos
 ```
 
-Node 18+. On enable, Claude Code asks for two optional keys, fal and Kie. Blank, you generate with Sinapses. Filled in, you generate on your own provider credit, with no house margin, and the key stays in your system's credential store. To connect your account, generate a code at [/conectar-claude](https://www.sapiensinteticos.com/conectar-claude) and tell Claude "connect my Sapiens account, code XXXX-XXXX". More in [plugins/sapiens-sinteticos](plugins/sapiens-sinteticos).
+Node 18+. On enable, Claude Code asks for optional keys: fal, Kie, WaveSpeed and Replicate. Fill in only the ones you have. Blank, you generate with Sinapses. Filled in, you generate on your own provider credit, with no house margin, and the key stays in your system's credential store. To connect your account, generate a code at [/conectar-claude](https://www.sapiensinteticos.com/conectar-claude) and tell Claude "connect my Sapiens account, code XXXX-XXXX". More in [plugins/sapiens-sinteticos](plugins/sapiens-sinteticos).
 
 **Remote (any MCP client, streamable HTTP).** Point your client at:
 
@@ -79,7 +79,7 @@ The Claude side always warns the cost before spending. Publishing to the editori
 
 ## Privacy
 
-The server only talks to the public Sapiens backend (Convex). With your own fal or Kie key, generations go from your computer straight to that provider. Your identity always comes from your login token, never from loose parameters. Each account only touches what is its own.
+The server only talks to the public Sapiens backend (Convex). With your own key (fal, Kie, WaveSpeed or Replicate), generations go from your computer straight to that provider, and each key only ever goes to its own provider's address. Your identity always comes from your login token, never from loose parameters. Each account only touches what is its own.
 
 ## The house
 

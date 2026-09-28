@@ -1,6 +1,6 @@
 ---
 name: pontes
-description: "A pessoa tem crédito na Kie, na fal, na Magnific, na Sogni ou na própria placa e quer usar o personagem dela lá, quer gerar com a chave dela em vez de Sinapse, ou está sem Sinapse pra vídeo. Como levar a ficha, gerar no balcão dela (no MCP instalado, fal e Kie saem pela sapiens_pontes; a chave nunca passa pelo Sapiens) e a peça voltar pro acervo com a ficha inteira. Puxe quando ouvir 'gera com a minha chave', 'tenho FAL_KEY', 'tem Kie aí?', 'uso a fal', 'gastei minhas Sinapses', 'gero na Magnific', 'tenho ComfyUI'."
+description: "A pessoa tem crédito na Kie, na fal, na WaveSpeed, no Replicate, na Magnific, na Sogni ou na própria placa e quer usar o personagem dela lá, quer gerar com a chave dela em vez de Sinapse, ou está sem Sinapse pra vídeo. Como levar a ficha, gerar no balcão dela (no MCP instalado, fal, Kie, WaveSpeed e Replicate saem pela sapiens_pontes; a chave nunca passa pelo Sapiens) e a peça voltar pro acervo com a ficha inteira. Puxe quando ouvir 'gera com a minha chave', 'tenho FAL_KEY', 'tem Kie aí?', 'uso a fal', 'tenho WaveSpeed', 'uso o Replicate', 'gastei minhas Sinapses', 'gero na Magnific', 'tenho ComfyUI'."
 ---
 
 # Pontes: gerar com a sua chave e trazer pro acervo
@@ -35,13 +35,13 @@ Confirme com ela ANTES de disparar em qualquer balcão pago. Geração de fora t
 
 Regras que valem fora igual dentro: prompt SEM idade em número; personagem nunca menor (a casa trabalha com 23+ no foco e 18 é piso absoluto); motor citado pelo nome que ele tem no provedor. Prompt novo que funcionar lá fora: grave de volta com `sapiens_character action=set_passport` (campo `recipes`, prompt verbatim + note com o que provou). É isso que faz a próxima rodada não redescobrir.
 
-## Passo 3a: gerar pela porta local (fal e Kie, MCP instalado)
+## Passo 3a: gerar pela porta local (fal, Kie, WaveSpeed e Replicate, MCP instalado)
 
 Com o `sapiens-mcp` instalado (plugin do Claude Code, extensão do Claude Desktop ou npx) e a chave configurada, é a porta mais curta:
 
 1. `sapiens_pontes action=balcoes` diz quais chaves estão configuradas (pelo nome, sem ler o valor). Faltando, repasse o `comoConfigurar` da mesma resposta: ele diz onde a chave entra no jeito que o Sapiens foi instalado.
 2. Confirme com ela o modelo e o custo no provedor. É dinheiro dela.
-3. `sapiens_pontes action=gerar` com `provedor` ('fal' ou 'kie'), `modelo` (o slug como está na página do modelo no provedor) e `input` (o corpo que a doc do modelo descreve, com o prompt DENTRO), mais `characterId` e `referenceImageIds` pra ficha. O descritor do passaporte vai no começo do prompt; o bloco NEGATIVE vai no campo `negative_prompt` quando o modelo tem um (no corpo do prompt, negação acende o que proíbe, e o piso de idade da casa recusa palavra de menor ali). As imagens da ficha vão no campo de referência do modelo (`image_url`, `image_urls`).
+3. `sapiens_pontes action=gerar` com `provedor` ('fal', 'kie', 'wavespeed' ou 'replicate'), `modelo` (o slug como está na página do modelo no provedor; no Replicate, 'dono/nome' ou 'dono/nome:<versão>' pra modelo de comunidade) e `input` (o corpo que a doc do modelo descreve, com o prompt DENTRO), mais `characterId` e `referenceImageIds` pra ficha. O descritor do passaporte vai no começo do prompt; o bloco NEGATIVE vai no campo `negative_prompt` quando o modelo tem um (no corpo do prompt, negação acende o que proíbe, e o piso de idade da casa recusa palavra de menor ali). As imagens da ficha vão no campo de referência do modelo (`image_url`, `image_urls`).
 4. Voltou `rodando`? Chame `sapiens_pontes action=status jobId=...`, nunca `gerar` de novo: o job está gravado na máquina dela, e o pedido idêntico em 30 minutos devolve o job que existe em vez de cobrar outra vez.
 5. Terminado, a peça entra sozinha no acervo, privada, custo 0 em Sinapses, com motor, prompt verbatim e custo na ficha. Mostre com `sapiens_gallery action=list`.
 
