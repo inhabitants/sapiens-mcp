@@ -12,6 +12,20 @@ description: "O fluxo de 4 passos do Musicator (create, lyrics, render, get) e a
 3. **render**: passe o `trackId` pronto pra sintetizar o áudio (3000 Sinapses, assíncrono, teto de 3/min).
 4. **get**: passe o `trackId` e vá polando o status até 'ready' (ou 'failed').
 
+## Qual motor no render
+
+`model` escolhe o motor. Sem ele, sai no Lyria 3.5.
+
+- `pro`: Lyria 3.5, faixa inteira até 3 min. Único que lê imagem de referência.
+- `clip`: Lyria 3 Clip, rascunho de 30s pra testar a ideia.
+- `mureka`: Mureka 9.5, faixa inteira, aguenta letra de até 5.000 caracteres.
+- `minimax`: MiniMax Music 2.6, faixa inteira até 5 min. Letra de 10 a 3.000 caracteres.
+- `elevenlabs`: ElevenLabs Music, a pessoa escolhe a duração em `durationSeconds` (30, 60, 120 ou 180; sem ele, 120). Letra até 3.500 caracteres.
+
+Todos custam o mesmo render fixo, menos o ElevenLabs, que cobra pela duração (`durationSeconds`): 30s 1300, 60s 2550, 120s 5050, 180s 7600 Sinapses. Diga o número e confirme antes de disparar o de 3 min.
+
+Letra maior que o teto do motor é recusada ANTES de cobrar, com o tamanho na mensagem: corte a letra ou troque de motor. `negativePrompt` e `seed` só valem no Lyria.
+
 Pular pro lyrics ou render sem create, ou sem os campos, falha sempre. É o erro número um deste fluxo.
 
 Depois de pronta: `action=publish` põe a faixa no Acervo da Comunidade (só admin/dono, custo 0, idempotente). A publicação já nasce com player no Fórum, veja a skill `forum`.

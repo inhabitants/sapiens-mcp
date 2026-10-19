@@ -1,8 +1,8 @@
 {
   "name": "sapiens-sinteticos",
   "displayName": "Sapiens Sintéticos",
-  "version": "1.81.0",
-  "description": "Para o Claude Code: as skills do Sapiens Sintéticos e o servidor da sua conta, rodando no seu computador. Gera em Sinapse ou com a sua chave (fal, Kie, WaveSpeed ou Replicate), guardada na sua máquina.",
+  "version": "1.102.1",
+  "description": "Para o Claude Code: as skills do Sapiens Sintéticos e o servidor da sua conta, rodando no seu computador. Gera em Sinapse ou com a sua chave (fal, Kie, WaveSpeed, Replicate ou OpenRouter), guardada na sua máquina.",
   "author": {
     "name": "Sapiens Sintéticos",
     "url": "https://www.sapiensinteticos.com"
@@ -20,7 +20,8 @@
     "fal",
     "kie",
     "wavespeed",
-    "replicate"
+    "replicate",
+    "openrouter"
   ],
   "userConfig": {
     "fal_key": {
@@ -51,6 +52,14 @@
       "type": "string",
       "title": "Chave do Replicate (opcional)",
       "description": "Em branco, você gera em Sinapse. Preenchida, gera no seu crédito do Replicate, sem margem da casa. Fica no cofre do sistema e sai daqui só pro Replicate.",
+      "sensitive": true,
+      "required": false,
+      "default": ""
+    },
+    "openrouter_api_key": {
+      "type": "string",
+      "title": "Chave da OpenRouter (opcional)",
+      "description": "Em branco, você gera em Sinapse. Preenchida, gera no seu crédito da OpenRouter, sem margem da casa. Fica no cofre do sistema e sai daqui só pra OpenRouter.",
       "sensitive": true,
       "required": false,
       "default": ""

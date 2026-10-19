@@ -35,7 +35,7 @@ You connect with a Sapiens account (Google or email), no API key, no card. Accou
 /plugin install sapiens-sinteticos@sapiens-sinteticos
 ```
 
-Node 18+. On enable, Claude Code asks for optional keys: fal, Kie, WaveSpeed and Replicate. Fill in only the ones you have. Blank, you generate with Sinapses. Filled in, you generate on your own provider credit, with no house margin, and the key stays in your system's credential store. To connect your account, generate a code at [/conectar-claude](https://www.sapiensinteticos.com/conectar-claude) and tell Claude "connect my Sapiens account, code XXXX-XXXX". More in [plugins/sapiens-sinteticos](plugins/sapiens-sinteticos).
+Node 18+. On enable, Claude Code asks for optional keys: fal, Kie, WaveSpeed, Replicate and OpenRouter. Fill in only the ones you have. Blank, you generate with Sinapses. Filled in, you generate on your own provider credit, with no house margin, and the key stays in your system's credential store. To connect your account, generate a code at [/conectar-claude](https://www.sapiensinteticos.com/conectar-claude) and tell Claude "connect my Sapiens account, code XXXX-XXXX". More in [plugins/sapiens-sinteticos](plugins/sapiens-sinteticos).
 
 **Remote (any MCP client, streamable HTTP).** Point your client at:
 
@@ -51,7 +51,7 @@ with the header `Authorization: Bearer <sessionToken>`. Generate the token at [s
 claude mcp add sapiens -- npx -y sapiens-mcp
 ```
 
-Node 18+. The backend URL is built in, nothing to configure. Then log in: open [/conectar-claude](https://www.sapiensinteticos.com/conectar-claude) while signed in, generate the code (`XXXX-XXXX`, valid for 5 minutes), and run `sapiens_meta` with `action: "login"` and `code: "XXXX-XXXX"`. The 30-day token is saved to `~/.sapiens-mcp/session.json`.
+Node 18+. The backend URL is built in, nothing to configure. Then log in: open [/conectar-claude](https://www.sapiensinteticos.com/conectar-claude) while signed in, generate the code (`XXXX-XXXX`, valid for 5 minutes), and run `sapiens_meta` with `action: "login"` and `code: "XXXX-XXXX"`. The token is valid for 90 days, renews on every use, and is saved to `~/.sapiens-mcp/session.json`.
 
 Works in Gemini CLI, Cursor, Antigravity, Claude Code and any MCP-speaking client. Only the way you add it changes.
 
@@ -72,14 +72,14 @@ The Claude side always warns the cost before spending. Publishing to the editori
 
 ## Troubleshooting
 
-- **"sessionToken expired" / "Sapiens account not connected".** The 30-day token lapsed or was never saved. Open [/conectar-claude](https://www.sapiensinteticos.com/conectar-claude) signed in, generate a fresh code, and run `sapiens_meta action=login code=XXXX-XXXX`.
+- **"sessionToken expired" / "Sapiens account not connected".** The token lapsed (90 days without use) or was never saved. Open [/conectar-claude](https://www.sapiensinteticos.com/conectar-claude) signed in, generate a fresh code, and run `sapiens_meta action=login code=XXXX-XXXX`.
 - **A tool or a new capability went missing after an update.** The client runs via `npx -y sapiens-mcp` (unpinned) and may be stuck on an old cache. Check what is running with `sapiens_meta action=version` (binary version, latest on npm, and `upToDate`). If `upToDate:false`, clear the npx cache and restart the client. With the plugin: `/plugin`, Installed tab, Sapiens Sintéticos, Update now, then `/reload-plugins`.
 - **"Invalid arguments".** The message already names the field that is missing or wrong, redo the call with what it asks. Do not repeat the same failing call (3 failures in a row make the client mark the server unreachable for about a minute, an anti-loop breaker).
 - **Low balance before generating.** `sapiens_meta action=credits` (or `action=subscription` for the per-bucket detail) shows what is left before you spend on image, music, or video.
 
 ## Privacy
 
-The server only talks to the public Sapiens backend (Convex). With your own key (fal, Kie, WaveSpeed or Replicate), generations go from your computer straight to that provider, and each key only ever goes to its own provider's address. Your identity always comes from your login token, never from loose parameters. Each account only touches what is its own.
+The server only talks to the public Sapiens backend (Convex). With your own key (fal, Kie, WaveSpeed, Replicate or OpenRouter), generations go from your computer straight to that provider, and each key only ever goes to its own provider's address. Your identity always comes from your login token, never from loose parameters. Each account only touches what is its own.
 
 ## The house
 

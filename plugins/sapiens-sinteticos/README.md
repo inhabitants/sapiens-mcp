@@ -17,7 +17,7 @@ Needs Node.js 18 or newer. From a terminal it works too: `claude plugin marketpl
 
 ## Sinapses or your own key
 
-When you enable the plugin, Claude Code asks for optional keys: fal, Kie, WaveSpeed and Replicate. Fill in only the ones you have.
+When you enable the plugin, Claude Code asks for optional keys: fal, Kie, WaveSpeed, Replicate and OpenRouter. Fill in only the ones you have.
 
 - Blank: you generate with Sinapses, the house credit.
 - Filled in: you generate on your own provider credit, with no house margin.
@@ -54,6 +54,9 @@ Ask Claude "what can Sapiens do?". To connect your account, generate a code at h
 - `minha-soul`: Instalar a soul do Sintético neste projeto
 - `curriculo`: Currículo PRO
 - `pontes`: Pontes: gerar com a sua chave e trazer pro acervo
+- `publicar`: Publicar nas redes da pessoa
+- `carrossel`: Carrossel: gerar, escrever, pôr foto e entregar
+- `sapiens-api`: API da conta: texto, imagem e vídeo em código
 
 ## Data
 

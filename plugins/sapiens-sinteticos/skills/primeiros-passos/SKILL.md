@@ -23,7 +23,7 @@ Não despeje a lista inteira de tools. O start guia.
 |---|---|
 | imagem | `sapiens_gallery action=list` |
 | artigo do perfil | `sapiens_write action=list` |
-| carrossel | `sapiens_pipeline action=list_carousels` |
+| carrossel | `sapiens_carrossel action=list` |
 
 **2. Disjuntor anti-loop.** Três falhas seguidas no MESMO tool fazem o cliente marcar o servidor como "unreachable" por ~56s. Parece que "o MCP caiu", mas foi argumento faltando. Quando um tool volta erro de validação ("exige X", "falta Y"), LEIA o erro e refaça a chamada COM o que falta. Nunca repita a chamada idêntica que falhou.
 
@@ -37,3 +37,4 @@ Não despeje a lista inteira de tools. O start guia.
 - `sapiens_meta action=formats`: os schemas por formato.
 - `sapiens_meta action=version`: qual versão está rodando de verdade e se é a última. Não exige login.
 - `sapiens_image action=models` e `sapiens_video action=models`: catálogo vivo com o preço ATUAL. Consulte em vez de chutar custo.
+- `sapiens_meta action=precos`: a tabela de preço em duas carteiras separadas: o App em Sinapses (por resolução e por segundo de vídeo) e a API em dólar, com saldo próprio. Sinapse não vira dólar. "A API sai mais barata que a fal.ai / WaveSpeed?" se responde com a parte `api`.
