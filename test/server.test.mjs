@@ -18,14 +18,19 @@ const PKG_ROOT = path.resolve(__dirname, "..");
 const SERVER = path.join(PKG_ROOT, "dist", "index.js");
 const pkg = JSON.parse(readFileSync(path.join(PKG_ROOT, "package.json"), "utf8"));
 
-// Contrato: o conjunto EXATO de 29 tools. Adicionar/remover/renomear quebra
-// este teste de propósito, forçando uma atualização consciente.
+// Contrato: o conjunto EXATO de 40 tools do stdio. Adicionar/remover/renomear
+// quebra este teste de propósito, forçando uma atualização consciente. O
+// remoto lista uma a menos (sapiens_pontes só existe na máquina da pessoa).
 const EXPECTED_TOOLS = [
+  "sapiens_skill",
+  "sapiens_resume",
   "sapiens_pipeline",
+  "sapiens_carrossel",
   "sapiens_image",
   "sapiens_meta",
   "sapiens_repertorio",
   "sapiens_gallery",
+  "sapiens_pontes",
   "sapiens_community",
   "sapiens_article",
   "sapiens_write",
@@ -35,11 +40,11 @@ const EXPECTED_TOOLS = [
   "sapiens_persona",
   "sapiens_helen",
   "sapiens_musicator",
-  "sapiens_shorts",
   "sapiens_video",
   "sapiens_stock_audio",
   "sapiens_stock_video",
   "sapiens_brand",
+  "sapiens_collection",
   "sapiens_character",
   "sapiens_profile",
   "sapiens_sintetico",
@@ -50,6 +55,13 @@ const EXPECTED_TOOLS = [
   "sapiens_atlas",
   "sapiens_reference",
   "sapiens_trilhas",
+  "sapiens_semana",
+  "sapiens_share",
+  "sapiens_decupagem",
+  "sapiens_publicidade",
+  "sapiens_distribution",
+  "sapiens_voice_jp",
+  "sapiens_publicar",
 ].sort();
 
 const READ_ONLY = [
@@ -58,7 +70,12 @@ const READ_ONLY = [
   "sapiens_stock_video",
   "sapiens_atlas",
   "sapiens_reference",
+  "sapiens_skill",
 ];
+
+// sapiens_skill e sapiens_resume não falam com o backend (conteúdo estático /
+// render puro no pacote), então são as únicas com openWorldHint=false.
+const CLOSED_WORLD = ["sapiens_skill", "sapiens_resume"];
 
 function startServer(extraEnv = {}) {
   // SAPIENS_TIER_OVERRIDE trava o tier e DESLIGA o probe de rede do boot:
@@ -178,7 +195,11 @@ test("tools/list: contrato de nomes + annotations", async () => {
         typeof t.annotations.title === "string" && t.annotations.title.length > 0,
         `${t.name} tem annotations.title`,
       );
-      assert.equal(t.annotations.openWorldHint, true, `${t.name} openWorldHint=true`);
+      assert.equal(
+        t.annotations.openWorldHint,
+        !CLOSED_WORLD.includes(t.name),
+        `${t.name} openWorldHint`,
+      );
       assert.equal(
         typeof t.annotations.readOnlyHint,
         "boolean",
@@ -223,6 +244,9 @@ const MUST_HAVE_ACTIONS = {
   ],
   sapiens_forum: ["feed", "post", "vote"],
   sapiens_repertorio: ["resolve", "add_item"],
+  // A porta da chave própria: status é o que impede o agente de gerar (e
+  // cobrar na conta da pessoa) de novo.
+  sapiens_pontes: ["balcoes", "gerar", "status", "jobs"],
 };
 
 test("contrato de actions: sub-actions críticas presentes", async () => {
@@ -274,9 +298,15 @@ const ADMIN_ONLY = [
   "sapiens_pipeline",
   "sapiens_article",
   "sapiens_quote_pop",
-  "sapiens_shorts",
   "sapiens_instagram",
   "sapiens_aula",
+  "sapiens_share",
+  "sapiens_decupagem",
+  "sapiens_publicidade",
+  "sapiens_distribution",
+  // Motor de voz japonesa por fila numa GPU da casa: enquanto for japones-so,
+  // membro nenhum precisa. Sai daqui junto com o gate do backend.
+  "sapiens_voice_jp",
 ];
 
 test("tools/list por tier: user não vê as admin-only", async () => {
@@ -346,6 +376,117 @@ test("prompts: list + get com args", async () => {
       arguments: {},
     });
     assert.ok(missing.error, "arg obrigatório faltando vira erro JSON-RPC");
+  } finally {
+    srv.child.kill();
+  }
+});
+
+// --- skills da casa servidas pelo connector (resources + tool) ---
+//
+// As duas portas pro MESMO conteúdo: quem lê resources pega por
+// skill://sapiens/<slug>/SKILL.md, quem não lê pega por sapiens_skill. É a
+// única tool que dá pra exercitar aqui sem tocar o backend (conteúdo estático
+// do pacote: sem login, sem custo, sem rede).
+
+const EXPECTED_SKILLS = [
+  "primeiros-passos",
+  "voz-da-casa",
+  "musica",
+  "video",
+  "imagem",
+  "personagem",
+  "studio",
+  "forum-comunidade",
+  "companhia",
+  "trilhas",
+  "minha-soul",
+  "minha-voz",
+  "curriculo",
+  "pontes",
+  "repertorio",
+  "carrossel",
+  "publicar",
+  "sapiens-api",
+].sort();
+
+test("skills: resources/list + resources/read servem o SKILL.md", async () => {
+  const srv = startServer();
+  try {
+    await srv.request(1, "initialize", {
+      protocolVersion: "2024-11-05",
+      capabilities: {},
+      clientInfo: { name: "contract-test", version: "0" },
+    });
+    srv.notify("notifications/initialized", {});
+
+    const list = await srv.request(2, "resources/list", {});
+    const resources = list.result?.resources;
+    assert.ok(Array.isArray(resources), "resources/list retorna array");
+    assert.deepEqual(
+      resources.map((r) => r.name).sort(),
+      EXPECTED_SKILLS,
+      "conjunto de skills mudou: atualize EXPECTED_SKILLS de propósito",
+    );
+
+    for (const r of resources) {
+      assert.equal(r.uri, `skill://sapiens/${r.name}/SKILL.md`, `uri de ${r.name}`);
+      assert.equal(r.mimeType, "text/markdown", `${r.name} é markdown`);
+      assert.ok(r.description?.length > 0, `${r.name} diz quando usar`);
+    }
+
+    const read = await srv.request(3, "resources/read", {
+      uri: "skill://sapiens/musica/SKILL.md",
+    });
+    const text = read.result?.contents?.[0]?.text ?? "";
+    assert.match(text, /^---\nname: musica\n/, "frontmatter do formato aberto");
+    assert.match(text, /trackId/, "o fluxo de verdade está no corpo");
+
+    // URI que não existe erra em vez de devolver conteúdo vazio.
+    const bad = await srv.request(4, "resources/read", {
+      uri: "skill://sapiens/nao-existe/SKILL.md",
+    });
+    assert.ok(bad.error, "resource desconhecido vira erro JSON-RPC");
+  } finally {
+    srv.child.kill();
+  }
+});
+
+test("skills: tool sapiens_skill lista e entrega o mesmo conteúdo", async () => {
+  const srv = startServer();
+  try {
+    await srv.request(1, "initialize", {
+      protocolVersion: "2024-11-05",
+      capabilities: {},
+      clientInfo: { name: "contract-test", version: "0" },
+    });
+    srv.notify("notifications/initialized", {});
+
+    const listed = await srv.request(2, "tools/call", {
+      name: "sapiens_skill",
+      arguments: { action: "list" },
+    });
+    assert.ok(!listed.result?.isError, "list não erra sem login");
+    const index = listed.result?.structuredContent;
+    assert.equal(index.count, EXPECTED_SKILLS.length);
+    assert.deepEqual(index.skills.map((s) => s.name).sort(), EXPECTED_SKILLS);
+
+    const got = await srv.request(3, "tools/call", {
+      name: "sapiens_skill",
+      arguments: { action: "get", name: "video" },
+    });
+    const content = got.result?.structuredContent?.content ?? "";
+    assert.match(content, /seedance-2-mini/, "traz o miolo que saiu das instructions");
+
+    // Slug errado devolve o menu em vez de estourar: sem loop de 3 falhas.
+    const miss = await srv.request(4, "tools/call", {
+      name: "sapiens_skill",
+      arguments: { action: "get", name: "musiqinha" },
+    });
+    assert.ok(!miss.result?.isError, "slug errado não vira isError");
+    assert.ok(
+      Array.isArray(miss.result?.structuredContent?.available),
+      "slug errado devolve os slugs válidos",
+    );
   } finally {
     srv.child.kill();
   }

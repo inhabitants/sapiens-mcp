@@ -102,11 +102,11 @@ const call = (id, name, args, opts) =>
   rpc({ jsonrpc: "2.0", id, method: "tools/call", params: { name, arguments: args } }, opts);
 const list = (id, opts) => rpc({ jsonrpc: "2.0", id, method: "tools/list", params: {} }, opts);
 
-test("gate: tools/list por tier vale no remoto (admin 29, user 23)", async () => {
+test("gate: tools/list por tier vale no remoto (admin 39, user 29)", async () => {
   const admin = await readRpcResponse(await handler(list(1, { token: "tok-admin-123456" })), 1);
-  assert.equal(admin.result.tools.length, 29);
+  assert.equal(admin.result.tools.length, 39);
   const user = await readRpcResponse(await handler(list(2, { token: "tok-user-rico-12" })), 2);
-  assert.equal(user.result.tools.length, 23, "user não vê admin-only");
+  assert.equal(user.result.tools.length, 29, "user não vê admin-only");
 });
 
 test("gate: token inválido não leva catálogo nem dispatch", async () => {

@@ -12,20 +12,31 @@ import { need } from "../schema.js";
 // lint: `npm run audit:mcp-format-parity` falha o CI se divergir. Ao adicionar
 // ou remover formato, mexa nos dois lados.
 const FORMATS = [
-  "tirinha",
   "carrossel_ig",
-  "post_social",
-  "mega_grafico",
-  "shorts_yt",
-  "video_yt",
   "musica",
   "aula",
 ] as const;
 
 // Formatos legados: fora do FORMAT_GUIDE (não advertidos), mas ainda aceitos na
 // validação pra editar productions antigas sem quebrar. cena_visual ("Vídeo
-// Programático") saiu de linha em jul/2026: Films + gerador de vídeo cobrem o caso.
-const LEGACY_FORMATS = ["post_linkedin", "post_twitter", "post_threads", "cena_visual"] as const;
+// Programático") saiu de linha em jul/2026: Films + gerador de vídeo cobrem o
+// caso. tirinha saiu de linha em ago/2026 (peça aposentada; as publicadas
+// seguem de pé). mega_grafico saiu do picker web em ago/2026 mas o fluxo MCP
+// segue vivo e ADVERTIDO (propose_mega_grafico_plan / run_mega_grafico_full
+// criam a production no servidor; o formato aqui é só tolerância de validação).
+// post_social, shorts_yt e video_yt saíram do picker em out/2026: vídeo vive no
+// gerador de vídeo (uma tela só) e o post de texto perdeu o lugar.
+const LEGACY_FORMATS = [
+  "post_linkedin",
+  "post_twitter",
+  "post_threads",
+  "cena_visual",
+  "tirinha",
+  "mega_grafico",
+  "post_social",
+  "shorts_yt",
+  "video_yt",
+] as const;
 
 const ACCEPTED_FORMATS = [...FORMATS, ...LEGACY_FORMATS] as const;
 
@@ -59,7 +70,45 @@ export const pipelineSchema = z.object({
     "update_carousel",
     "carousel_auto_images",
     "carousel_generate_image",
+    "capa_ia",
   ]),
+
+  // capa_ia: a capa seamless 16:9 que vira os DOIS primeiros slides 3:4.
+  // O texto é queimado dentro da imagem (é o que deixa o elemento passar na
+  // frente e atrás das letras), então quem escreve a manchete aqui é quem
+  // escolhe o que vai aparecer desenhado na peça.
+  capaHeadline: z
+    .string()
+    .optional()
+    .describe(
+      "capa_ia: a manchete da capa, desenhada DENTRO da imagem. Curta: ela ocupa a folha inteira.",
+    ),
+  capaSubline: z
+    .string()
+    .optional()
+    .describe("capa_ia: linha de apoio embaixo da manchete (opcional)."),
+  capaRightText: z
+    .string()
+    .optional()
+    .describe("capa_ia: texto que cai na METADE DIREITA, ou seja, no 2º slide (opcional)."),
+  capaElement: z
+    .string()
+    .optional()
+    .describe(
+      "capa_ia: o que atravessa a cena (koi, aguas-vivas, petalas, borboletas, fagulhas, passaros, corujas). Omitido = a IA escolhe pela pauta.",
+    ),
+  capaVibe: z
+    .string()
+    .optional()
+    .describe(
+      "capa_ia: a atmosfera (futuro-etereo, pedra-serena, aurora, concreto-frio). Omitido = a IA escolhe pela pauta.",
+    ),
+  capaImageModel: z
+    .string()
+    .optional()
+    .describe(
+      "capa_ia: motor da imagem. gpt-image-2-high (default, 1200, letra pequena legível), gpt-image-2-low (200), nano-banana-max (900, cena mais fiel e 2K, letra erra mais), nano-banana-2 (450, o rápido).",
+    ),
 
   // propose_mega_grafico_plan / run_mega_grafico_full
   withHelen: z
@@ -118,13 +167,49 @@ export const pipelineSchema = z.object({
     .describe(
       "generate_carousel: se TRUE, a voz do Sintético do dono dirige o copy (amplificar). Default false = estilo do dono.",
     ),
+  model: z
+    .string()
+    .optional()
+    .describe(
+      "generate_carousel / generate_carousel_production: a FORMA. Folha travada da casa ('feed', o padrão; 'reflexao'; 'case'), em que a espinha de slides vem do servidor e a IA (ou seus beats) só escreve a prosa, ou 'editorial' (a IA escolhe os layouts livremente). Ausente = o Feed.",
+    ),
+  aspect: z
+    .enum(["4:5", "9:16"])
+    .optional()
+    .describe(
+      "generate_carousel: PROPORÇÃO da peça. Não confunda com `format` (que é o tipo da production: carrossel_ig, reels...) nem com `model` (que é a FORMA: quais beats, quais layouts). Aqui é o TAMANHO da folha: '4:5' (default) é a folha que o feed do Instagram, o LinkedIn e o X mostram inteira; '9:16' ocupa a tela inteira do celular. Dá pra trocar depois no editor ou por update_carousel (theme.sheet).",
+    ),
+  beats: z
+    .union([
+      z.array(
+        z.object({
+          n: z.number().describe("número do beat na espinha (1 a 9)"),
+          slots: z
+            .record(z.string())
+            .describe("só os slots de PROSA daquele beat (title/body/punch/tagline...), já contados e na voz"),
+        }),
+      ),
+      // Defesa: cliente que serializa o array como string JSON (mesmo caso do
+      // arg payload). O handler normaliza.
+      z.string(),
+    ])
+    .optional()
+    .describe(
+      "generate_carousel_production: copy PRONTO por beat da espinha, [{n, slots}]. Exige model. Com beats o Gemini de escrita NÃO roda e a rodada cobra só o picker de imagens (zero com autoPickImages=false). Use quando a skill do carrossel já escreveu e validou os blocos (o contador emite este JSON com --beats).",
+    ),
+  keyword: z
+    .string()
+    .optional()
+    .describe(
+      "generate_carousel_production (com beats): a palavra única do comment-to-DM, vira meta.keyword do pacote de publicação.",
+    ),
 
   // carrossel standalone (get/update/imagens)
   carouselId: z
     .string()
     .optional()
     .describe(
-      "carousels_standalone:_id — get_carousel/update_carousel/carousel_auto_images/carousel_generate_image. Vem de generate_carousel ou list_carousels.",
+      "carousels_standalone:_id — get_carousel/update_carousel/carousel_auto_images/carousel_generate_image. Vem de generate_carousel ou list_carousels. No carousel_auto_images, alternativa: productionId (carrossel da pipeline).",
     ),
   slideId: z
     .string()
@@ -167,7 +252,7 @@ export const pipelineSchema = z.object({
   productionId: z
     .string()
     .optional()
-    .describe("contentProductions:_id — get_production/update_production/finalize_production/remove_production/list_versions. Vem de create_production."),
+    .describe("contentProductions:_id — get_production/update_production/finalize_production/remove_production/list_versions/carousel_auto_images (carrossel da pipeline). Vem de create_production ou generate_carousel_production."),
   publishableId: z
     .string()
     .optional()
@@ -239,6 +324,28 @@ function coercePayloadArg(raw: unknown): unknown {
       'Arg "payload" veio como string mas não é JSON válido. Mande o objeto do payload.',
     );
   }
+}
+
+// Mesma defesa pro `beats` do generate_carousel_production: aceita o array já
+// estruturado ou a string JSON dele, e valida o shape mínimo antes de mandar.
+function coerceBeatsArg(
+  raw: unknown,
+): Array<{ n: number; slots: Record<string, string> }> | undefined {
+  if (raw == null) return undefined;
+  let val: unknown = raw;
+  if (typeof val === "string") {
+    try {
+      val = JSON.parse(val);
+    } catch {
+      throw new Error(
+        'Arg "beats" veio como string mas não é JSON válido. Mande o array [{n, slots}].',
+      );
+    }
+  }
+  if (!Array.isArray(val) || val.some((b: any) => typeof b?.n !== "number" || !b?.slots)) {
+    throw new Error('Arg "beats" deve ser um array de { n: número do beat, slots: {slot: texto} }.');
+  }
+  return val as Array<{ n: number; slots: Record<string, string> }>;
 }
 
 export async function pipeline(args: PipelineArgs): Promise<any> {
@@ -466,6 +573,8 @@ export async function pipeline(args: PipelineArgs): Promise<any> {
         ...(articleId ? { publishedArticleId: articleId } : {}),
         autoPickImages: args.autoPickImages,
         useSintetico: args.useSintetico,
+        ...(args.model ? { model: args.model } : {}),
+        ...(args.aspect ? { aspect: args.aspect } : {}),
       });
     }
 
@@ -478,11 +587,20 @@ export async function pipeline(args: PipelineArgs): Promise<any> {
       // Sinapses (reembolsa se falhar). Devolve productionId + url do editor.
       // SÍNCRONA e pesada (Gemini + imagens): vale a REGRA DO TIMEOUT — se voltar
       // Timeout, confira em get_production/list_sources antes de repetir.
+      //
+      // model trava a folha registrada; beats = copy pronto do agente (pula o
+      // Gemini de escrita, cobra só o picker). beats pode chegar serializado
+      // como string JSON (mesmo caso do payload): normaliza antes de mandar.
+      const beats = coerceBeatsArg(args.beats);
       return await convexAction("carouselAutofill:mcpFillCarouselFromArticle", {
         sessionToken,
         sourceId: need(args.sourceId, "sourceId"),
         autoPickImages: args.autoPickImages,
         useSintetico: args.useSintetico,
+        ...(args.model ? { model: args.model } : {}),
+        ...(beats ? { beats } : {}),
+        ...(args.caption ? { caption: args.caption } : {}),
+        ...(args.keyword ? { keyword: args.keyword } : {}),
       });
     }
 
@@ -509,18 +627,42 @@ export async function pipeline(args: PipelineArgs): Promise<any> {
         ...(args.title ? { title: args.title } : {}),
       });
 
-    case "carousel_auto_images":
+    case "carousel_auto_images": {
       // IA escolhe imagens do banco pros slides de foto sem imagem (60 Sinapses).
+      // Aceita carouselId (standalone) OU productionId (carrossel da pipeline).
       // makeVisual dá ritmo a carrossel texto-pesado; generateMissing gera as que
       // o banco não cobriu (custo por imagem). SÍNCRONA e pesada com
       // generateMissing: vale a REGRA DO TIMEOUT.
+      if (!args.carouselId && !args.productionId) {
+        throw new Error(
+          "carousel_auto_images: passe carouselId (standalone) OU productionId (carrossel da pipeline).",
+        );
+      }
       return await convexAction("carouselAutofill:mcpCarouselAutoImages", {
         sessionToken,
-        carouselId: need(args.carouselId, "carouselId"),
+        ...(args.carouselId ? { carouselId: args.carouselId } : {}),
+        ...(!args.carouselId && args.productionId ? { productionId: args.productionId } : {}),
         force: args.force,
         makeVisual: args.makeVisual,
         generateMissing: args.generateMissing,
       });
+    }
+
+    case "capa_ia": {
+      // Gera a capa 16:9 com o texto baked, fatia em duas 3:4 no servidor (o
+      // corte que o editor faz no canvas) e, com carouselId, já põe os dois
+      // slides na frente do carrossel. SÍNCRONA e paga: vale a REGRA DO TIMEOUT.
+      return await convexAction("capaIa:mcpCapaIa", {
+        sessionToken,
+        headline: need(args.capaHeadline, "capaHeadline"),
+        ...(args.capaSubline ? { subline: args.capaSubline } : {}),
+        ...(args.capaRightText ? { rightText: args.capaRightText } : {}),
+        ...(args.capaElement ? { element: args.capaElement } : {}),
+        ...(args.capaVibe ? { vibe: args.capaVibe } : {}),
+        ...(args.capaImageModel ? { imageModel: args.capaImageModel } : {}),
+        ...(args.carouselId ? { carouselId: args.carouselId } : {}),
+      });
+    }
 
     case "carousel_generate_image":
       // Gera imagem NOVA pra UM slide (nanoBanana, ~450 Sinapses) e salva no

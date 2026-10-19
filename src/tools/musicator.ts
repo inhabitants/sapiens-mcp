@@ -11,7 +11,9 @@ import { convexAction, convexQuery, getSessionToken } from "../convexClient.js";
  *              trackId, só devolve o texto inline (300 sinapses).
  *   - list:    lista as tracks do próprio user (id, título, status, áudio).
  *   - get:     detalhe de uma track (status/áudio/letra) — pra acompanhar render.
- *   - render:  schedula o synth (Lyria/ACE/Suno) numa track pronta (3000 sinapses).
+ *   - render:  schedula o synth numa track pronta. Motor em `model` (Lyria 3.5
+ *              default, Lyria 3 Clip, Mureka 9.5, MiniMax Music 2.6, ElevenLabs
+ *              Music). 3000 sinapses; ElevenLabs cobra pela duração.
  *   - publish: publica uma faixa PRONTA do user no Acervo da Comunidade (aba
  *              Músicas) + eco no Chat e Fórum. CURADO: só admin (dono). Custo 0.
  *   - list_public: lê o Acervo público de músicas da Comunidade (sem custo, sem
@@ -82,6 +84,23 @@ export const musicatorSchema = z.object({
     .number()
     .optional()
     .describe("Pra action=render: seed pra reprodutibilidade do synth."),
+  model: z
+    .enum(["pro", "clip", "mureka", "minimax", "elevenlabs"])
+    .optional()
+    .describe(
+      "Pra action=render: motor da faixa. 'pro' = Lyria 3.5 (default, faixa inteira até 3 min, lê imagem de referência). " +
+        "'clip' = Lyria 3 Clip (rascunho de 30s). 'mureka' = Mureka 9.5 (faixa inteira, letra até 5.000 caracteres). " +
+        "'minimax' = MiniMax Music 2.6 (faixa inteira até 5 min, letra de 10 a 3.000 caracteres). " +
+        "'elevenlabs' = ElevenLabs Music (duração escolhida em durationSeconds, letra até 3.500 caracteres). " +
+        "Preço: o mesmo render fixo em todos, menos 'elevenlabs', que cobra pela duração (tabela na skill 'musica'; confirme com a pessoa antes). " +
+        "Só o Lyria lê imagem de referência; negativePrompt e seed são ignorados nos motores de fora do Lyria.",
+    ),
+  durationSeconds: z
+    .number()
+    .optional()
+    .describe(
+      "Pra action=render com model='elevenlabs': duração da faixa em segundos, uma de 30, 60, 120 ou 180 (default 120). Ignorado nos outros motores.",
+    ),
 });
 
 export type MusicatorArgs = z.infer<typeof musicatorSchema>;
@@ -161,6 +180,12 @@ export async function musicator(args: MusicatorArgs): Promise<any> {
       stylePromptOverride: args.stylePromptOverride,
       negativePrompt: args.negativePrompt,
       seed: args.seed,
+      // Só vão quando escolhidos: servidor anterior a 11/out/2026 não conhece os
+      // dois args e recusaria o pedido inteiro.
+      ...(args.model ? { model: args.model } : {}),
+      ...(args.model === "elevenlabs" && args.durationSeconds !== undefined
+        ? { durationSeconds: args.durationSeconds }
+        : {}),
     });
   }
 

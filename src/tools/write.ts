@@ -15,6 +15,9 @@ import {
  * /u/<username>), gastando as Sinapses dele. Identidade vem do sessionToken.
  *
  * Sub-actions:
+ *   - create: salva um texto que VOCÊ já escreveu. De graça, sem IA no caminho.
+ *     É a porta certa pra "publica esse meu artigo": gerar e depois sobrescrever
+ *     com o original queima 400 Sinapses à toa.
  *   - generate: gera 1 artigo na voz Sapiens a partir de um brief livre
  *     (ou reescrevendo um artigo publicado / um texto teu). Cobra 400 Sinapses,
  *     reembolsa se a geração falhar. Salva como rascunho no teu perfil.
@@ -24,13 +27,29 @@ import {
  *   - publish: publica no teu perfil (publish=true) ou volta pra rascunho (false).
  */
 export const writeSchema = z.object({
-  action: z.enum(["generate", "list", "get", "update", "publish"]),
+  action: z.enum(["create", "generate", "list", "get", "update", "publish"]),
+  // --- create (texto pronto, GRÁTIS) ---
+  // title/content são compartilhados com update (declarados lá embaixo).
+  category: z
+    .string()
+    .optional()
+    .describe("create: categoria do artigo (ex: 'filosofia-tech'). Opcional."),
+  tags: z
+    .array(z.string())
+    .optional()
+    .describe("create: até 8 tags específicas. Opcional."),
+  brandSlug: z
+    .string()
+    .optional()
+    .describe(
+      "create: design system que veste a peça (slug via sapiens_brand action=list). Omitido, herda o padrão da tua conta. É o que faz a capa e as imagens saírem no TEU estilo, não no da casa.",
+    ),
   // --- generate ---
   brief: z
     .string()
     .optional()
     .describe(
-      "Briefing livre (1 parágrafo, até ~600 palavras). Caminho padrão de 'generate'. A IA expande na voz Sapiens. Custa 400 Sinapses.",
+      "Briefing livre (1 parágrafo, até ~600 palavras). Caminho padrão de 'generate'. A IA expande na voz Sapiens. Custa 400 Sinapses. Pra texto que VOCÊ já escreveu, use action=create (de graça).",
     ),
   sourceKind: z
     .enum(["brief", "published_article", "user_article"])
@@ -71,7 +90,7 @@ export const writeSchema = z.object({
     .string()
     .optional()
     .describe(
-      "Capa PRONTA (opcional, só generate): id de uma imagem da TUA galeria (generatedImages:_id, ache via sapiens_gallery/sapiens_reference) que vira a capa do artigo em vez da capa-cortesia gerada do zero. Use quando você JÁ gerou a imagem (sapiens_image) e o artigo é sobre ela — assim a peça não nasce sem capa se a cortesia falhar.",
+      "Capa PRONTA (opcional, vale em create e generate): id de uma imagem da TUA galeria (generatedImages:_id, ache via sapiens_gallery/sapiens_reference) que vira a capa do artigo em vez da capa-cortesia gerada do zero. Use quando você JÁ gerou a imagem (sapiens_image) e o artigo é sobre ela: assim a peça não nasce sem capa se a cortesia falhar.",
     ),
   coverImageUrl: httpUrl()
     .optional()
@@ -91,12 +110,17 @@ export const writeSchema = z.object({
     .string()
     .optional()
     .describe("user_articles:_id (obrigatório pra get/update/publish)."),
-  // --- update ---
-  title: z.string().optional(),
+  // --- create / update ---
+  title: z
+    .string()
+    .optional()
+    .describe("Obrigatório em create. Em update, renomeia."),
   content: z
     .string()
     .optional()
-    .describe("Markdown completo do corpo (substitui o conteúdo)."),
+    .describe(
+      "Markdown completo do corpo. Em create, é o teu texto na íntegra (nada é reescrito). Em update, substitui o conteúdo.",
+    ),
   excerpt: z.string().optional(),
   tldr: z.string().optional(),
   // --- publish ---
@@ -112,6 +136,30 @@ export type WriteArgs = z.infer<typeof writeSchema>;
 
 export async function write(args: WriteArgs): Promise<any> {
   const sessionToken = getSessionToken();
+
+  if (args.action === "create") {
+    if (!args.title?.trim()) {
+      throw new Error(
+        "action=create exige title (o texto é teu, então o título também).",
+      );
+    }
+    const res = await convexMutation("mcpExtras:mcpUserCreateArticle", {
+      sessionToken,
+      title: args.title,
+      content: args.content,
+      excerpt: args.excerpt,
+      tldr: args.tldr,
+      category: args.category,
+      tags: args.tags,
+      brandSlug: args.brandSlug,
+      coverImageId: args.coverImageId,
+      coverImageUrl: args.coverImageUrl,
+    });
+    return {
+      ...res,
+      note: "Salvo como RASCUNHO, sem custo e sem uma linha reescrita. Pra ir ao ar no perfil: action=publish com este articleId.",
+    };
+  }
 
   if (args.action === "generate") {
     const sourceKind = args.sourceKind ?? "brief";

@@ -1,9 +1,12 @@
 import { createMcpHandler, withMcpAuth } from "mcp-handler";
+import { runWithClientHint } from "./clientIdentity.js";
 import {
   CallToolRequestSchema,
   GetPromptRequestSchema,
   ListPromptsRequestSchema,
+  ListResourcesRequestSchema,
   ListToolsRequestSchema,
+  ReadResourceRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
@@ -13,6 +16,7 @@ import {
   SAPIENS_INSTRUCTIONS,
 } from "./registry.js";
 import { getPrompt, listPrompts } from "./prompts.js";
+import { listSkillResources, readSkillResource } from "./skills.js";
 import {
   convexMutation,
   convexQuery,
@@ -36,7 +40,8 @@ import { MCP_VERSION } from "./version.js";
  *      cache por token: inválida = erro claro, sem catálogo e sem dispatch
  *      (fail-closed). Transiente (backend fora) = erro pedindo retry.
  *   3. Saldo: conta sem Sinapses não executa tool nenhuma exceto sapiens_meta
- *      (diagnóstico: whoami/credits/subscription pra pessoa entender o porquê).
+ *      (diagnóstico: whoami/credits/subscription pra pessoa entender o porquê)
+ *      e sapiens_skill (as skills da casa, conteúdo estático do pacote).
  *      Admin (dono) passa sempre.
  *
  * Identidade: SEMPRE o bearer do header Authorization (o sessionToken de 30
@@ -230,12 +235,25 @@ function initServer(mcp: McpServer): void {
     }
     // Transiente: serve o catálogo cheio (o gate de verdade é no tools/call).
     const tier = session.status === "valid" ? session.tier : null;
-    return { tools: buildToolList(tier) };
+    return { tools: buildToolList(tier, "remote") };
   });
 
   s.setRequestHandler(ListPromptsRequestSchema, async () => ({
     prompts: listPrompts(),
   }));
+
+  // Skills da casa como resource, em paridade com o stdio. Conteúdo estático do
+  // pacote: sem backend, sem custo, e de propósito FORA do gate de saldo (quem
+  // ficou sem Sinapse ainda consegue ler como a casa funciona).
+  s.setRequestHandler(ListResourcesRequestSchema, async () => ({
+    resources: listSkillResources(),
+  }));
+
+  s.setRequestHandler(ReadResourceRequestSchema, async (req) => {
+    const found = readSkillResource(req.params.uri);
+    if (!found) throw new Error(`Resource desconhecido: ${req.params.uri}`);
+    return found;
+  });
 
   s.setRequestHandler(GetPromptRequestSchema, async (req) =>
     getPrompt(
@@ -259,8 +277,9 @@ function initServer(mcp: McpServer): void {
     }
 
     // O gate do dono: login válido + Sinapses na conta pra executar qualquer
-    // coisa. sapiens_meta fica de fora do gate de saldo (é como a pessoa
-    // DESCOBRE que está sem saldo); admin passa sempre.
+    // coisa. Duas tools ficam de fora do gate de saldo: sapiens_meta (é como a
+    // pessoa DESCOBRE que está sem saldo) e sapiens_skill (documentação
+    // estática, não toca o backend nem gera nada). Admin passa sempre.
     const session = await resolveRemoteSession(token);
     if (session.status === "invalid") {
       return isErrorResult(MSG_INVALID(session.reason));
@@ -271,7 +290,8 @@ function initServer(mcp: McpServer): void {
     if (
       session.tier !== "admin" &&
       session.balance <= 0 &&
-      name !== "sapiens_meta"
+      name !== "sapiens_meta" &&
+      name !== "sapiens_skill"
     ) {
       return isErrorResult(MSG_NO_BALANCE);
     }
@@ -296,6 +316,16 @@ export type SapiensRemoteOptions = {
   /** Teto em segundos do streaming de uma request (default 300, teto Vercel Pro). */
   maxDuration?: number;
   verboseLogs?: boolean;
+  /**
+   * OAuth discovery (RFC 9728). Quando setados, o 401 sai com o header
+   * WWW-Authenticate apontando pro Protected Resource Metadata, o que habilita
+   * o "Adicionar ao Claude em 1 clique" (o claude.ai web e o Claude Desktop só
+   * conectam a MCP remoto via OAuth). `resourceMetadataPath` = path do PRM;
+   * `resourceUrl` = origin público (evita depender de proxy headers na Vercel).
+   * Sem eles, o transporte segue só com bearer estático (Claude Code/Cursor).
+   */
+  resourceMetadataPath?: string;
+  resourceUrl?: string;
   /** Tetos do rate limit por minuto (in-memory, por instância). */
   limits?: {
     /** Toda request, por IP. Default 120/min. */
@@ -329,7 +359,7 @@ export function createSapiensRemoteHandler(
     initServer,
     {
       serverInfo: { name: "mcp-sapiens", version: MCP_VERSION },
-      capabilities: { tools: {}, prompts: {} },
+      capabilities: { tools: {}, prompts: {}, resources: {} },
       instructions: SAPIENS_INSTRUCTIONS,
     },
     {
@@ -352,7 +382,12 @@ export function createSapiensRemoteHandler(
         "Muitas requisições dessa sessão num minuto. Espere um pouco e tente de novo.",
       );
     }
-    return runWithSessionToken(token, () => base(req));
+    // Stateless: o initialize não fica entre requests, então a pista do client
+    // aqui é o User-Agent (prefixo "ua:" avisa o backend que é pista, não nome).
+    const ua = req.headers.get("user-agent") ?? undefined;
+    return runWithSessionToken(token, () =>
+      runWithClientHint(ua ? `ua:${ua}` : undefined, () => base(req)),
+    );
   };
 
   const authed = withMcpAuth(
@@ -367,7 +402,13 @@ export function createSapiensRemoteHandler(
         scopes: [],
       };
     },
-    { required: true },
+    {
+      required: true,
+      // Habilita o discovery OAuth no 401 (RFC 9728) quando o app configura o
+      // PRM. O access_token é o mesmo sessionToken bearer (o OAuth só o emite).
+      resourceMetadataPath: opts.resourceMetadataPath,
+      resourceUrl: opts.resourceUrl,
+    },
   );
 
   return async (req: Request): Promise<Response> => {

@@ -34,7 +34,7 @@ export const SAPIENS_PROMPTS: SapiensPrompt[] = [
     name: "capturar-repertorio",
     title: "Capturar obra no Repertório",
     description:
-      "Grava um filme/série/anime/jogo/livro/música no seu acervo pessoal (grátis).",
+      "Grava um filme/série/anime/jogo/jogo de tabuleiro/livro/música no seu acervo pessoal (grátis).",
     arguments: [
       {
         name: "obra",
@@ -114,8 +114,8 @@ export const SAPIENS_PROMPTS: SapiensPrompt[] = [
       `Quero uma imagem de: "${a.cena}". Monte o prompt na regra da casa (full-bleed, ` +
       "sujeito oversized 70%+ do frame, sem moldura/margem, sem 'tarot card'). Confira " +
       "modelo e preço com sapiens_image action=models e meu saldo com sapiens_meta " +
-      "action=credits; me diga o custo antes de gerar. Se eu tiver studio montado e " +
-      "pedir 'do meu jeito', use useStudio=true. Depois de gerar, me mostre a url e " +
+      "action=credits; me diga o custo antes de gerar. Se eu pedir 'na minha marca' ou " +
+      "'com fulano', use brandSlug ou influencerId. Depois de gerar, me mostre a url e " +
       "ofereça publicar na galeria (sapiens_gallery action=publish).",
   },
 ];

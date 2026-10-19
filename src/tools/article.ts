@@ -31,6 +31,7 @@ export const articleSchema = z.object({
     "unpublish",
     "delete",
     "ensure_visuals",
+    "visuals_status",
   ]),
   slug: z
     .string()
@@ -40,7 +41,7 @@ export const articleSchema = z.object({
     .string()
     .optional()
     .describe(
-      "Obrigatório pra update/publish/unpublish/delete/ensure_visuals. Pode descobrir via action=get (o retorno tem _id).",
+      "Obrigatório pra update/publish/unpublish/delete/ensure_visuals/visuals_status. Pode descobrir via action=get (o retorno tem _id).",
     ),
   // Campos pra update (todos opcionais)
   title: z.string().optional(),
@@ -115,7 +116,7 @@ export const articleSchema = z.object({
     .max(3)
     .optional()
     .describe(
-      "ensure_visuals: quantas ilustrações inline gerar (1-3). Default 1.",
+      "ensure_visuals: quantas ilustrações inline gerar (1-3). Default 2 (cada uma custa ~450 Sinapses, então 1 economiza).",
     ),
   // Classifica retroativamente como Educativo (Trilhas → Blog).
   educativeReference: z
@@ -202,8 +203,16 @@ export async function article(args: ArticleArgs): Promise<any> {
 
     case "ensure_visuals": {
       // Gera banner / inline / conceptMap que estiverem faltando.
-      // Idempotente: pula o que já existe. Custo: ~1700 sinapses pra
-      // artigo novo (450+450+800), só do que regerar pros que existem.
+      // Idempotente: pula o que já existe. Custo MEDIDO num artigo pelado
+      // (11/ago/2026): ~2550 Sinapses = capa 450 + 2 inlines de 450 + mapa
+      // 1200. Com inlineCount=1 cai pra ~2100. Artigo que já tem parte dos
+      // visuais paga só o que faltar.
+      //
+      // ASSÍNCRONO (ago/2026): volta na hora com o plano da leva, porque as
+      // quatro gerações em sequência estouravam o teto de 120s do cliente em
+      // 10 de cada 22 chamadas — e o timeout parecia morte quando a operação
+      // seguia rodando e já tinha cobrado. Quando não há nada a gerar, segue
+      // respondendo na hora com o retrato de sempre (é a sonda barata).
       const articleId = need(args.articleId, "articleId");
       return await convexAction(
         "articleVisuals:ensureArticleVisualsBySession",
@@ -214,8 +223,20 @@ export async function article(args: ArticleArgs): Promise<any> {
           forceInline: args.forceInline,
           forceConceptMap: args.forceConceptMap,
           inlineCount: args.inlineCount,
+          async: true,
         },
       );
+    }
+
+    case "visuals_status": {
+      // Leitura pura da leva + do estado real dos visuais. Custo 0, pode
+      // chamar à vontade: é o jeito de fechar o ciclo depois de um
+      // ensure_visuals, e o único que não corre risco de cobrar de novo.
+      const articleId = need(args.articleId, "articleId");
+      return await convexAction("articleVisuals:articleVisualsJobBySession", {
+        sessionToken,
+        articleId,
+      });
     }
   }
 }

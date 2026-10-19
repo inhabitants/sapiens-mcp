@@ -4,6 +4,12 @@ import path from "node:path";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+// A extensão do Claude Desktop (.mcpb) é um arquivo só, gerado pelo esbuild, e
+// não carrega package.json: o scripts/mcpb.mjs grava a versão aqui na hora do
+// build (--define). No pacote do npm o identificador não existe, e o typeof
+// dele é "undefined" sem estourar.
+declare const __SAPIENS_MCP_VERSION__: string | undefined;
+
 /**
  * Fonte ÚNICA da versão do MCP, lida do package.json do próprio binário em
  * runtime. Reflete o que está REALMENTE rodando (não um literal cravado no
@@ -13,9 +19,11 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
  *
  * Antes disto a versão vivia em 3 literais independentes (package.json + 2 no
  * index.ts) sincronizados por um regex no release.sh — um bump off-path
- * dessincronizava em silêncio. Agora package.json é a única fonte.
+ * dessincronizava em silêncio. Agora package.json é a única fonte (a extensão
+ * recebe o mesmo número, copiado dele no build).
  */
 export function getMcpVersion(): string {
+  if (typeof __SAPIENS_MCP_VERSION__ === "string") return __SAPIENS_MCP_VERSION__;
   try {
     const pkgPath = path.resolve(__dirname, "..", "package.json");
     const pkg = JSON.parse(readFileSync(pkgPath, "utf8"));

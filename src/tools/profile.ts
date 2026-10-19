@@ -19,6 +19,14 @@ import { convexQuery, convexMutation, getSessionToken } from "../convexClient.js
  *
  * Sub-actions:
  *   - get:          card completo (identidade + nível + saldo + badges + golden tools).
+ *   - voz:          a sapiens-voz: retrato do momento do MEMBRO (contrato
+ *                   sapiens.voz/v1, identidade + persona + repertório + criações
+ *                   públicas + studios, derivado e datado). Salve como
+ *                   sapiens-voz.json, ou instale como skill (minha-voz), quando ele
+ *                   pedir "pega minha voz / meu retrato do Sapiens".
+ *   - soul:         DEPRECIADA (22/08/2026): mesmo retorno de voz, fica só pra
+ *                   pacote antigo. Soul agora é do Sintético: sapiens_sintetico
+ *                   action=soul.
  *   - badges:       só as conquistas (lista cheia).
  *   - golden_tools: só os favoritos do aitag (lista cheia).
  *   - notifications: suas notificações recentes (sino) + contagem de não-lidas.
@@ -35,6 +43,8 @@ import { convexQuery, convexMutation, getSessionToken } from "../convexClient.js
 export const profileSchema = z.object({
   action: z.enum([
     "get",
+    "voz",
+    "soul",
     "badges",
     "golden_tools",
     "notifications",
@@ -140,6 +150,24 @@ function mapTools(rows: any[]): any[] {
 
 export async function profile(args: ProfileArgs): Promise<any> {
   const sessionToken = getSessionToken();
+
+  // A voz: retrato do momento do MEMBRO (contrato sapiens.voz/v1). Autentica
+  // pelo próprio sessionToken; token de membro tem acesso total, então vem
+  // inteira. 'soul' segue aceita por retrocompat (pacote antigo), mesmo retorno:
+  // desde 22/08/2026 soul é só do Sintético (sapiens_sintetico action=soul). A
+  // função Convex segue se chamando soulContract:getForToken de propósito
+  // (função mcp* não renomeia; o conceito mudou, o caminho não).
+  if (args.action === "voz" || args.action === "soul") {
+    const voz: any = await convexQuery("soulContract:getForToken", { sessionToken });
+    return {
+      ...voz,
+      note:
+        "Snapshot datado (generatedAt), não é conexão viva. Salve como sapiens-voz.json no projeto do usuário, ou instale como skill (minha-voz); pra atualizar, rode a action de novo e sobrescreva o arquivo." +
+        (args.action === "soul"
+          ? " AVISO: action=soul foi renomeada pra action=voz. Soul agora é só do Sintético: sapiens_sintetico action=soul."
+          : ""),
+    };
+  }
 
   // notifications/mark_read autenticam pelo próprio sessionToken (requireMcpUser
   // no Convex), não precisam do resolveUser — atalham antes.

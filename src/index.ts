@@ -10,7 +10,9 @@ import {
   CallToolRequestSchema,
   GetPromptRequestSchema,
   ListPromptsRequestSchema,
+  ListResourcesRequestSchema,
   ListToolsRequestSchema,
+  ReadResourceRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 
 import { MCP_VERSION } from "./version.js";
@@ -26,7 +28,9 @@ import {
   probeTierInBackground,
 } from "./tier.js";
 import { getPrompt, listPrompts } from "./prompts.js";
+import { listSkillResources, readSkillResource } from "./skills.js";
 import { convexMutation, getSessionToken } from "./convexClient.js";
+import { runWithClientHint } from "./clientIdentity.js";
 
 // Telemetria stdio (fire-and-forget, NUNCA derruba a chamada). O stdio sempre
 // foi caixa-preta (cada cliente roda a própria cópia via npx), então o
@@ -65,7 +69,11 @@ function logStdioUsage(fields: {
 const server = new Server(
   { name: "mcp-sapiens", version: MCP_VERSION },
   {
-    capabilities: { tools: { listChanged: true }, prompts: {} },
+    capabilities: {
+      tools: { listChanged: true },
+      prompts: {},
+      resources: {},
+    },
     instructions: SAPIENS_INSTRUCTIONS,
   },
 );
@@ -73,6 +81,19 @@ const server = new Server(
 server.setRequestHandler(ListToolsRequestSchema, async () => ({
   tools: buildToolList(getCachedTier()),
 }));
+
+// As skills da casa também como RESOURCE (skill://sapiens/<slug>/SKILL.md).
+// Conteúdo estático do pacote: não exige login, não custa, não toca o backend.
+// Cliente que não lê resources pega o mesmo texto pela tool sapiens_skill.
+server.setRequestHandler(ListResourcesRequestSchema, async () => ({
+  resources: listSkillResources(),
+}));
+
+server.setRequestHandler(ReadResourceRequestSchema, async (req) => {
+  const found = readSkillResource(req.params.uri);
+  if (!found) throw new Error(`Resource desconhecido: ${req.params.uri}`);
+  return found;
+});
 
 server.setRequestHandler(ListPromptsRequestSchema, async () => ({
   prompts: listPrompts(),
@@ -89,7 +110,11 @@ server.setRequestHandler(CallToolRequestSchema, async (req) => {
   const name = req.params.name;
   const args = (req.params.arguments ?? {}) as Record<string, unknown>;
   const t0 = Date.now();
-  const result = await callTool(name, args);
+  // O client do handshake (clientInfo.name) viaja com a chamada: é o que
+  // deixa o backend dizer "MCP (Claude)" em vez de "MCP (agente)".
+  const result = await runWithClientHint(server.getClientVersion()?.name, () =>
+    callTool(name, args),
+  );
   logStdioUsage({
     tool: name,
     action: typeof args.action === "string" ? args.action : null,

@@ -6,7 +6,8 @@ import { need } from "../schema.js";
  * sapiens_instagram — o "ManyChat da casa" via MCP. ADMIN-ONLY (requireMcpAdmin
  * no Convex): opera o auto-DM do Instagram da casa (regras de resposta
  * automática, inbox das conversas, resposta manual pela janela de 24h).
- * Espelha a UI /dashboard/admin/instagram; backend em convex/instagramDm.ts.
+ * Espelha as regras em /experimentos/distribution-workflow?tab=autodm e o inbox
+ * em /dashboard/admin/sapiens-leads/instagram; backend em convex/instagramDm.ts.
  *
  * Sub-actions:
  *   - rules: lista as regras (keyword, variações, escopo por post, disparos)

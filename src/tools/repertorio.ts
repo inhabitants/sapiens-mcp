@@ -31,7 +31,7 @@ import { need } from "../schema.js";
  * Action-based design (memoria: consolidar tools via args).
  */
 
-const mediaTypeEnum = z.enum(["movie", "series", "anime", "game", "book", "music", "tool"]);
+const mediaTypeEnum = z.enum(["movie", "series", "anime", "game", "book", "music", "tool", "person", "boardgame"]);
 const statusEnum = z.enum([
   "backlog",
   "active",
@@ -39,7 +39,7 @@ const statusEnum = z.enum([
   "paused",
   "dropped",
 ]);
-const sourceEnum = z.enum(["tmdb", "anilist", "rawg", "twitch", "googlebooks", "itunes", "manual"]);
+const sourceEnum = z.enum(["tmdb", "anilist", "rawg", "twitch", "googlebooks", "itunes", "manual", "wikidata"]);
 
 export const repertorioSchema = z.object({
   action: z.enum([
@@ -53,6 +53,7 @@ export const repertorioSchema = z.object({
     "remove_item",
     "search_tools",
     "add_tool",
+    "catalog_tool",
   ]),
   // Reads
   userId: z
@@ -76,7 +77,7 @@ export const repertorioSchema = z.object({
   source: sourceEnum
     .optional()
     .describe(
-      "Pra add_item: o source EXATO de um candidato do action=resolve (manual=filme/série via OMDb, anilist, twitch=jogo, googlebooks, itunes). Não invente.",
+      "Pra add_item: o source EXATO de um candidato do action=resolve (manual=filme/série via OMDb, anilist, twitch=jogo, googlebooks, itunes, wikidata=pessoa ou jogo de tabuleiro). Não invente.",
     ),
   externalId: z
     .string()
@@ -93,8 +94,33 @@ export const repertorioSchema = z.object({
     .string()
     .optional()
     .describe(
-      "Pra add_tool: o toolId EXATO de um candidato do action=search_tools (catálogo aitag). Dedup por (userId, source aitag, externalId=toolId).",
+      "Pra add_tool: o toolId EXATO de um candidato do action=search_tools (catálogo aitag). Dedup por (userId, source aitag, externalId=toolId). Pra catalog_tool: o toolId NOVO da ficha, em kebab-case minúsculo (vira o endereço aitag.app/tool/<toolId>).",
     ),
+  // catalog_tool (ADMIN): cadastra ferramenta open source no catálogo do AItag.
+  // Lista fechada de propósito: curadoria, afiliação, nota e ícone continuam
+  // gesto do dono no aitag.app/admin.
+  name: z.string().optional().describe("Pra catalog_tool: o nome do produto como o projeto escreve (HyperFrames, não hyperframes)."),
+  githubUrl: z
+    .string()
+    .optional()
+    .describe("Pra catalog_tool: o repo, https://github.com/<owner>/<repo>. É a chave do dedup: o mesmo repo com outro toolId devolve a ficha que já existe."),
+  websiteUrl: z.string().optional().describe("Pra catalog_tool: a homepage do projeto (https). Ausente, vale o githubUrl."),
+  categoryEn: z
+    .string()
+    .optional()
+    .describe(
+      "Pra catalog_tool: UMA destas, exata: Text & Writing, Image & Design, Video & Animation, Voice & Audio, Coding & Development, Marketing & SEO, Data Analysis & Productivity, Research & Education, Agents & Bots, Creative Automation, Privacy & Web3, Experimental Tools, Technical Utilities, Aggregators & Meta Tools, Adult 18+.",
+    ),
+  categoryPt: z.string().optional().describe("Pra catalog_tool: opcional; ausente, o servidor copia a de uma vizinha da mesma categoria."),
+  descriptionEn: z.string().optional().describe("Pra catalog_tool: uma frase do que a ferramenta faz, em inglês (até 400)."),
+  descriptionPt: z.string().optional().describe("Pra catalog_tool: a mesma frase em português (até 400)."),
+  reviewEn: z
+    .string()
+    .optional()
+    .describe("Pra catalog_tool: a análise editorial em inglês, 3 a 5 frases na voz da casa. É o gate de indexação da página: sem ela, a ficha fica fora do Google."),
+  reviewPt: z.string().optional().describe("Pra catalog_tool: a análise editorial em português."),
+  tagsEn: z.array(z.string()).optional().describe("Pra catalog_tool: até 10 tags em inglês."),
+  tagsPt: z.array(z.string()).optional().describe("Pra catalog_tool: até 10 tags em português."),
   favorite: z
     .boolean()
     .optional()
@@ -105,7 +131,9 @@ export const repertorioSchema = z.object({
     .number()
     .nullable()
     .optional()
-    .describe("0-10. Pra update_item: passe null pra remover rating."),
+    .describe(
+      "0-10, nota da OBRA. Pra update_item: passe null pra remover rating. Pessoa (mediaType person) não leva rating: dar nota pra gente soa esquisito, o que ela fez ganha nota na ficha de cada obra. Não mande nem pergunte nota de pessoa.",
+    ),
   tags: z.array(z.string()).optional(),
   note: z.string().optional().describe("Nota pessoal sobre a obra."),
   containsSpoilers: z.boolean().optional(),
@@ -152,6 +180,28 @@ export async function repertorio(args: RepertorioArgs): Promise<any> {
         aitagUrl: `https://www.aitag.app/tool/${t.toolId}`,
       })),
     };
+  }
+
+  // catalog_tool (ADMIN): cadastra ferramenta open source no catálogo do AItag,
+  // ou devolve a que já existe (dedup por toolId e pelo repo do GitHub). Ficha
+  // existente nunca é sobrescrita: o servidor só preenche a análise que estiver
+  // vazia. Quem gateia é o Convex (requireMcpAdmin).
+  if (args.action === "catalog_tool") {
+    return await convexMutation("aitag/mcpCatalog:mcpCatalogTool", {
+      sessionToken: getSessionToken(),
+      toolId: need(args.toolId, "toolId"),
+      name: need(args.name, "name"),
+      githubUrl: need(args.githubUrl, "githubUrl"),
+      websiteUrl: args.websiteUrl,
+      categoryEn: need(args.categoryEn, "categoryEn"),
+      categoryPt: args.categoryPt,
+      descriptionEn: need(args.descriptionEn, "descriptionEn"),
+      descriptionPt: need(args.descriptionPt, "descriptionPt"),
+      reviewEn: args.reviewEn,
+      reviewPt: args.reviewPt,
+      tagsEn: args.tagsEn,
+      tagsPt: args.tagsPt,
+    });
   }
 
   // resolve: busca metadado (capa/ano/id) nos providers server-side, com as

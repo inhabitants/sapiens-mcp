@@ -93,9 +93,9 @@ function readPluginSessionToken(): string | null {
 // Override por env (CONVEX_URL) continua valendo pra dev/staging.
 //
 // CONVEX-URL-MIGRATION: artefato DISTRIBUÍDO (pacote npm `sapiens-mcp`, já
-// publicado). No corte EU->US, trocar o literal aqui, bump de versão e
-// `npm publish`. Quem instalou precisa atualizar. Ver docs/infra/migracao-convex-eu-us.md
-const DEFAULT_CONVEX_URL = "https://oceanic-bass-791.convex.cloud";
+// publicado). Trocado no corte EU->US de 2026-09-03 (kindred-ptarmigan-184, US
+// East). Quem instalou precisa atualizar. Ver docs/infra/migracao-convex-eu-us.md
+const DEFAULT_CONVEX_URL = "https://kindred-ptarmigan-184.convex.cloud";
 
 let _client: ConvexHttpClient | null = null;
 
@@ -117,17 +117,25 @@ function sessionStorePath(): string {
   return path.resolve(os.homedir(), ".sapiens-mcp", "session.json");
 }
 
-export function saveSessionToken(token: string): { path: string; expiresAt: number } {
+// Espelho local da validade do servidor (shared/sessionTtl.ts): 90 dias em
+// janela deslizante. Só serve pra não mandar um token obviamente morto pro
+// backend; a validade REAL é sempre a da row no Convex, e cada uso empurra ela
+// pra frente (ver touchSession abaixo, que regrava este arquivo com o novo
+// expiresAt quando o servidor renova).
+const LOCAL_SESSION_TTL_MS = 90 * 24 * 60 * 60 * 1000;
+
+export function saveSessionToken(
+  token: string,
+  expiresAtOverride?: number,
+): { path: string; expiresAt: number } {
   const file = sessionStorePath();
-  // mode 0700/0600: o arquivo guarda um bearer de 30 dias. Sem isto, em POSIX o
+  // mode 0700/0600: o arquivo guarda um bearer de 90 dias. Sem isto, em POSIX o
   // dir sai 0755 e o arquivo 0644 (world-readable) — num host compartilhado (a
   // VPS da Helen) outro usuário local leria o token e assumiria a conta. mode só
   // aplica na CRIAÇÃO, então o chmod explícito cobre o caso de reescrever um
   // arquivo já existente 0644. No Windows chmod é no-op benigno (try/catch).
   fs.mkdirSync(path.dirname(file), { recursive: true, mode: 0o700 });
-  // Espelha os 30 dias do server (só pra avisar quando perto de expirar; a
-  // validade real é sempre checada no Convex).
-  const expiresAt = Date.now() + 30 * 24 * 60 * 60 * 1000;
+  const expiresAt = expiresAtOverride ?? Date.now() + LOCAL_SESSION_TTL_MS;
   fs.writeFileSync(
     file,
     JSON.stringify({ sessionToken: token, expiresAt }, null, 2),
@@ -305,7 +313,11 @@ function withTimeout<T>(p: Promise<T>, label: string): Promise<T> {
         new Error(
           `Timeout: o backend Sapiens não respondeu em ${Math.round(
             CONVEX_TIMEOUT_MS / 1000,
-          )}s (${label}). Tente de novo em instantes.`,
+          )}s (${label}). Isto é o CLIENTE desistindo de esperar, não a ` +
+            `operação morrendo: ela segue rodando no servidor e, se cobra ` +
+            `Sinapses, JÁ cobrou. NÃO repita a chamada — repetir gera e cobra ` +
+            `de novo. Espere alguns minutos e leia o estado real por uma ` +
+            `leitura (o \`get\`/\`list\`/\`status\` do mesmo tool) antes de decidir.`,
         ),
       );
     }, CONVEX_TIMEOUT_MS);
@@ -330,6 +342,46 @@ export async function convexMutation<T = any>(
 ): Promise<T> {
   const client = getConvex();
   return (await withTimeout(client.mutation(fnPath as any, args), `mutation ${fnPath}`)) as T;
+}
+
+// ============================================
+// Renovação da chave por USO (janela deslizante do servidor).
+//
+// A validade da conexão são 90 dias que andam pra frente a cada uso, mas quem
+// empurra é o backend, e ele só sabe que a conexão está viva se alguém bater na
+// porta. Este é o batidor: uma chamada barata por hora por token, best-effort
+// (falhou, não atrapalha nada), e é ela que também alimenta o "último uso" da
+// tela de conexões em /conectar-claude. Sem isso, quem opera todo dia era
+// deslogado no aniversário do login.
+//
+// No stdio, quando o servidor renova, o store em disco é regravado com o novo
+// expiresAt (senão o espelho local venceria antes da chave de verdade). No
+// remoto não se toca em disco: o token é do request, não do host.
+// ============================================
+const TOUCH_EVERY_MS = 60 * 60 * 1000;
+const touchedAt = new Map<string, number>();
+
+export async function touchSession(token: string): Promise<void> {
+  if (!token || token.length < 8) return;
+  const now = Date.now();
+  if (now - (touchedAt.get(token) ?? 0) < TOUCH_EVERY_MS) return;
+  if (touchedAt.size > 2000) touchedAt.clear(); // processo remoto de vida longa
+  touchedAt.set(token, now);
+  try {
+    const r: any = await convexMutation("desktopAuth:touchDesktopSession", {
+      sessionToken: token,
+    });
+    if (
+      r?.renewed &&
+      typeof r.expiresAt === "number" &&
+      !isRemoteContext() &&
+      readStoredSessionToken() === token
+    ) {
+      saveSessionToken(token, r.expiresAt);
+    }
+  } catch {
+    // best-effort: renovar é conforto, não pré-requisito da chamada em curso
+  }
 }
 
 export async function convexAction<T = any>(

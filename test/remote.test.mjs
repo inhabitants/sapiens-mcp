@@ -76,6 +76,41 @@ test("remoto: initialize com bearer devolve serverInfo + instructions", async ()
   );
   assert.ok(msg.result?.capabilities?.tools, "capability tools");
   assert.ok(msg.result?.capabilities?.prompts, "capability prompts");
+  assert.ok(msg.result?.capabilities?.resources, "capability resources");
+});
+
+// As skills da casa no remoto: paridade com o stdio. Não passam pelo gate de
+// sessão de propósito (documentação estática do produto, sem dado de usuário),
+// então respondem mesmo com o backend fora — que é o caso deste arquivo. É o
+// ponto: quem está sem saldo ou com sessão vencida ainda lê como a casa funciona.
+test("remoto: resources servem as skills mesmo com o backend fora", async () => {
+  const listed = await readRpcResponse(
+    await handler(
+      rpc({ jsonrpc: "2.0", id: 20, method: "resources/list", params: {} }),
+    ),
+    20,
+  );
+  const resources = listed.result?.resources;
+  assert.ok(Array.isArray(resources) && resources.length >= 10, "catálogo de skills");
+  assert.ok(
+    resources.every((r) => r.uri.startsWith("skill://sapiens/")),
+    "todas as URIs no namespace da casa",
+  );
+
+  const read = await readRpcResponse(
+    await handler(
+      rpc({
+        jsonrpc: "2.0",
+        id: 21,
+        method: "resources/read",
+        params: { uri: "skill://sapiens/voz-da-casa/SKILL.md" },
+      }),
+    ),
+    21,
+  );
+  const text = read.result?.contents?.[0]?.text ?? "";
+  assert.match(text, /name: voz-da-casa/, "frontmatter da skill pedida");
+  assert.match(text, /travessão/, "a régua editorial está no corpo");
 });
 
 test("remoto: tools/list com token não-verificável = lista cheia (fail-open)", async () => {
@@ -86,7 +121,11 @@ test("remoto: tools/list com token não-verificável = lista cheia (fail-open)",
   const msg = await readRpcResponse(res, 2);
   const tools = msg.result?.tools;
   assert.ok(Array.isArray(tools), "tools/list responde");
-  assert.equal(tools.length, 29, "tier desconhecido lista o catálogo cheio");
+  assert.equal(tools.length, 39, "tier desconhecido lista o catálogo cheio (menos as locais)");
+  assert.ok(
+    !tools.some((t) => t.name === "sapiens_pontes"),
+    "sapiens_pontes só existe no stdio: a chave de provedor não sobe pro remoto",
+  );
   const meta = tools.find((t) => t.name === "sapiens_meta");
   assert.ok(meta?.description?.length > 0, "descriptions presentes");
 });

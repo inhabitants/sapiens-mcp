@@ -1,38 +1,53 @@
 import { z } from "zod";
-import { convexAction, convexQuery, getSessionToken } from "../convexClient.js";
+import { convexAction, convexMutation, getSessionToken } from "../convexClient.js";
 
 /**
- * Catálogo dos estúdios/experimentos Sapiens (v1.3).
+ * Duas coisas com o mesmo nome, e o `action` separa as duas:
  *
- * Versão minimal: retorna info estática sobre os experimentos disponíveis no
- * app. Cada entry tem URL do dashboard, descrição curta, status (estável /
- * beta / experimental), e tags. Útil pro Claude rotear o user pro lugar
- * certo quando ele pede coisa que não está coberta no plugin v1.x.
+ * 1. O CATÁLOGO dos estúdios/experimentos da casa (`list`/`get`): info estática
+ *    com URL do dashboard, status e tags, pro Claude rotear o user pro lugar
+ *    certo quando ele pede coisa que o plugin não cobre.
+ * 2. O STUDIO DO MEMBRO (`mine`/`create`): a página de portfólio da empresa
+ *    dele. Fundar é aqui; vestir a página (capa, logo, sobre, seções) e montar
+ *    o time é na própria página, no modo edição.
  *
- * v1.4 vai adicionar wrappers session-token-auth pros estúdios que justificam
- * (Helen Voice TTS, Musicator letras, Sapiens Shorts render, Persona Sapiens).
- * Por hora skills usam Claude-side + dashboard URL.
+ * A Emancipação (o antigo "Nível 3", blueprint pra construir a casa própria na
+ * infra do membro) saiu em ago/2026 junto com os níveis: o studio virou perfil
+ * de empresa, não uma jornada. As queries `studioBlueprints:mcp*` seguem no
+ * backend só como aviso pra pacote publicado que ainda chama.
  */
 
 export const studiosSchema = z.object({
   action: z
-    .enum(["list", "get", "publishable_url", "mine", "emancipar", "module"])
+    .enum(["list", "get", "publishable_url", "mine", "create"])
     .describe(
-      "mine = o SEU studio ('Meu Studio', singular): nível, marca, operador e ferramentas, pra você gerar com useStudio. list/get = catálogo de estúdios da casa. publishable_url = URL de artigo. " +
-        "emancipar = INICIA a Emancipação (Nível 3 do Studio): puxa o blueprint-mestre pra VOCÊ (Claude) construir a casa PRÓPRIA do membro, na infra DELE (Vercel + Convex + domínio dele), FORA do Sapiens. Devolve a identidade do studio dele já hidratada + o índice de módulos + o guia da Fundação. " +
-        "module = puxa o guia de UM módulo de infra pra continuar a construção (ex: fundacao, sapiens-connect, midia, telegram, email, auth).",
+      "mine = o SEU studio (a página de portfólio da sua casa): nome, endereço público, marca, operador e tamanho do time. " +
+        "create = FUNDA um studio novo na conta do user (exige 'name'). Nasce NO AR, com endereço público e ele como fundador (studio não tem rascunho); vestir a página é na própria página. Teto de 4 por pessoa. " +
+        "list/get = catálogo de estúdios da casa. publishable_url = URL de artigo.",
     ),
   studio: z
     .string()
     .optional()
     .describe(
-      "Pra action=get: slug do estúdio (ex 'helen-voice', 'musicator', 'persona-sapiens', 'sapiens-shorts').",
+      "Pra action=get: slug do estúdio (ex 'helen-voice', 'musicator', 'persona-sapiens', 'sapiens-video').",
     ),
-  module: z
+  name: z
     .string()
     .optional()
     .describe(
-      "Pra action=module: slug do módulo de infra da emancipação. Prontos (com guia): fundacao, sapiens-connect, midia, telegram, email, auth. Chegando (no índice, sem guia ainda): pagamentos, analytics.",
+      "Pra action=create: o nome da casa (obrigatório). O endereço público sai daí, em kebab-case. Pergunte ao user, não invente.",
+    ),
+  description: z
+    .string()
+    .optional()
+    .describe(
+      "Pra action=create: uma linha do que a casa faz (até 200 chars). Opcional, mas é o que aparece embaixo do nome na página.",
+    ),
+  brandSlug: z
+    .string()
+    .optional()
+    .describe(
+      "Pra action=create: marca da casa (slug de sapiens_brand). Opcional. Só passa marca que é do user.",
     ),
   publishableId: z
     .string()
@@ -54,8 +69,8 @@ const STUDIOS = {
   "helen-voice": {
     name: "Helen Voice (TTS)",
     description:
-      "Text-to-speech via ElevenLabs ou Google TTS (Gemini). BYOK suportado. Voice cloning a partir de samples (UI-only). v1.4: speak via MCP.",
-    url: `${APP}/dashboard/influencer-ia`,
+      "Text-to-speech via ElevenLabs ou Google TTS (Gemini), sempre em Sinapses: a casa não recebe chave de provedor. Voice cloning a partir de samples (UI-only). v1.4: speak via MCP.",
+    url: `${APP}/dashboard/personagens`,
     status: "stable",
     tags: ["audio", "tts", "elevenlabs", "google", "voice"],
     convex: "helenVoiceActions",
@@ -87,28 +102,6 @@ const STUDIOS = {
     mcpNote:
       "Coberto via sapiens_persona. PRIMÁRIO (de graça, qualquer logado): get_quiz + submit_quiz + my_profile — aplica o teste conversando e ALIMENTA o personalityProfile do user. SECUNDÁRIO: generate + list_codes (arte dos arquétipos, 450 Sinapses).",
   },
-  "personagem-atlas": {
-    name: "Personagem-Atlas",
-    description:
-      "Dossiê editorial premium de personagens sintéticos: 10 slides com tipografia refinada, paleta cromática e geração de conteúdo via IA. É construção de PERSONAGEM ficcional, não o teste de personalidade do user (esse é o persona-sapiens).",
-    url: `${APP}/experimentos/personagem-atlas`,
-    status: "stable",
-    tags: ["personagem", "dossie", "editorial", "slides", "atlas", "character"],
-    convex: "characterAtlas",
-    mcpReady: false,
-  },
-  "sapiens-shorts": {
-    name: "Sapiens Shorts (UGC / Reflexão)",
-    description:
-      "Gera shorts verticais 9:16 via VEO. Estilos: ugc, unboxing, app-demo, reflexao. Composição automática persona + screen. v1.5: render via MCP.",
-    url: `${APP}/imgen-sapiens-shorts`,
-    status: "stable",
-    tags: ["video", "shorts", "9:16", "veo", "ugc"],
-    convex: "sapiensShortsActions",
-    mcpReady: true,
-    mcpNote:
-      "Coberto via sapiens_shorts (render com brief structured). Compose persona+screen via composeWithImageUrl continua UI-only (compose tem credit refund que mexe em scheduler).",
-  },
   "sapiens-video": {
     name: "Sapiens Video (longer-form)",
     description: "Vídeo longer-form com prompt livre. v1.5: generate via MCP.",
@@ -132,29 +125,19 @@ const STUDIOS = {
     mcpNote:
       "Parcialmente coberto via sapiens_pipeline format=post_social (texto Claude-side) + sapiens_image.",
   },
-  "comic-builder": {
-    name: "Comic Builder (Tirinhas)",
-    description:
-      "Estúdio oficial de tirinhas/quadrinhos. A IA roteiriza e gera os painéis de dois jeitos: painel a painel (controle fino) ou a tira inteira numa imagem só (estilo e lógica mais travados). Traço dos artigos como estilo base, Helen opcional, diagramação (2×2, tira, vertical) e histórico das tirinhas.",
-    url: `${APP}/experimentos/comic-builder`,
-    status: "stable",
-    tags: ["tirinha", "tirinhas", "comic", "quadrinhos", "hq", "painel", "roteiro", "narrativa"],
-    convex: "comicStrips",
-    mcpReady: true,
-    mcpNote:
-      "Coberto via sapiens_pipeline format=tirinha (roteiro: cena + fala dos balões) + sapiens_image pra render. DOIS modos: MODO A tira inteira numa imagem só (1 sapiens_image em grade) ou MODO B painel a painel (N sapiens_image com character-lock por referência). Decida o modo antes de gerar. A imagem sai SEM texto (no-text da casa, modelo erra letra); a fala vai como legenda separada e os balões editáveis + diagramação + histórico finalizam no dashboard. Estúdio canônico de tirinha: não precisa freestyle de prompt.",
-  },
+  // comic-builder (Tirinhas) saiu do roster em ago/2026: peça aposentada. As
+  // tirinhas publicadas seguem de pé (/tirinha/<id>, cards na Comunidade).
   "carrosel-editorial": {
     name: "Carrossel Editorial",
     description:
-      "Gerador de carrossel Instagram com templates fixos (role × variant A/B/C), 9 slides Sapiens. Render via Playwright.",
+      "Carrossel do Instagram com layouts travados: modelos Feed, Reflexão e Case (9 slides) ou editorial livre, folha 4:5 ou 9:16, assinado com a marca de quem faz. O arquivo sai do navegador, no editor.",
     url: `${APP}/experimentos/carrosel-editorial`,
     status: "stable",
-    tags: ["carrossel", "instagram", "editorial", "playwright"],
+    tags: ["carrossel", "instagram", "editorial"],
     convex: "carouselStandalone",
     mcpReady: true,
     mcpNote:
-      "Coberto via sapiens_pipeline format=carrossel_ig (texto+imagens). Render Playwright fica no dashboard.",
+      "Coberto via sapiens_carrossel (gerar, escrever os slides, pôr foto da galeria, capa IA), pra qualquer conta. Baixar é no editor.",
   },
   comunidade: {
     name: "Comunidade Sapiens",
@@ -182,15 +165,18 @@ const STUDIOS = {
 } as const;
 
 export async function studios(args: StudiosArgs): Promise<any> {
-  // action=mine: o STUDIO do user logado (o "Meu Studio", singular), resumo
-  // non-PII pro Claude saber o que está montado antes de gerar com useStudio.
+  // action=mine: o studio PRIMÁRIO do user logado (a página de portfólio da casa
+  // dele), resumo non-PII. Os campos `level`/`levelLabel`/`tools`/`imageVibe`/
+  // `studioMcpRuns` vêm vazios: os níveis e as ferramentas à la carte morreram
+  // quando o studio virou página, e a geração ancorada (`useStudio`) morreu com
+  // ela; só continuam no retorno porque pacotes já publicados os imprimem.
   if (args.action === "mine") {
     const sessionToken = getSessionToken();
     const studio = await convexAction("desktopMcp:studioMine", { sessionToken });
     if (!studio) {
       return {
         studio: null,
-        note: "Você ainda não tem um studio. Crie em sapiensinteticos.com/dashboard/studio, escolha as ferramentas e ancore a sua marca.",
+        note: "Você ainda não fundou um studio. Funde o seu em sapiensinteticos.com/dashboard/studio: ele vira uma página pública com a sua obra e o seu time.",
       };
     }
     return { studio };
@@ -231,41 +217,33 @@ export async function studios(args: StudiosArgs): Promise<any> {
     // tivermos lookup slug-by-id.
     return {
       url: slug ? `${APP}/articles/${slug}` : null,
-      admin: `${APP}/dashboard/admin/content`,
+      admin: `${APP}/experimentos/content-pipeline`,
       note: slug
         ? "URL pública. Pra ver versões anteriores, use sapiens_pipeline list_versions."
         : "publishableId lookup ainda não suportado v1.3. Passe slug.",
     };
   }
 
-  // action=emancipar: o blueprint-mestre da Emancipação (Nível 3). O membro sai
-  // da casa do Sapiens e monta a PRÓPRIA, na infra dele, guiado pelo Claude dele.
-  if (args.action === "emancipar") {
-    const sessionToken = getSessionToken();
-    const res: any = await convexQuery(
-      "studioBlueprints:mcpEmanciparBlueprint",
-      { sessionToken },
-    );
-    if (!res?.ok) return res; // { ok:false, error } — ex: sem studio montado ainda
-    return {
-      ...res,
-      howto:
-        "Blueprint-mestre da Emancipação (Nível 3). VOCÊ (o Claude do membro) constrói a casa dele NUMA PASTA NOVA, fora deste projeto, com Vercel + Convex + domínio DO MEMBRO. O Sapiens NÃO hospeda a casa. Conduza assim: (1) leia o `blueprint` (guia da Fundação) e execute passo a passo, confirmando com o membro ANTES de criar conta ou gastar (domínio); (2) o selo <meta name=\"sapiens-studio\"> é OBRIGATÓRIO pra verificação; (3) com a casa no ar, o membro submete a URL no Sapiens (Rito 'Studio no Ar', que paga Sinapses); (4) pra cada próximo módulo do `modules` que estiver 'ready', chame sapiens_studios action=module module=<slug>. Um módulo por vez, sem atropelar. É um passo grande: vá com calma e no gosto do membro.",
-    };
-  }
-
-  // action=module: o guia de UM módulo de infra, hidratado com a identidade do
-  // studio do membro. Chame depois da fundacao, um por vez.
-  if (args.action === "module") {
-    if (!args.module) {
+  // action=create: funda a casa. O servidor resolve o dono pelo sessionToken e
+  // devolve o endereço público já montado (quem chama não tem tela pra procurar).
+  if (args.action === "create") {
+    const name = (args.name ?? "").trim();
+    if (!name) {
       throw new Error(
-        "action=module exige 'module' (slug do módulo de infra: fundacao, sapiens-connect, telegram, email, auth).",
+        "action=create exige 'name' (o nome da casa). Pergunte ao user antes de inventar.",
       );
     }
     const sessionToken = getSessionToken();
-    return await convexQuery("studioBlueprints:mcpModuleBlueprint", {
+    const res: any = await convexMutation("studios:mcpCreateStudio", {
       sessionToken,
-      module: args.module,
+      name,
+      description: args.description,
+      brandSlug: args.brandSlug,
     });
+    return {
+      ...res,
+      note: "Studio fundado e JÁ NO AR nesse endereço. O user veste a página (capa, logo, sobre, time, obra) em " +
+        `${APP}/studios/${res.slug} no modo edição. Convidar gente exige follow mútuo.`,
+    };
   }
 }
