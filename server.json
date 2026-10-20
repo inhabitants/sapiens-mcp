@@ -3,7 +3,7 @@
   "name": "com.sapiensinteticos/sapiens",
   "title": "Sapiens Sintéticos",
   "description": "Operate your Sapiens Sintéticos AI studio: generate image, article, voice, music and video.",
-  "version": "1.102.1",
+  "version": "1.103.0",
   "websiteUrl": "https://www.sapiensinteticos.com/conectar-claude",
   "repository": {
     "url": "https://github.com/inhabitants/sapiens-mcp",
@@ -13,7 +13,7 @@
     {
       "registryType": "npm",
       "identifier": "sapiens-mcp",
-      "version": "1.102.1",
+      "version": "1.103.0",
       "transport": {
         "type": "stdio"
       }

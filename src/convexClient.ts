@@ -305,21 +305,32 @@ export function describeConvexError(e: any): string {
 // (minutos) ainda precisa do fluxo assíncrono. Override por env pra outro teto.
 const CONVEX_TIMEOUT_MS = Number(process.env.SAPIENS_CONVEX_TIMEOUT_MS) || 120000;
 
-function withTimeout<T>(p: Promise<T>, label: string): Promise<T> {
+/** O fim da mensagem quando quem chama não diz onde o resultado cai. */
+const ONDE_CONFERIR_GENERICO =
+  "Espere alguns minutos e leia o estado real por uma leitura (o `get`/`list`/`status` do mesmo tool) antes de decidir.";
+
+/**
+ * A mensagem do Timeout. `ondeConferir` troca a frase genérica pela leitura
+ * certa daquele tool: o "status do mesmo tool" não existe em todo tool, e o
+ * agente que seguia a frase genérica no sapiens_image caía na galeria, que não
+ * mostra peça ainda gerando, e repetia a cobrança.
+ */
+export function mensagemDeTimeout(label: string, ondeConferir?: string): string {
+  return (
+    `Timeout: o backend Sapiens não respondeu em ${Math.round(
+      CONVEX_TIMEOUT_MS / 1000,
+    )}s (${label}). Isto é o CLIENTE desistindo de esperar, não a ` +
+    `operação morrendo: ela segue rodando no servidor e, se cobra ` +
+    `Sinapses, JÁ cobrou. NÃO repita a chamada: repetir gera e cobra ` +
+    `de novo. ${ondeConferir ?? ONDE_CONFERIR_GENERICO}`
+  );
+}
+
+function withTimeout<T>(p: Promise<T>, label: string, ondeConferir?: string): Promise<T> {
   let timer: ReturnType<typeof setTimeout>;
   const timeout = new Promise<never>((_, reject) => {
     timer = setTimeout(() => {
-      reject(
-        new Error(
-          `Timeout: o backend Sapiens não respondeu em ${Math.round(
-            CONVEX_TIMEOUT_MS / 1000,
-          )}s (${label}). Isto é o CLIENTE desistindo de esperar, não a ` +
-            `operação morrendo: ela segue rodando no servidor e, se cobra ` +
-            `Sinapses, JÁ cobrou. NÃO repita a chamada — repetir gera e cobra ` +
-            `de novo. Espere alguns minutos e leia o estado real por uma ` +
-            `leitura (o \`get\`/\`list\`/\`status\` do mesmo tool) antes de decidir.`,
-        ),
-      );
+      reject(new Error(mensagemDeTimeout(label, ondeConferir)));
     }, CONVEX_TIMEOUT_MS);
   });
   return Promise.race([
@@ -387,7 +398,14 @@ export async function touchSession(token: string): Promise<void> {
 export async function convexAction<T = any>(
   fnPath: string,
   args: Record<string, any>,
+  // Onde o agente confere o resultado se o cliente desistir de esperar: a
+  // leitura daquele tool, no lugar da frase genérica da mensagem de Timeout.
+  opts: { ondeConferir?: string } = {},
 ): Promise<T> {
   const client = getConvex();
-  return (await withTimeout(client.action(fnPath as any, args), `action ${fnPath}`)) as T;
+  return (await withTimeout(
+    client.action(fnPath as any, args),
+    `action ${fnPath}`,
+    opts.ondeConferir,
+  )) as T;
 }

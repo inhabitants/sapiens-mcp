@@ -72,9 +72,11 @@ Não despeje a lista inteira de tools. O start guia.
 
 | O que gerou | Onde conferir |
 |---|---|
-| imagem | \`sapiens_gallery action=list\` |
+| imagem (generate, upscale, sombra) | \`sapiens_image action=status\` |
 | artigo do perfil | \`sapiens_write action=list\` |
 | carrossel | \`sapiens_carrossel action=list\` |
+
+Imagem tem leitura própria porque a galeria (\`sapiens_gallery action=list\`) só mostra peça PRONTA: a que ainda está gerando não aparece lá, parece que falhou, e repetir cobra de novo. O \`status\` lista as gerações recentes da conta com o estado de cada uma: \`gerando\` (já cobrou, NÃO gere de novo, leia de novo em 1 ou 2 minutos), \`pronta\` (mostre essa), \`falhou\` ou \`bloqueada\` (o débito voltou, aí sim gere de novo) e \`presa\` (passou de 15 minutos gerando, a varredura do servidor estorna).
 
 **2. Disjuntor anti-loop.** Três falhas seguidas no MESMO tool fazem o cliente marcar o servidor como "unreachable" por ~56s. Parece que "o MCP caiu", mas foi argumento faltando. Quando um tool volta erro de validação ("exige X", "falta Y"), LEIA o erro e refaça a chamada COM o que falta. Nunca repita a chamada idêntica que falhou.
 
@@ -126,8 +128,10 @@ O modelo repete esses porque soam competentes. Todos caem.
 - **Frase vazia**: "vale destacar", "é importante notar", "no final das contas", "quando se trata de", "nos dias de hoje".
 - **Rodízio de sinônimo**: o agente, depois o assistente, depois a ferramenta, tudo pra mesma coisa. Repetir a palavra certa é precisão.
 - **Kicker de falsa profundidade**: a última linha "funda" que vira aforismo. Deleta, não reescreve numa metáfora melhor. Termina na frase concreta que já estava lá.
-
-Hedge não entra nessa lista: "ao meu ver", "por enquanto", "talvez" assinam a voz e ficam.
+- **Muleta de hedge**: "ao meu ver", "na minha opinião", "tendo a achar", "talvez" que não carrega dúvida. Corta e afirma. Incerteza real fica, dita como fato: "testei só no plano grátis", "até o preço cair".
+- **Palavra difícil**: "utilizar", "possuir", "visando", "a fim de", "devido ao fato de". Usar, ter, pra, porque.
+- **Advérbio no lugar do número**: "melhorou significativamente", "caiu drasticamente". Fala o número.
+- **Passiva com agente**: "foi lançado pela OpenAI" vira "a OpenAI lançou". Quem fez é o sujeito.
 
 ## Revisar sem apagar a pessoa
 
@@ -279,6 +283,7 @@ Duração é o que pesa aqui, não o modelo: um take de 30s em 720p passa de 40 
 - \`sapiens-video-kling\`: Kling 3.0 Pro, anima imagem, 3 a 15s, som opcional.
 - \`sapiens-video-wan\`: WAN 2.5, imagem que fala ou canta, com lip-sync, 5 ou 10s.
 - \`sapiens-video-wan-3\`: WAN 3.0, texto ou imagem, som nativo, frame final e 1080p, 5 a 10s.
+- \`sapiens-video-flux-3-max\`: FLUX 3 Max, texto ou imagem, 5 a 20s em \`720p\` ou \`1080p\`, som nativo e frame final (só junto do inicial). Segue o prompt de perto e volta rápido. Não aceita referência de personagem nem vídeo de movimento.
 - \`sapiens-video-kling-motion\`: passa o movimento de um vídeo pra uma imagem. Precisa de pessoa com tronco visível na imagem E no vídeo.
 - \`sapiens-video-shot-mimic\`: recria o plano, a câmera e os cortes de um vídeo de referência como cena nova.
 - \`sapiens-video-omni-11\`: Gemini Omni 1.1, texto ou imagem vira clipe de 4, 6, 8 ou 10s (sem \`durationSec\`, 10s) com áudio nativo, de \`360p\` a \`4k\` (sem \`resolution\`, 720p). O preço é por segundo e por resolução: o take de 4s custa 40% do de 10s, o 360p custa 1/3 do 720p, o 1080p 1,5x e o 4k 3x. Aceita até 3 imagens suas (frame inicial, frame final ou referência de personagem e estilo); vídeo de movimento não (pra copiar coreografia, Seedance). Edita e estende um vídeo SEU: \`sourceVideoId\` (da galeria) ou \`sourceVideoUrl\` (link da casa), mp4 até 10 s, com \`sourceVideoMode\` \`edit\` (o padrão: a mesma cena com a mudança pedida, cobrada pelo tamanho do clipe; é como se troca a pessoa de um vídeo pelo seu personagem, com a ficha dele em \`referenceImageIds\`) ou \`extend\` (o pedaço seguinte, cobrado pelo \`durationSec\`). A proporção sai a do clipe. O truque: \`editOfImageId\` aponta um vídeo Omni seu e o prompt vira instrução de edição sobre a MESMA cena (troca item ou personagem, preserva câmera e ambiente). É o caminho pra variações com continuidade: gera a base uma vez, edita N vezes. Cada edição debita como geração nova. Pra ir ADIANTE no tempo é \`action=extend\` (o pedaço seguinte, cobrado pela duração dele): o arquivo de cada parte já traz as anteriores na frente, então a última parte pronta é o filme inteiro. Não emende as partes, a abertura repete; \`action=chain\` aponta o \`filmeInteiro\`.
@@ -434,7 +439,7 @@ Peça que vai virar overlay, sticker, slide ou camada de vídeo nasce recortada:
 
 ## Cuidados
 
-- \`generate\` é SÍNCRONA e cobra ao concluir. Modelo pesado (Pro, gpt-image-2-high, Grok quality, Seedream 5.0 Pro, 2K/4K) cai na regra do timeout: cheque \`sapiens_gallery action=list\` antes de repetir, senão cobra duas vezes. O \`seedream-5-0-pro\` foi medido em ~140s, ACIMA do teto de 120s do cliente, então o Timeout nele é o esperado e a imagem está lá.
+- \`generate\` é SÍNCRONA e cobra no disparo. Modelo pesado (Pro, gpt-image-2-high, GPT Image 2.5 Sunburst, Grok quality, Seedream 5.0 Pro, 2K/4K) cai na regra do timeout: leia \`action=status\` antes de repetir, senão cobra duas vezes. Ela lista as gerações recentes da conta, a mais nova primeiro, e é a única leitura que mostra a peça que AINDA está gerando (a galeria só mostra pronta). Ache a sua pelo model, pelo começo do prompt e pelo \`haMinutos\`: \`gerando\` = espere e leia de novo em 1 ou 2 minutos; \`pronta\` = mostre essa; \`falhou\`/\`bloqueada\` = o débito voltou, aí sim gere de novo (bloqueada pede outro prompt ou outro motor); \`presa\` = passou de 15 minutos e o servidor estorna sozinho. O \`seedream-5-0-pro\` foi medido em ~140s, ACIMA do teto de 120s do cliente, então o Timeout nele é o esperado e a imagem chega.
 - Uma imagem só vira pública (e ganha página indexável) com \`sapiens_gallery action=publish\`.
 
 ## Depois de pronta: resolução maior e sombra
@@ -444,7 +449,7 @@ Duas ações da ficha do site saem por aqui, sobre uma imagem SUA já pronta (\`
 - \`action=upscale\`: a mesma peça em resolução maior. Use quando a pessoa vai imprimir, recortar ou levar pra vídeo em tela grande.
 - \`action=sombra\`: o mapa de profundidade da foto (colorido, não em cinza), pra usar como referência de pose e volume numa geração seguinte.
 
-As duas cobram Sinapses, preço fixo igual ao da ficha. São síncronas e o upscale pode passar de 2 minutos: Timeout é o cliente desistindo, não o servidor. Olhe \`sapiens_gallery action=list\` antes de repetir, senão cobra duas vezes.
+As duas cobram Sinapses, preço fixo igual ao da ficha. São síncronas e o upscale pode passar de 2 minutos: Timeout é o cliente desistindo, não o servidor. A peça nova não aparece enquanto trabalha: ela entra pronta em até uns 6 minutos, com o prompt começando por "Resolução ampliada:" ou "Sombra da foto:". Leia \`action=status\` antes de repetir, senão cobra duas vezes; passados 6 minutos sem ela, a ação falhou e as Sinapses voltaram.
 
 ## De qual saldo sai
 

@@ -516,3 +516,82 @@ test("runWithClientHint: a pista existe só dentro da chamada", () => {
   assert.equal(runWithClientHint("", () => getClientName()), undefined);
   assert.equal(runWithClientHint("ua:Claude-User/1.0", () => getClientName()), "ua:Claude-User/1.0");
 });
+
+// ---------- sapiens_image action=status (a leitura depois do Timeout) ----------
+
+import { mensagemDeTimeout } from "../dist/convexClient.js";
+import {
+  imageSchema,
+  lerGeracoesRecentes,
+  ONDE_CONFERIR_GENERATE,
+  ONDE_CONFERIR_UPSCALE_SOMBRA,
+} from "../dist/tools/image.js";
+
+test("imageSchema: action=status existe e não pede prompt nem peça", () => {
+  assert.equal(imageSchema.parse({ action: "status" }).action, "status");
+});
+
+test("mensagemDeTimeout: o generate aponta o status, não o 'status do mesmo tool' genérico", () => {
+  const generica = mensagemDeTimeout("action x:y");
+  assert.match(generica, /NÃO repita/);
+  assert.match(generica, /`get`\/`list`\/`status` do mesmo tool/);
+
+  const daImagem = mensagemDeTimeout("action desktopMcp:generateImageOnline", ONDE_CONFERIR_GENERATE);
+  assert.match(daImagem, /NÃO repita/);
+  assert.match(daImagem, /sapiens_image action=status/);
+  assert.doesNotMatch(daImagem, /do mesmo tool/);
+
+  const daFicha = mensagemDeTimeout("action imageUpscale:aumentarResolucao", ONDE_CONFERIR_UPSCALE_SOMBRA);
+  assert.match(daFicha, /sapiens_image action=status/);
+  assert.match(daFicha, /Resolução ampliada:/);
+
+  // Regra da casa: sem travessão na mensagem que o agente lê.
+  for (const m of [generica, daImagem, daFicha]) assert.doesNotMatch(m, /—/);
+});
+
+test("lerGeracoesRecentes: gerando ganha a idade, e passa a presa aos 15 minutos", () => {
+  const agora = 1_000_000_000_000;
+  const min = 60_000;
+  const r = lerGeracoesRecentes(
+    [
+      { imageId: "a", estado: "gerando", createdAt: agora - 2 * min - 5_000 },
+      { imageId: "b", estado: "pronta", createdAt: agora - 3 * min, url: "https://cdn/x.webp" },
+      { imageId: "c", estado: "gerando", createdAt: agora - 16 * min },
+      { imageId: "d", estado: "falhou", createdAt: agora - 20 * min },
+    ],
+    agora,
+  );
+  assert.equal(r.count, 4);
+  assert.equal(r.gerando, 1);
+  assert.deepEqual(
+    r.items.map((i) => [i.imageId, i.estado, i.haMinutos]),
+    [
+      ["a", "gerando", 2],
+      ["b", "pronta", 3],
+      ["c", "presa", 16],
+      ["d", "falhou", 20],
+    ],
+  );
+  assert.equal(r.items[1].url, "https://cdn/x.webp");
+  assert.match(r.leitura, /NÃO gere de novo/);
+});
+
+test("lerGeracoesRecentes: conta sem geração recente volta vazia, sem quebrar", () => {
+  const r = lerGeracoesRecentes([], Date.now());
+  assert.deepEqual([r.count, r.gerando, r.items], [0, 0, []]);
+  assert.equal(r.truncado, undefined);
+});
+
+test("lerGeracoesRecentes: presa conta do claim do render, igual à varredura do servidor", () => {
+  const agora = 1_000_000_000_000;
+  const min = 60_000;
+  const r = lerGeracoesRecentes(
+    // Criada no site há 20 min e reivindicada pelo MCP há 5: o render pago ainda vale.
+    [{ imageId: "a", estado: "gerando", createdAt: agora - 20 * min, renderClaimedAt: agora - 5 * min }],
+    agora,
+    true,
+  );
+  assert.equal(r.items[0].estado, "gerando");
+  assert.equal(r.items[0].haMinutos, 20);
+  assert.equal(r.truncado, true);
+});

@@ -626,8 +626,10 @@ export async function gallery(args: GalleryArgs): Promise<any> {
     });
   }
 
-  // publish: liga isPublic na própria imagem. Public = entra na galeria
-  // pública + feed Pinterest (e /imagem/<id> se não for degen). Publicado não
+  // publish: liga isPublic na própria peça, imagem ou vídeo (o vídeo desde
+  // 20/10/2026, pelo servidor: este pacote só repassa, então versão antiga
+  // publica vídeo também). Imagem entra na galeria pública + feed Pinterest (e
+  // /imagem/<id> se não for degen); vídeo ganha a /video/<id>. Publicado não
   // despublica (decisão do dono, 22/08/2026): a action unpublish saiu daqui, e
   // pacote antigo que ainda mandar isPublic=false toma a recusa do servidor.
   if (args.action === "publish") {

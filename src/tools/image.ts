@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { httpUrl } from "../schema.js";
-import { convexAction, convexQuery, getSessionToken } from "../convexClient.js";
+import { convexAction, convexQuery, describeConvexError, getSessionToken } from "../convexClient.js";
 
 // IDs canônicos do catálogo (apps/sapiens/convex/shared/imageModels.ts).
 // IDs fora dessa lista caem no fallback e o pricing vira 999. Sempre usar os
@@ -118,8 +118,57 @@ function defaultSizeFor(model: string | undefined): string | undefined {
   return model && DEFAULT_2K_MODELS.has(model) ? "2K" : undefined;
 }
 
+/**
+ * Onde conferir quando o generate passa do teto do cliente (o fim da mensagem
+ * de Timeout). Antes a frase genérica mandava ler "o status do mesmo tool", que
+ * não existia aqui, e as instruções mandavam pra galeria, que só mostra peça
+ * pronta: a que ainda gerava sumia, o agente repetia e a conta pagava duas vezes.
+ */
+export const ONDE_CONFERIR_GENERATE =
+  "Leia sapiens_image action=status: ela lista as gerações recentes da conta com o estado de cada uma, inclusive a que ainda está gerando (a galeria só mostra peça pronta). gerando = ainda no servidor, volte em 1 ou 2 minutos; pronta = a peça está no acervo, mostre essa; falhou = o débito voltou, e só aí gere de novo.";
+
+/**
+ * Upscale e sombra não abrem row antes de terminar: a peça nova nasce pronta,
+ * então durante o trabalho não há nada pra ver. Os prazos somam os tetos de
+ * imageUpscale.ts e depthFoto.ts (pedido, poll, download).
+ */
+export const ONDE_CONFERIR_UPSCALE_SOMBRA =
+  "A peça nova só aparece quando fica pronta, em até uns 6 minutos: leia sapiens_image action=status (ou sapiens_gallery action=list), onde ela entra pronta ao lado da original, com o prompt começando por 'Resolução ampliada:' (upscale) ou 'Sombra da foto:' (sombra). Passados 6 minutos sem ela, a ação falhou e as Sinapses voltaram: só aí repita.";
+
+/**
+ * Gerando há mais que isto = presa. A régua é a da varredura do servidor
+ * (loadingAindaVale, LOADING_SEM_JOB_MS): 15 minutos contados do maior entre a
+ * criação e o claim do render, senão a row do site que o MCP renderizou depois
+ * viraria "presa" aqui com o render pago ainda vivo lá.
+ */
+const PRESA_MS = 15 * 60 * 1000;
+
+const LEITURA_STATUS =
+  "As gerações de imagem mais recentes da conta, a mais nova primeiro. As que estão gerando vêm todas; o resto vem cortado. gerando: o servidor ainda está nela e ela JÁ cobrou; NÃO gere de novo, leia de novo em 1 ou 2 minutos. pronta: está no acervo (imageId, url, acervoUrl): mostre essa em vez de gerar outra. falhou: não virou peça e o que saiu em Sinapses volta sozinho; pode gerar de novo. bloqueada: o motor recusou o conteúdo e o que saiu em Sinapses volta sozinho; mude o prompt ou o motor antes de tentar de novo. presa: gerando há mais de 15 minutos, não termina mais; a varredura do servidor marca como falha e devolve as Sinapses, então pode gerar de novo. Pra achar a peça de um Timeout, case pelo model, pelo começo do prompt e pelo haMinutos. Upscale e sombra só aparecem quando ficam prontos.";
+
+/**
+ * A leitura do action=status: o servidor devolve o estado cru e as horas da
+ * row (sem relógio nele), e a idade e o "presa" saem daqui.
+ */
+export function lerGeracoesRecentes(items: any[], agora: number, truncado = false) {
+  const lidas = items.map((i) => {
+    const idadeMs = Math.max(0, agora - Number(i.createdAt));
+    const desde = Math.max(Number(i.createdAt), Number(i.renderClaimedAt ?? 0));
+    const presa = i.estado === "gerando" && agora - desde >= PRESA_MS;
+    return { ...i, estado: presa ? "presa" : i.estado, haMinutos: Math.floor(idadeMs / 60000) };
+  });
+  return {
+    gerando: lidas.filter((i) => i.estado === "gerando").length,
+    count: lidas.length,
+    items: lidas,
+    // A leitura parou no teto de varredura: geração mais antiga que isso não entrou.
+    ...(truncado ? { truncado: true } : {}),
+    leitura: LEITURA_STATUS,
+  };
+}
+
 export const imageSchema = z.object({
-  action: z.enum(["generate", "request_generation", "compose", "models", "upscale", "sombra"]),
+  action: z.enum(["generate", "request_generation", "compose", "models", "upscale", "sombra", "status"]),
   prompt: z
     .string()
     .optional()
@@ -375,6 +424,22 @@ export async function image(args: ImageArgs): Promise<any> {
 
   const sessionToken = getSessionToken();
 
+  // status: a leitura depois de um Timeout. Somente leitura, sem custo. Mostra
+  // a peça que AINDA está gerando, que a galeria não mostra.
+  if (args.action === "status") {
+    let r: any;
+    try {
+      r = await convexQuery("imagemRecentes:mcpGeracoesRecentes", { sessionToken });
+    } catch (e) {
+      // Pacote na frente do deploy: o servidor ainda não tem a leitura.
+      if (!/Could not find public function/i.test(describeConvexError(e))) throw e;
+      throw new Error(
+        "action=status ainda não chegou no servidor. Enquanto isso, sapiens_gallery action=list mostra só a peça PRONTA: a que ainda está gerando não aparece lá. Depois de um Timeout, espere uns minutos e olhe a galeria antes de gerar de novo.",
+      );
+    }
+    return lerGeracoesRecentes(r?.items ?? [], Date.now(), r?.truncado === true);
+  }
+
   // v1.8: compose tem args próprios, validação separada
   // Ações da ficha do site sobre uma imagem SUA pronta: a peça nova entra no
   // acervo como versão, e a de origem fica intacta. Síncronas e com custo fixo;
@@ -384,7 +449,11 @@ export async function image(args: ImageArgs): Promise<any> {
       throw new Error(`action=${args.action} exige sourceImageId (uma imagem SUA pronta; ache em sapiens_gallery action=list).`);
     }
     const fn = args.action === "upscale" ? "imageUpscale:aumentarResolucao" : "depthFoto:extrairSombraDaFoto";
-    return await convexAction(fn, { imageId: args.sourceImageId, sessionToken });
+    return await convexAction(
+      fn,
+      { imageId: args.sourceImageId, sessionToken },
+      { ondeConferir: ONDE_CONFERIR_UPSCALE_SOMBRA },
+    );
   }
 
   if (args.action === "compose") {
@@ -450,35 +519,39 @@ export async function image(args: ImageArgs): Promise<any> {
   // motor (e no tamanho) é o default do template.
   const genModel = args.model ?? (args.templateSlug ? undefined : "nano-banana-2");
 
-  const result = await convexAction("desktopMcp:generateImageOnline", {
-    sessionToken,
-    prompt: args.prompt,
-    aspectRatio: args.aspectRatio,
-    // Sem size explícito, o motor decide (ver DEFAULT_2K_MODELS). Quando nem ele
-    // manda, o campo vai undefined e o backend fica no 1K de sempre.
-    size: args.size ?? defaultSizeFor(genModel),
-    // Com templateSlug, deixa o model em branco pro default do template valer
-    // (sem template, mantém o default nano-banana-2 da tool).
-    model: genModel,
-    negativePrompt: args.negativePrompt,
-    // Com área marcada a geração é edição, seja o que vier em mode.
-    mode: args.maskRegions ? "edit" : args.mode ?? "create",
-    sourceImageId: args.sourceImageId,
-    sourceImageIds: args.sourceImageIds,
-    referenceImageUrls: args.referenceImageUrls,
-    brandSlug: args.brandSlug,
-    brandMark: args.brandMark,
-    skills: args.skills,
-    templateSlug: args.templateSlug,
-    registro: args.registro,
-    influencerId: args.influencerId,
-    loraIntensity: args.loraIntensity,
-    refStrength: args.refStrength,
-    // Só vai quando veio: servidor de antes do campo recusaria arg desconhecido.
-    ...(args.maskRegions ? { maskRegions: args.maskRegions } : {}),
-    ...(args.pagarCom === "dolar" ? { pagarCom: "dolar" } : {}),
-    ...(args.transparentBackground === true ? { transparentBackground: true } : {}),
-  });
+  const result = await convexAction(
+    "desktopMcp:generateImageOnline",
+    {
+      sessionToken,
+      prompt: args.prompt,
+      aspectRatio: args.aspectRatio,
+      // Sem size explícito, o motor decide (ver DEFAULT_2K_MODELS). Quando nem ele
+      // manda, o campo vai undefined e o backend fica no 1K de sempre.
+      size: args.size ?? defaultSizeFor(genModel),
+      // Com templateSlug, deixa o model em branco pro default do template valer
+      // (sem template, mantém o default nano-banana-2 da tool).
+      model: genModel,
+      negativePrompt: args.negativePrompt,
+      // Com área marcada a geração é edição, seja o que vier em mode.
+      mode: args.maskRegions ? "edit" : args.mode ?? "create",
+      sourceImageId: args.sourceImageId,
+      sourceImageIds: args.sourceImageIds,
+      referenceImageUrls: args.referenceImageUrls,
+      brandSlug: args.brandSlug,
+      brandMark: args.brandMark,
+      skills: args.skills,
+      templateSlug: args.templateSlug,
+      registro: args.registro,
+      influencerId: args.influencerId,
+      loraIntensity: args.loraIntensity,
+      refStrength: args.refStrength,
+      // Só vai quando veio: servidor de antes do campo recusaria arg desconhecido.
+      ...(args.maskRegions ? { maskRegions: args.maskRegions } : {}),
+      ...(args.pagarCom === "dolar" ? { pagarCom: "dolar" } : {}),
+      ...(args.transparentBackground === true ? { transparentBackground: true } : {}),
+    },
+    { ondeConferir: ONDE_CONFERIR_GENERATE },
+  );
   // Backend de antes do campo não devolve motor nem ficha: cai no id pedido e
   // monta a ficha aqui. O nome bonito (modelName) só vem do servidor.
   const model: string | undefined = result?.model ?? genModel;

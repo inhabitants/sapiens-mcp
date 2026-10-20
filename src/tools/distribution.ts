@@ -32,6 +32,8 @@ import {
  *     categoria (o que a peça É; queue e edit também a declaram).
  *   - voices:  as abas que existem hoje, com a contagem de cada uma.
  *   - status:  move a peça de lane (fila, agendado, postado, descartado).
+ *     Em agendado, volta com `aviso` quando a peça é capítulo de série e o
+ *     anterior, no mesmo canal, não sai antes dela.
  *   - edit:    reescreve a peça que está na fila (copy, título, hashtags,
  *     notas, mídia, língua, comentário). Só manda o que muda. Texto de peça
  *     POSTADA não se reescreve: o post na rede não muda junto.
@@ -182,7 +184,7 @@ const CHANNELS = [
  * `apps/sapiens/convex/shared/categoriaDaPeca.ts`. O eixo é o ASSUNTO: quem
  * assina é a aba, a mídia é o canal. "sem" só existe no list (a triagem).
  */
-const CATEGORIAS = ["arte", "personagem", "tecnico", "novidade", "educativo", "mercado"] as const;
+const CATEGORIAS = ["arte", "personagem", "tecnico", "novidade", "educativo", "mercado", "pessoal"] as const;
 
 export const distributionSchema = z.object({
   action: z.enum([
@@ -312,7 +314,8 @@ export const distributionSchema = z.object({
         "novidade: o que chegou (motor novo, feature da casa, lançamento).",
         "educativo: o porquê (aula, artigo, framework, carrossel que explica, quote).",
         "mercado: o dinheiro e a carreira (cripto, startup, vaga, oportunidade).",
-        "Quando duas servem, vale a primeira desta ordem: novidade, tecnico, educativo, mercado, personagem, arte (o motor novo testado em páreo é novidade; o páreo com o Batkin no meio é técnico).",
+        "pessoal: a própria vida de quem assina (saúde, história, relato em primeira pessoa). Ganha das outras quando o assunto é a vida dele, mesmo que a peça ensine algo de passagem. A régua nunca chuta pessoal: declare.",
+        "Fora pessoal, quando duas servem, vale a primeira desta ordem: novidade, tecnico, educativo, mercado, personagem, arte (o motor novo testado em páreo é novidade; o páreo com o Batkin no meio é técnico).",
         "queue: declare SEMPRE que souber o que a peça é. Ausente, a régua chuta pelo título e pela 1a frase da copy, e a peça cai na gaveta errada ou na triagem; a declarada aparece na gaveta certa da fila sem toque do dono e desce pras filhas da teia.",
         "edit: troca a categoria (vale em peça já postada) e null devolve pra régua.",
         "list: filtra pela que vale (a declarada, senão a da régua); 'sem' lista a triagem, o que a régua não sabe ler. Cada item volta com categoria e categoriaDeclarada.",
@@ -542,6 +545,31 @@ function linhaDoJaSaiu(avisos: AvisoJaSaiu[] | undefined): string | null {
   return `JÁ SAIU no ${a.channel} com a mesma abertura: "${a.title}" (aba ${a.voice ?? "?"}${dia}, itemId ${a.itemId})${mais}. Confira com o dono antes de despachar. Se for repetição, descarte esta.`;
 }
 
+type CapituloAnterior = {
+  capitulo: number;
+  anterior: number;
+  itemId: string;
+  title: string;
+  status: "fila" | "agendado";
+  scheduledFor: number | null;
+};
+
+/**
+ * A linha do "capítulo fora de ordem": a peça marcada é capítulo de série e o
+ * anterior, no mesmo canal, não sai antes dela. Aviso, não recusa: a hora fica
+ * marcada, mas na hora o tique devolve a peça pra fila em vez de soltar spoiler
+ * (17/10/2026, A Vó Roubou a Fila). Servidor anterior a 18/10/2026 não manda o
+ * campo, e aí não há linha.
+ */
+function linhaDoForaDeOrdem(c: CapituloAnterior | undefined): string | null {
+  if (!c) return null;
+  const onde =
+    c.status === "fila" || c.scheduledFor === null
+      ? "está na fila sem hora"
+      : `está marcado pra ${new Date(c.scheduledFor).toISOString().slice(0, 16).replace("T", " ")} UTC, depois desta`;
+  return `FORA DE ORDEM: esta peça é o capítulo ${c.capitulo} e o capítulo ${c.anterior} ("${c.title}", itemId ${c.itemId}) ainda não saiu neste canal: ${onde}. Na hora marcada esta NÃO sai sozinha: volta pra fila com o motivo. Marque o capítulo ${c.anterior} pra antes desta, ou poste ele primeiro, e mostre isto ao dono.`;
+}
+
 export async function distribution(args: DistributionArgs): Promise<any> {
   const sessionToken = getSessionToken();
 
@@ -704,14 +732,20 @@ export async function distribution(args: DistributionArgs): Promise<any> {
   if (args.action === "status") {
     if (!args.itemId) throw new Error("action=status exige itemId.");
     if (!args.status) throw new Error("action=status exige status.");
-    await convexMutation("distributionMcp:mcpSetStatus", {
+    const r: any = await convexMutation("distributionMcp:mcpSetStatus", {
       sessionToken,
       itemId: args.itemId,
       status: args.status,
       postUrl: args.postUrl,
       scheduledFor: args.scheduledFor,
     });
-    return { ok: true, itemId: args.itemId, status: args.status };
+    const foraDeOrdem = linhaDoForaDeOrdem(r?.foraDeOrdem);
+    return {
+      ok: true,
+      itemId: args.itemId,
+      status: args.status,
+      ...(foraDeOrdem ? { aviso: foraDeOrdem, capituloAnterior: r.foraDeOrdem, instruction: foraDeOrdem } : {}),
+    };
   }
 
   if (args.action === "bio") {

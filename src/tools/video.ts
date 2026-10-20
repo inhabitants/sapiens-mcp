@@ -157,6 +157,11 @@ import { httpUrl } from "../schema.js";
  *                                   final (role 'end'), 5/8/10s em 480/720/1080p. Sem imagem de
  *                                   referência (o reference-to-video do provider é outro endpoint,
  *                                   fora até o roteador saber escolher).
+ *   - sapiens-video-flux-3-max     FLUX 3 Max (fal + Black Forest Labs): texto OU imagem (t2v/i2v),
+ *                                   5 a 20s em 720p ou 1080p, som nativo com interruptor, frame final
+ *                                   (role 'end', só junto do 'start'). Segue o prompt de perto e
+ *                                   volta rápido. Sem referência de personagem nem vídeo de
+ *                                   movimento: o servidor recusa e estorna.
  *   - sapiens-video-kling-motion   Kling Motion — transfere o movimento de um vídeo pra uma imagem
  *                                   (PRECISA de pessoa com tronco visível na imagem E no vídeo;
  *                                   vídeo de referência MÁX 10s — o provider recusa acima disso —
@@ -218,6 +223,7 @@ const VIDEO_MODELS = [
   "sapiens-video-ltx-spicy",
   "sapiens-video-wan",
   "sapiens-video-wan-3",
+  "sapiens-video-flux-3-max",
   "sapiens-video-kling-motion",
   "sapiens-video-shot-mimic",
   // Os três Veo 3.1 e o Omni 1.0 seguem no enum por retrocompat (cliente em
