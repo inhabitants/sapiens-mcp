@@ -162,6 +162,20 @@ import { httpUrl } from "../schema.js";
  *                                   (role 'end', só junto do 'start'). Segue o prompt de perto e
  *                                   volta rápido. Sem referência de personagem nem vídeo de
  *                                   movimento: o servidor recusa e estorna.
+ *   - sapiens-video-ltx-25-fast-a2v  LTX 2.5 Fast Audio-to-Video (Lightricks, API oficial): o ÁUDIO da
+ *                                   pessoa vira o take. A faixa (UM áudio, mp3 ou m4a: a do
+ *                                   sapiens_musicator por referenceAudioTrackIds, com posse conferida,
+ *                                   ou um link de arquivo SEU em referenceAudioUrls) puxa a boca e o gesto e dita
+ *                                   a duração; a foto (startImageId/startImageUrl, a da ficha) abre a
+ *                                   cena, e sem ela o prompt descreve. Até 20s de áudio em 720p/1080p.
+ *                                   COBRA PELO SEGUNDO DO ÁUDIO, medido pelo servidor antes do débito:
+ *                                   durationSec não se usa no create (na cotação, durationSec = os
+ *                                   segundos do áudio). Frame final (role 'end') só junto do inicial.
+ *   - sapiens-video-ltx-25-pro-a2v   O mesmo com mais fidelidade, até 10s de áudio.
+ *   - sapiens-video-ltx-23-pro-a2v   A geração anterior: até 20s, o segundo mais barato da linha.
+ *   - sapiens-video-ltx-25-fast    LTX 2.5 Fast: texto OU imagem, 6 a 20s em 720p ou 1080p, som nativo
+ *                                   com interruptor, frame final só junto do inicial. Sem referência.
+ *   - sapiens-video-ltx-25-pro     LTX 2.5 Pro: o mesmo com mais fidelidade, 6 a 10s.
  *   - sapiens-video-kling-motion   Kling Motion — transfere o movimento de um vídeo pra uma imagem
  *                                   (PRECISA de pessoa com tronco visível na imagem E no vídeo;
  *                                   vídeo de referência MÁX 10s — o provider recusa acima disso —
@@ -224,6 +238,11 @@ const VIDEO_MODELS = [
   "sapiens-video-wan",
   "sapiens-video-wan-3",
   "sapiens-video-flux-3-max",
+  "sapiens-video-ltx-25-fast-a2v",
+  "sapiens-video-ltx-25-pro-a2v",
+  "sapiens-video-ltx-23-pro-a2v",
+  "sapiens-video-ltx-25-fast",
+  "sapiens-video-ltx-25-pro",
   "sapiens-video-kling-motion",
   "sapiens-video-shot-mimic",
   // Os três Veo 3.1 e o Omni 1.0 seguem no enum por retrocompat (cliente em
@@ -622,15 +641,26 @@ export const videoSchema = z.object({
     .max(3)
     .optional()
     .describe(
-      "action=create, só model='sapiens-video-pvideo-2-pro': até 3 URLs públicas (host da casa) de ÁUDIO de referência (mp3, wav, m4a, flac ou ogg), somando 15s: a voz e o som que guiam o take. " +
+      "action=create, model='sapiens-video-pvideo-2-pro': até 3 URLs públicas (host da casa) de ÁUDIO de referência (mp3, wav, m4a, flac ou ogg), somando 15s: a voz e o som que guiam o take. " +
         "Áudio nunca é a única referência: vai junto de uma imagem ou de um vídeo. Cada SEGUNDO é cobrado à parte, medido pelo servidor antes do débito (áudio que ele não mede, como webm, conta o teto de 15s). " +
-        "Cote em action=price com referenceAudioSec.",
+        "Cote em action=price com referenceAudioSec. " +
+        "No LTX Audio-to-Video (model='sapiens-video-ltx-25-fast-a2v', '-25-pro-a2v' ou '-23-pro-a2v') é OBRIGATÓRIO e é UM só: o áudio vira o take (canto ou fala), em mp3 ou m4a, até 20s (10s no 2.5 Pro); a duração e o preço saem dele, medidos pelo servidor. " +
+        "Ali o link precisa ser de um arquivo da SUA conta (link de outra conta é recusado antes de cobrar). Se o áudio é uma faixa sua do sapiens_musicator, use referenceAudioTrackIds (o trackId): o servidor confere que a faixa é sua.",
+    ),
+  referenceAudioTrackIds: z
+    .array(z.string())
+    .max(3)
+    .optional()
+    .describe(
+      "action=create: o mesmo áudio de referenceAudioUrls, por ID de faixa SUA (o trackId que sapiens_musicator action=list/get devolve, status 'ready'). " +
+        "O servidor confere que a faixa é da sua conta e usa o áudio dela; faixa de outra conta é recusada antes de cobrar. Soma com referenceAudioUrls nos mesmos tetos. " +
+        "É o caminho certo no LTX Audio-to-Video, onde a faixa VIRA o take: UM só, mp3 ou m4a, e a faixa precisa caber no teto (até 20s, 10s no 2.5 Pro; o durationSeconds do action=list diz). Faixa mais longa é recusada antes de cobrar: corte o trecho e mande o arquivo seu em referenceAudioUrls.",
     ),
   keepAudio: z
     .boolean()
     .optional()
     .describe(
-      "action=create, com exatamente 1 referenceAudioUrls: o áudio vira a TRILHA do take (toca primeiro, e o motor completa o resto com som próprio). " +
+      "action=create, com exatamente 1 áudio (referenceAudioUrls ou referenceAudioTrackIds): o áudio vira a TRILHA do take (toca primeiro, e o motor completa o resto com som próprio). " +
         "É o caminho de fazer a personagem falar com a voz que você mandou. Sem custo extra além dos segundos do áudio.",
     ),
   referenceVideoSec: z
@@ -1161,6 +1191,7 @@ export async function video(args: VideoArgs): Promise<any> {
       referenceVideoUrls: args.referenceVideoUrls,
       // Áudio de referência: só quando veio (servidor de antes do campo recusaria).
       ...(args.referenceAudioUrls?.length ? { referenceAudioUrls: args.referenceAudioUrls } : {}),
+      ...(args.referenceAudioTrackIds?.length ? { referenceAudioTrackIds: args.referenceAudioTrackIds } : {}),
       ...(args.keepAudio ? { keepAudio: true } : {}),
       editOfImageId: args.editOfImageId,
       sourceVideoId: args.sourceVideoId,

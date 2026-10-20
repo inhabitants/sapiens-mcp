@@ -275,10 +275,28 @@ Itere enquadramento e prompt no Mini, feche no padrão quando o take estiver cer
 
 Duração é o que pesa aqui, não o modelo: um take de 30s em 720p passa de 40 mil Sinapses. Cheque o saldo e confirme a duração com a pessoa ANTES de disparar. Precisa de 1080p? É \`sapiens-video-seedance\` mesmo, a 2.5 não substitui o padrão.
 
+## Quando a personagem canta ou fala com o SEU áudio
+
+A linha LTX Audio-to-Video faz o que nenhum outro motor da casa faz: o áudio que você manda VIRA o take. A faixa puxa a boca e o gesto e dita a duração; a foto abre a cena.
+
+| Modelo | Áudio | Pra quê |
+|---|---|---|
+| \`sapiens-video-ltx-25-fast-a2v\` | até 20s | o padrão: canto e fala, rápido |
+| \`sapiens-video-ltx-25-pro-a2v\` | até 10s | mais detalhe de rosto e textura |
+| \`sapiens-video-ltx-23-pro-a2v\` | até 20s | o segundo mais barato da linha |
+
+1. O áudio: UM só, mp3 ou m4a. Faixa SUA do \`sapiens_musicator\` vai por \`referenceAudioTrackIds\` (o \`trackId\` de \`action=list\`, faixa \`ready\`): o servidor confere que ela é da sua conta antes de cobrar, e é o caminho certo. Trecho cortado por você vai num link de arquivo da sua conta em \`referenceAudioUrls\` (link de outra conta é recusado antes de cobrar). O motor lê até 20s (10s no Pro), então faixa mais longa precisa do corte. WAV não entra: a LTX não lê.
+2. A foto: \`startImageId\` ou \`startImageUrl\`, a da ficha da personagem. Sem foto, o \`prompt\` descreve quem canta e onde.
+3. O prompt: o que acontece na cena enquanto ela canta (onde, luz, câmera, o gesto). Não precisa escrever a letra.
+4. \`resolution\`: \`720p\` ou \`1080p\`; \`aspectRatio\`: \`9:16\`, \`16:9\` ou \`1:1\` (o 2.3 Pro não faz quadrado).
+
+O preço é pelo SEGUNDO DO ÁUDIO: o servidor mede o arquivo antes de cobrar, e \`durationSec\` não se usa no create. Pra cotar, \`action=price\` com \`durationSec\` = os segundos do áudio.
+
 ## Os outros modelos
 
+- \`sapiens-video-ltx-25-fast\` e \`sapiens-video-ltx-25-pro\`: LTX 2.5, texto ou imagem, 6 a 20s no Fast e 6 a 10s no Pro, em \`720p\` ou \`1080p\`, som nativo com interruptor e frame final (só junto do inicial). Não aceita referência de personagem.
 - \`sapiens-video-h3\`: MiniMax H3, o mais barato por pixel da casa, com som nativo, texto ou imagem. 5 a 15s em \`2k\` ou \`768p\` (o 2K longo demora uns 9 minutos: volta \`pending\` e termina sozinho). Aceita até 9 imagens e 3 vídeos de referência, e é o caminho de take LONGO com personagem travada. Referência e frame inicial não vão juntos: escolha um. Sem \`resolution\` cai no 2k, que custa 33% mais por segundo.
-- \`sapiens-video-pvideo-2-pro\`: P-Video-2 Pro, o H3 acelerado pela Pruna, e o RASCUNHO de personagem travada: até 9 imagens (referências mais frame inicial e final, juntos no mesmo pedido), 5 a 15s em \`480p\` ou \`768p\`, som nativo, e o take volta em segundos. Itere elenco, ângulo e fala aqui e feche no Seedance ou no H3. Não faz texto puro (precisa de ao menos uma imagem, ou um clipe) e cobra cada imagem além do segundo: cote em \`action=price\` com as mesmas imagens do create. Aceita também até 3 clipes (\`referenceVideoUrls\`) e 3 áudios (\`referenceAudioUrls\`) de referência, 15s somados por tipo, cobrados por segundo e medidos pelo servidor antes do débito; cote passando \`referenceVideoSec\`/\`referenceAudioSec\`. Com \`keepAudio\` e um áudio só, ele vira a trilha: é como a personagem fala com a voz que você mandou.
+- \`sapiens-video-pvideo-2-pro\`: P-Video-2 Pro, o H3 acelerado pela Pruna, e o RASCUNHO de personagem travada: até 9 imagens (referências mais frame inicial e final, juntos no mesmo pedido), 5 a 15s em \`480p\` ou \`768p\`, som nativo, e o take volta em segundos. Itere elenco, ângulo e fala aqui e feche no Seedance ou no H3. Não faz texto puro (precisa de ao menos uma imagem, ou um clipe) e cobra cada imagem além do segundo: cote em \`action=price\` com as mesmas imagens do create. Aceita também até 3 clipes (\`referenceVideoUrls\`) e 3 áudios (\`referenceAudioUrls\`, ou \`referenceAudioTrackIds\` pra faixa sua do \`sapiens_musicator\`) de referência, 15s somados por tipo, cobrados por segundo e medidos pelo servidor antes do débito; cote passando \`referenceVideoSec\`/\`referenceAudioSec\`. Com \`keepAudio\` e um áudio só, ele vira a trilha: é como a personagem fala com a voz que você mandou.
 - \`sapiens-video-h3-spicy\` e \`sapiens-video-seedance-spicy\`: os mesmos motores SEM freio de conteúdo. Os dois partem de uma IMAGEM sua (não fazem texto puro), e é isso que trava a identidade: quem aparece já veio pronto na imagem, o motor só dá movimento. O H3 Spicy é o mais barato e o mais rápido da casa (250 Sinapses o segundo em 480p, 3 a 15s); o Seedance Spicy tem o peso do 2.0, vai a 15s em 480p e 720p e para em 10s no 1080p.
 - \`sapiens-video-kling\`: Kling 3.0 Pro, anima imagem, 3 a 15s, som opcional.
 - \`sapiens-video-wan\`: WAN 2.5, imagem que fala ou canta, com lip-sync, 5 ou 10s.
