@@ -55,6 +55,7 @@ export const gallerySchema = z.object({
     "reprovar",
     "reprovadas",
     "carimbo",
+    "apagar",
   ]),
   processo: z
     .array(
@@ -247,6 +248,14 @@ export const gallerySchema = z.object({
     .optional()
     .describe(
       "action=carimbo: true LIGA o carimbo +18 na peça, false TIRA. Obrigatório nessa action. A regra é a do botão da ficha: a curadoria (admin) liga e tira qualquer carimbo, inclusive o que a ponte põe por CLASSE de motor sem autor; o dono liga na própria peça e só tira o carimbo que ele mesmo pôs. Peça carimbada não entra em praça de teto sfw do Distribution (Instagram, TikTok, YouTube, LinkedIn): tirar o carimbo de peça vestida é o que destrava a fila. Não tire carimbo de peça com nudez.",
+    ),
+
+  // --- action=apagar: a saída sem volta ---
+  confirmar: z
+    .boolean()
+    .optional()
+    .describe(
+      "action=apagar: tem que vir true. Apagar não tem volta (a peça e o arquivo saem), então a tool recusa sem ele: só mande depois que o dono pediu pra apagar AQUELA peça. Peça que errou e deve ficar como lição vai por action=reprovar.",
     ),
 });
 
@@ -900,6 +909,26 @@ export async function gallery(args: GalleryArgs): Promise<any> {
       sessionToken,
       imageId: args.imageId,
       adulta: args.adulta,
+    });
+  }
+
+  // apagar: a mesma saída do botão de excluir da ficha. A peça e o arquivo
+  // saem e não voltam; quem quer guardar a lição do erro usa reprovar. O
+  // confirmar=true é a trava daqui pro agente não apagar por engano.
+  if (args.action === "apagar") {
+    if (!args.imageId) {
+      throw new Error(
+        "action=apagar exige imageId: a peça que sai (imagem ou vídeo, o id da galeria).",
+      );
+    }
+    if (args.confirmar !== true) {
+      throw new Error(
+        "action=apagar exige confirmar=true: apagar não tem volta. Se a peça só errou e deve ficar como lição, use action=reprovar com o motivo.",
+      );
+    }
+    return await convexAction("desktopMcp:galleryApagar", {
+      sessionToken,
+      imageId: args.imageId,
     });
   }
 

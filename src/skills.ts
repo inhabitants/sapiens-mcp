@@ -296,7 +296,7 @@ O preço é pelo SEGUNDO DO ÁUDIO: o servidor mede o arquivo antes de cobrar, e
 
 - \`sapiens-video-ltx-25-fast\` e \`sapiens-video-ltx-25-pro\`: LTX 2.5, texto ou imagem, 6 a 20s no Fast e 6 a 10s no Pro, em \`720p\` ou \`1080p\`, som nativo com interruptor e frame final (só junto do inicial). Não aceita referência de personagem.
 - \`sapiens-video-h3\`: MiniMax H3, o mais barato por pixel da casa, com som nativo, texto ou imagem. 5 a 15s em \`2k\` ou \`768p\` (o 2K longo demora uns 9 minutos: volta \`pending\` e termina sozinho). Aceita até 9 imagens e 3 vídeos de referência, e é o caminho de take LONGO com personagem travada. Referência e frame inicial não vão juntos: escolha um. Sem \`resolution\` cai no 2k, que custa 33% mais por segundo.
-- \`sapiens-video-pvideo-2-pro\`: P-Video-2 Pro, o H3 acelerado pela Pruna, e o RASCUNHO de personagem travada: até 9 imagens (referências mais frame inicial e final, juntos no mesmo pedido), 5 a 15s em \`480p\` ou \`768p\`, som nativo, e o take volta em segundos. Itere elenco, ângulo e fala aqui e feche no Seedance ou no H3. Não faz texto puro (precisa de ao menos uma imagem, ou um clipe) e cobra cada imagem além do segundo: cote em \`action=price\` com as mesmas imagens do create. Aceita também até 3 clipes (\`referenceVideoUrls\`) e 3 áudios (\`referenceAudioUrls\`, ou \`referenceAudioTrackIds\` pra faixa sua do \`sapiens_musicator\`) de referência, 15s somados por tipo, cobrados por segundo e medidos pelo servidor antes do débito; cote passando \`referenceVideoSec\`/\`referenceAudioSec\`. Com \`keepAudio\` e um áudio só, ele vira a trilha: é como a personagem fala com a voz que você mandou.
+- \`sapiens-video-pvideo-2-pro\`: P-Video-2 Pro, o H3 acelerado pela Pruna, e o RASCUNHO de personagem travada: até 9 imagens (referências mais frame inicial e final, juntos no mesmo pedido), 5 a 15s em \`480p\` ou \`768p\`, som nativo, e o take volta em segundos. Itere elenco, ângulo e fala aqui e feche no Seedance ou no H3. Não faz texto puro (precisa de ao menos uma imagem, ou um clipe) e cobra cada imagem além do segundo: cote em \`action=price\` com as mesmas imagens do create. Aceita também até 3 clipes (\`referenceVideoUrls\`) e 3 áudios (\`referenceAudioUrls\`, ou \`referenceAudioTrackIds\` pra faixa sua do \`sapiens_musicator\`) de referência, 15s somados por tipo, cobrados por segundo e medidos pelo servidor antes do débito; cote passando \`referenceVideoClipsSec\` (a duração de cada clipe) e \`referenceAudioSec\`. Com \`keepAudio\` e um áudio só, ele vira a trilha: é como a personagem fala com a voz que você mandou.
 - \`sapiens-video-h3-spicy\` e \`sapiens-video-seedance-spicy\`: os mesmos motores SEM freio de conteúdo. Os dois partem de uma IMAGEM sua (não fazem texto puro), e é isso que trava a identidade: quem aparece já veio pronto na imagem, o motor só dá movimento. O H3 Spicy é o mais barato e o mais rápido da casa (250 Sinapses o segundo em 480p, 3 a 15s); o Seedance Spicy tem o peso do 2.0, vai a 15s em 480p e 720p e para em 10s no 1080p.
 - \`sapiens-video-kling\`: Kling 3.0 Pro, anima imagem, 3 a 15s, som opcional.
 - \`sapiens-video-wan\`: WAN 2.5, imagem que fala ou canta, com lip-sync, 5 ou 10s.
@@ -820,7 +820,7 @@ O \`markdown\` que a action devolve já é o corpo inteiro. Você só põe o fro
 \`\`\`\`markdown
 ---
 name: sapiens-soul
-description: <Nome>, o Sintético de <nome ou @ da pessoa>: a personalidade dele e o que ele sabe sobre ela, vindos do Sapiens Sintéticos. Puxe quando ela chamar <Nome> pelo nome, pedir a opinião dele, ou quiser escrever na voz dele.
+description: "<Nome>, o Sintético de <nome ou @ da pessoa>: a personalidade dele e o que ele sabe sobre ela, vindos do Sapiens Sintéticos. Puxe quando ela chamar <Nome> pelo nome, pedir a opinião dele, ou quiser escrever na voz dele."
 ---
 
 <o markdown inteiro, como veio>
@@ -1133,12 +1133,20 @@ export const SKILLS: Record<string, SapiensSkill> = Object.fromEntries(
   SKILL_LIST.map((s) => [s.name, s]),
 );
 
-/** Monta o SKILL.md completo (frontmatter do formato aberto + corpo). */
+/**
+ * Monta o SKILL.md completo (frontmatter do formato aberto + corpo).
+ *
+ * O frontmatter segue o spec de agentskills.io, cujo validador lê com YAML
+ * estrito, e é assim que tem que passar em qualquer agente: a description vai
+ * entre aspas (um ": " no meio quebrava a leitura) e campo que o spec não tem
+ * mora em `metadata`.
+ */
 export function renderSkill(skill: SapiensSkill): string {
   return `---
 name: ${skill.name}
-description: ${skill.description}
-source: sapiens-mcp (sapiensinteticos.com)
+description: ${JSON.stringify(skill.description)}
+metadata:
+  source: sapiens-mcp (sapiensinteticos.com)
 ---
 
 # ${skill.title}

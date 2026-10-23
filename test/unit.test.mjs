@@ -595,3 +595,46 @@ test("lerGeracoesRecentes: presa conta do claim do render, igual à varredura do
   assert.equal(r.items[0].haMinutos, 20);
   assert.equal(r.truncado, true);
 });
+
+// ---------- skills: frontmatter no spec aberto (agentskills.io) ----------
+//
+// O validador do spec lê o SKILL.md com YAML estrito. Sete skills quebravam
+// ali por um ": " na description sem aspas, e o `source:` no topo é campo que
+// o spec não tem (22/10/2026).
+
+import { SKILLS, renderSkill } from "../dist/skills.js";
+
+const CAMPOS_DO_SPEC = new Set(["name", "description", "license", "compatibility", "metadata", "allowed-tools"]);
+
+function frontmatterDe(md) {
+  const m = md.match(/^---\n([\s\S]*?)\n---\n/);
+  assert.ok(m, "abre com bloco de frontmatter");
+  return m[1].split("\n");
+}
+
+test("renderSkill: todo SKILL.md servido passa no spec aberto", () => {
+  const skills = Object.values(SKILLS);
+  assert.ok(skills.length > 0);
+  for (const s of skills) {
+    const linhas = frontmatterDe(renderSkill(s));
+    const topo = linhas.filter((l) => !/^\s/.test(l)).map((l) => l.split(":")[0]);
+    for (const campo of topo) assert.ok(CAMPOS_DO_SPEC.has(campo), `${s.name}: "${campo}" não é campo do spec`);
+    assert.match(s.name, /^[a-z0-9]+(-[a-z0-9]+)*$/, `${s.name}: slug do spec`);
+    assert.ok(s.name.length <= 64, `${s.name}: name até 64`);
+    assert.ok(s.description.length <= 1024, `${s.name}: description até 1024`);
+    // Entre aspas duplas, e o que o parser lê de volta é a description inteira.
+    const desc = linhas.find((l) => l.startsWith("description: ")).slice("description: ".length);
+    assert.equal(JSON.parse(desc), s.description, `${s.name}: description entre aspas e íntegra`);
+  }
+});
+
+test("renderSkill: ': ', aspas e quebra de linha na description não vazam pro YAML", () => {
+  const md = renderSkill({ name: "x", title: "X", description: 'Use quando: ela pede "isso" # já\nou aquilo', body: "corpo" });
+  const linhas = frontmatterDe(md);
+  assert.deepEqual(linhas, [
+    "name: x",
+    'description: "Use quando: ela pede \\"isso\\" # já\\nou aquilo"',
+    "metadata:",
+    "  source: sapiens-mcp (sapiensinteticos.com)",
+  ]);
+});

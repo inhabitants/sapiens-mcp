@@ -311,7 +311,7 @@ export const distributionSchema = z.object({
         "arte: obra que se olha (série, cena, clipe, ilustração).",
         "personagem: a vida de alguém da casa (a Helen dançando, o Batkin no secador).",
         "tecnico: o como (páreo, teste medido, folha comparativa, receita, workflow).",
-        "novidade: o que chegou (motor novo, feature da casa, lançamento).",
+        "novidade: o que chegou (motor novo, feature da casa, lançamento). Sai SEMPRE com mídia: o servidor recusa novidade só texto, no queue e no edit que tira a mídia. Motor de vídeo sem take vai com uma imagem da casa (sapiens_image, templateSlug retrato-sapiens-v1, o nome do motor em inglês na arte), que é barata; o take pago só com ok do dono.",
         "educativo: o porquê (aula, artigo, framework, carrossel que explica, quote).",
         "mercado: o dinheiro e a carreira (cripto, startup, vaga, oportunidade).",
         "pessoal: a própria vida de quem assina (saúde, história, relato em primeira pessoa). Ganha das outras quando o assunto é a vida dele, mesmo que a peça ensine algo de passagem. A régua nunca chuta pessoal: declare.",

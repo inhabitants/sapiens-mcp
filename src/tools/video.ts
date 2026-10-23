@@ -663,11 +663,18 @@ export const videoSchema = z.object({
       "action=create, com exatamente 1 áudio (referenceAudioUrls ou referenceAudioTrackIds): o áudio vira a TRILHA do take (toca primeiro, e o motor completa o resto com som próprio). " +
         "É o caminho de fazer a personagem falar com a voz que você mandou. Sem custo extra além dos segundos do áudio.",
     ),
+  referenceVideoClipsSec: z
+    .array(z.number())
+    .max(3)
+    .optional()
+    .describe(
+      "action=price, só no P-Video-2 Pro (PREFIRA este): a duração de CADA vídeo de referência que o create vai mandar, ex: [10, 4.2]. O servidor aplica a mesma régua do create: cada clipe arredonda pra cima e para na duração do take + 1s, e a soma tem teto 15. O create mede sozinho; isto é só pra cotar.",
+    ),
   referenceVideoSec: z
     .number()
     .optional()
     .describe(
-      "action=price, só no P-Video-2 Pro: segundos do(s) vídeo(s) de referência que o create vai mandar (cada clipe arredonda pra cima e para na duração do take + 1s, a soma tem teto 15). O create mede sozinho; isto é só pra cotar.",
+      "action=price, só no P-Video-2 Pro: o TOTAL já cobrável de vídeo de referência (você mesmo aplicou o limite de duração do take + 1s por clipe). Sem a duração de cada clipe na mão, use referenceVideoClipsSec, que o servidor aplica o limite. Com os dois, valem os clipes.",
     ),
   referenceAudioSec: z
     .number()
@@ -886,6 +893,9 @@ export async function video(args: VideoArgs): Promise<any> {
       // Só quando vieram: servidor de antes do campo recusaria arg desconhecido.
       ...(COBRA_POR_SEGUNDO_DE_REFERENCIA.has(args.model) && args.referenceVideoSec !== undefined
         ? { referenceVideoSec: args.referenceVideoSec }
+        : {}),
+      ...(COBRA_POR_SEGUNDO_DE_REFERENCIA.has(args.model) && args.referenceVideoClipsSec?.length
+        ? { referenceVideoClipsSec: args.referenceVideoClipsSec }
         : {}),
       ...(COBRA_POR_SEGUNDO_DE_REFERENCIA.has(args.model) && args.referenceAudioSec !== undefined
         ? { referenceAudioSec: args.referenceAudioSec }
