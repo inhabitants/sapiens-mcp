@@ -137,6 +137,11 @@ const CHANNELS = [
   // Pornhub: a conta de model da Aria, foto e video, sem API. A peca nasce na
   // fila como pacote e a mao sobe. So ilustrada: fotorreal de IA e barrado la.
   "pornhub",
+  // As pracas que apontam pro Pornhub da Aria, no mesmo molde (pacote, mao
+  // sobe). RedGifs: so video ate 60 s, e o pacote leva so tag (minimo 3).
+  // sex.com: titulo, descricao e o Source URL do pin.
+  "redgifs",
+  "sexcom",
   // Segunda conta da mesma rede, nomeada (Model A).
   "instagram-pro",
   "threads-pro",
@@ -350,7 +355,7 @@ export const distributionSchema = z.object({
     .boolean()
     .optional()
     .describe(
-      "sign: true liga (o default), false desliga. queue: true enfileira a peça já com a assinatura ligada. A ASSINATURA carimba a IMAGEM e o VÍDEO da peça que moram no CDN da casa (o que sapiens_image/sapiens_video/sapiens_gallery devolvem), com o carimbo da LINHAGEM de quem assina a peça (a aba dela, ver lineages): no estilo casa, sint.fyi/<conta da linhagem na casa, ou o dono> no canto e, no vídeo, o fecho de 2 segundos no fim (o vídeo fica 2s mais longo); no estilo propria, só a marca da linhagem (ex: Velourie), sem nada da casa e sem fecho; no estilo nenhuma, o servidor recusa. O carimbo da casa é RECUSADO em peça +18 e em praça com teto adulto (fanvue, fanvue-dm, pornhub, civitai-red), porque sint.fyi é endereço da casa; a marca própria passa. A imagem do feed do Instagram é carimbada já recortada pra 4:5 a 1.91:1. O carimbo leva uns 30s na primeira vez (na hora quando a mídia já foi assinada antes), e enquanto ele não fica pronto a peça NÃO sai: o botão de postar da tela devolve o motivo.",
+      "sign: true liga (o default), false desliga. queue: true enfileira a peça já com a assinatura ligada. A ASSINATURA carimba a IMAGEM e o VÍDEO da peça que moram no CDN da casa (o que sapiens_image/sapiens_video/sapiens_gallery devolvem), com o carimbo da LINHAGEM de quem assina a peça (a aba dela, ver lineages): no estilo casa, sint.fyi/<conta da linhagem na casa, ou o dono> no canto e, no vídeo, o fecho de 2 segundos no fim (o vídeo fica 2s mais longo); no estilo propria, só a marca da linhagem (ex: Velourie), sem nada da casa e sem fecho; no estilo nenhuma, o servidor recusa. O carimbo da casa é RECUSADO em peça +18 e em praça com teto adulto (fanvue, fanvue-dm, pornhub, redgifs, sexcom, civitai-red), porque sint.fyi é endereço da casa; a marca própria passa. A imagem do feed do Instagram é carimbada já recortada pra 4:5 a 1.91:1. O carimbo leva uns 30s na primeira vez (na hora quando a mídia já foi assinada antes), e enquanto ele não fica pronto a peça NÃO sai: o botão de postar da tela devolve o motivo.",
     ),
   itemId: z.string().optional().describe("status/sign/edit: o id da peça (vem do list ou do queue)."),
   status: z
@@ -395,7 +400,7 @@ export const distributionSchema = z.object({
     )
     .optional()
     .describe(
-      "tree-mark: as células da linhagem em `slug`, uma por rede da árvore (x, instagram, bluesky, email, telegram, tumblr, deviantart, threads, tiktok, youtube, fanvue, pornhub; a lista viva sai em tree, campo redes). handle = o @ (ou a URL do perfil, que vira @) ou, na rede email, o endereço: é a conta que existe lá fora; string vazia limpa. canal = a conta da casa que é desta linhagem nessa rede (instagram-6, x-buffer-3), só em rede de conta própria e nunca no bluesky, que é a mãe (lineage-save). dispensada = true quando a linhagem decidiu não ter a rede; X, Instagram, Bluesky, email e Telegram são obrigatórias e o servidor recusa. Tudo ou nada: uma célula recusada não grava nenhuma.",
+      "tree-mark: as células da linhagem em `slug`, uma por rede da árvore (x, instagram, bluesky, email, telegram, tumblr, deviantart, threads, tiktok, youtube, fanvue, pornhub, redgifs, sexcom; a lista viva sai em tree, campo redes). handle = o @ (ou a URL do perfil, que vira @) ou, na rede email, o endereço: é a conta que existe lá fora; string vazia limpa. canal = a conta da casa que é desta linhagem nessa rede (instagram-6, x-buffer-3), só em rede de conta própria e nunca no bluesky, que é a mãe (lineage-save). dispensada = true quando a linhagem decidiu não ter a rede; X, Instagram, Bluesky, email e Telegram são obrigatórias e o servidor recusa. Tudo ou nada: uma célula recusada não grava nenhuma.",
     ),
   nome: z.string().optional().describe("lineage-new: o nome da linhagem (obrigatório). lineage-save: renomeia."),
   grupo: z

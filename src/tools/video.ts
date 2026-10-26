@@ -151,6 +151,8 @@ import { httpUrl } from "../schema.js";
  *                                   Spicy). Sem frame final. Em take longo, escreva o prompt em BEATS
  *                                   (primeiro ela faz X, depois Y, então Z): sem isso o motor inventa
  *                                   quando o texto acaba antes do tempo.
+ *     Nos três spicy o frame sai só de peça do acervo do membro (startImageId/startImageUrl): o
+ *     servidor baixa o frame da peça e recusa arquivo local, base64, upload, ponte e foto de fora.
  *   - sapiens-video-wan            WAN 2.5 — imagem que fala/canta (áudio+lip-sync nativo), 5/10s (i2v)
  *   - sapiens-video-wan-3          WAN 3.0: a geração seguinte da linha WAN. Texto OU imagem (t2v/i2v),
  *                                   som nativo com interruptor (mesmo preço ligado ou desligado), frame
@@ -585,7 +587,7 @@ export const videoSchema = z.object({
     )
     .optional()
     .describe(
-      "References em base64 (escape hatch / Motion / Shot Mimic). i2v: role 'start' (imagem). Motion: 'start' (pessoa) + 'driving' (vídeo de movimento, <=5MB, MÁX 10s — o Kling Motion recusa referência acima de 10s e cobra pela duração do clipe; corte o trecho antes). Shot Mimic: 'start' (personagem) + 'driving' (previs ou clipe do plano a imitar, <=5MB, MÁX 15s — acima o provider corta em 15s). Pra frame inicial/final a partir do seu acervo, prefira start/endImage* abaixo (sem precisar de base64).",
+      "References em base64 (escape hatch / Motion / Shot Mimic). i2v: role 'start' (imagem). Motion: 'start' (pessoa) + 'driving' (vídeo de movimento, <=5MB, MÁX 10s — o Kling Motion recusa referência acima de 10s e cobra pela duração do clipe; corte o trecho antes). Shot Mimic: 'start' (personagem) + 'driving' (previs ou clipe do plano a imitar, <=5MB, MÁX 15s — acima o provider corta em 15s). Pra frame inicial/final a partir do seu acervo, prefira start/endImage* abaixo (sem precisar de base64). Nos Spicy (h3-spicy, seedance-spicy, ltx-spicy) references base64 NÃO vale: o frame vem só de startImageId/startImageUrl de peça sua gerada na casa.",
     ),
   // Frame inicial/final por REFERÊNCIA (resolvido server-side, igual à imagem):
   // id da própria galeria OU url allowlist (galeria/Acervo/personagens). Mais
@@ -593,10 +595,10 @@ export const videoSchema = z.object({
   startImageId: z
     .string()
     .optional()
-    .describe("Frame inicial (i2v): generatedImages:_id da SUA galeria. Vira reference role 'start'. No Seedance 2.x e no H3 NÃO combina com referenceImage*/referenceVideoUrls: é um ou outro."),
+    .describe("Frame inicial (i2v): generatedImages:_id da SUA galeria. Vira reference role 'start'. No Seedance 2.x e no H3 NÃO combina com referenceImage*/referenceVideoUrls: é um ou outro. Nos Spicy é a única porta do frame junto com startImageUrl, e a peça precisa ser SUA e gerada na casa (upload, peça trazida por ponte e foto de fora são recusados)."),
   startImageUrl: httpUrl()
     .optional()
-    .describe("Frame inicial (i2v): url pública (Bunny/Convex/Wikimedia) de galeria/Acervo/personagem. Vira reference role 'start'."),
+    .describe("Frame inicial (i2v): url pública (Bunny/Convex/Wikimedia) de galeria/Acervo/personagem. Vira reference role 'start'. Nos Spicy só vale url de peça SUA gerada na casa: Wikimedia, avatar, upload e peça trazida por ponte são recusados."),
   endImageId: z
     .string()
     .optional()
@@ -692,7 +694,8 @@ export const videoSchema = z.object({
     .describe(
       "Frame INICIAL (i2v) a partir de um ARQUIVO LOCAL do seu PC — só no MCP instalado (stdio), não na conexão remota. " +
         "Passe o caminho absoluto (ex: 'C:\\\\Users\\\\voce\\\\HERO\\\\1.png'); o processo lê o arquivo e sobe como frame inicial, igual a subir a imagem no gerador do site. PNG/JPEG/WebP, até 8MB. " +
-        "É 1 imagem inicial por vídeo (o modelo do site): pra vários vídeos, rode create uma vez por imagem. Mutuamente exclusivo com startImageId/startImageUrl.",
+        "É 1 imagem inicial por vídeo (o modelo do site): pra vários vídeos, rode create uma vez por imagem. Mutuamente exclusivo com startImageId/startImageUrl. " +
+        "Nos Spicy (h3-spicy, seedance-spicy, ltx-spicy) arquivo local NÃO vale: o frame vem só de startImageId/startImageUrl de peça sua gerada na casa.",
     ),
   endImagePath: z
     .string()
