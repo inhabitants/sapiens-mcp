@@ -53,7 +53,7 @@ export const referenceSchema = z.object({
         "'favorites' (as que você curtiu), 'videos' (seus vídeos; idem), 'stock_video' (Banco de Vídeo da casa: clipes/B-roll prontos, aceita term/orientation/loopOnly), " +
         "'acervo' (stock + comunidade públicos de IMAGEM), 'characters' (personagens), " +
         "'depth_map' (guias de movimento: os SEUS com shadowSource='mine', ou o banco curado da casa por default), " +
-        "'pose_map' (seu banco privado de POSE: mapa de profundidade de corpo num quadro parado, quase 7 mil poses organizadas por familia/vista/enquadramento/leitura; aceita também term/orientation/people/hasObject/hasSuporte/objeto/favoritesOnly/collection/sort, mais semantic e similarTo pra busca por sentido).",
+        "'pose_map' (seu banco privado de POSE: mapa de profundidade de corpo num quadro parado, mais de 8 mil poses organizadas por familia/vista/camera/enquadramento/leitura; aceita também term/orientation/people/hasObject/hasSuporte/objeto/favoritesOnly/collection/sort, grupo/porPose pra mesma pose em várias câmeras, mais semantic e similarTo pra busca por sentido).",
     ),
   handle: z
     .string()
@@ -195,6 +195,24 @@ export const referenceSchema = z.object({
     .describe(
       "Só bucket 'pose_map': true = só poses apoiadas em algo além do chão (banco, bloco, parede, cama: vem em `suporte`); false = só no chão. Omitir = as duas.",
     ),
+  camera: z
+    .enum(["baixo", "nivel", "alto"])
+    .optional()
+    .describe(
+      "Só bucket 'pose_map': a altura da câmera. 'baixo' = de baixo pra cima (contra-plongée), 'nivel' = na altura do corpo, 'alto' = de cima (plongée). Combina com vista: vista é o giro, camera é a altura.",
+    ),
+  grupo: z
+    .string()
+    .optional()
+    .describe(
+      "Só bucket 'pose_map': a chave de um CONJUNTO (vem no campo `grupo` de cada item). Devolve as outras câmeras da MESMA pose, cada uma com seu `angulo` (frente, de-cima, de-baixo, lado, diagonal). É a cobertura de câmera: o gesto travado e a câmera andando. Com grupo, `term` é ignorado (o conjunto já é a resposta); os outros recortes valem.",
+    ),
+  porPose: z
+    .boolean()
+    .optional()
+    .describe(
+      "Só bucket 'pose_map': true = só poses que vêm em conjunto de câmeras, na ordem do catálogo da fonte, com as câmeras de cada pose coladas. Use pra montar sequência ou história com a mesma pose de vários pontos.",
+    ),
   mode: z
     .enum(["mine", "public"])
     .optional()
@@ -329,6 +347,9 @@ export async function reference(args: ReferenceArgs): Promise<any> {
       enquadramento: args.enquadramento,
       leitura: args.leitura,
       hasSuporte: args.hasSuporte,
+      camera: args.camera,
+      grupo: args.grupo,
+      porPose: args.porPose,
     });
 
     let note: string;
@@ -343,7 +364,7 @@ export async function reference(args: ReferenceArgs): Promise<any> {
         "Guias de movimento (mapa de profundidade). Use a `url` em sapiens_video referenceVideoUrls: a coreografia e a câmera do clipe guiam o take. `thumbnailUrl` é só preview (a soma com esqueleto), nunca mande ela como driving. Teto de duração varia por motor.";
     } else if (args.bucket === "pose_map") {
       note =
-        "Poses do SEU banco privado (mapa de profundidade de corpo). Use a `url` (a SOMBRA pura) em sapiens_image referenceImageUrls pra guiar a POSE da figura, com a linha 'adopt exactly the body pose of the <n>th reference; it is a pose guide only, ignore its grey tones'. Cada item traz `familia`, `vista`, `enquadramento` e `leitura` (prefira 'clara': a 'confusa' devolve membro sem dono), `people`, `objeto` (o que a mão segura), `suporte` (banco, bloco, parede: nomeie no prompt onde o corpo se apoia), `descricao` e `membros` (cada braço e perna com o LADO da pessoa, em inglês: cole no prompt, é o que evita duas pernas esquerdas). `skeletonUrl` é a SOMA (sombra + esqueleto colorido), guia OPCIONAL: em imagem, a sombra pura + `membros` no prompt já dizem o lado de cada membro e não deixam marca; a soma só vale quando a pose é difícil de ler, sempre com 'ignore any coloured overlay lines', e confira a peça, porque o traço às vezes fica na imagem (em VÍDEO a soma ganhou da sombra no A/B da casa). `usadaPor` diz quem já usou: não repita a pose na mesma personagem. Pra recortar, mande familia/vista/leitura/people/hasObject/hasSuporte em vez de tentar pela busca escrita; `poseId` vai em similarTo pra variações do mesmo gesto. Pedido vago ('uma pose boa pra isso') começa por favoritesOnly=true ou sort='used': é a curadoria que o dono já fez. É material privado seu: a peça gerada a partir dele é geração normal e publica normal, mas a pose em si não é acervo público da casa.";
+        "Poses do SEU banco privado (mapa de profundidade de corpo). Use a `url` (a SOMBRA pura) em sapiens_image referenceImageUrls pra guiar a POSE da figura, com a linha 'adopt exactly the body pose of the <n>th reference; it is a pose guide only, ignore its grey tones'. Cada item traz `familia`, `vista`, `enquadramento` e `leitura` (prefira 'clara': a 'confusa' devolve membro sem dono), `people`, `objeto` (o que a mão segura), `suporte` (banco, bloco, parede: nomeie no prompt onde o corpo se apoia), `descricao` e `membros` (cada braço e perna com o LADO da pessoa, em inglês: cole no prompt, é o que evita duas pernas esquerdas). `skeletonUrl` é a SOMA (sombra + esqueleto colorido), guia OPCIONAL: em imagem, a sombra pura + `membros` no prompt já dizem o lado de cada membro e não deixam marca; a soma só vale quando a pose é difícil de ler, sempre com 'ignore any coloured overlay lines', e confira a peça, porque o traço às vezes fica na imagem (em VÍDEO a soma ganhou da sombra no A/B da casa). `usadaPor` diz quem já usou: não repita a pose na mesma personagem. Pra recortar, mande familia/vista/leitura/people/hasObject/hasSuporte em vez de tentar pela busca escrita; `poseId` vai em similarTo pra variações do mesmo gesto. Item com `grupo` faz parte de um CONJUNTO (a mesma pose de várias câmeras, `angulo` diz qual): peça grupo=<grupo> pra ver as outras. Pra cobertura de câmera numa sequência, cada plano leva só o rosto da ficha + a pose da câmera nova, com a roupa e o FUNDO que a câmera nova vê escritos no prompt; a peça anterior como referência prende o fundo e o motor gira o corpo em vez da câmera. Pedido vago ('uma pose boa pra isso') começa por favoritesOnly=true ou sort='used': é a curadoria que o dono já fez. É material privado seu: a peça gerada a partir dele é geração normal e publica normal, mas a pose em si não é acervo público da casa.";
     } else if (args.bucket === "acervo" || args.bucket === "characters") {
       note =
         "São referências públicas: use a `url` (characters trazem mainImageUrl + imageUrls) em sapiens_image referenceImageUrls, ou em sapiens_video startImageUrl/endImageUrl. Não são suas, então NÃO entram em sourceImageIds.";
