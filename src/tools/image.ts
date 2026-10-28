@@ -570,6 +570,9 @@ export async function image(args: ImageArgs): Promise<any> {
       ...(args.transparentBackground === true ? { transparentBackground: true } : {}),
       // Idem: servidor de antes da LoRA própria recusaria o arg.
       ...(args.loras?.length ? { loras: args.loras } : {}),
+      // O base64 da peça não volta pro agente (ver o fim desta função), então
+      // nem sai do Convex: era o maior data egress da conta.
+      semBase64: true,
     },
     { ondeConferir: ONDE_CONFERIR_GENERATE },
   );

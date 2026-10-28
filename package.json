@@ -1,6 +1,6 @@
 {
   "name": "sapiens-mcp",
-  "version": "1.105.2",
+  "version": "1.105.3",
   "mcpName": "com.sapiensinteticos/sapiens",
   "description": "MCP server pra operar o Sapiens Sintéticos (sapiensinteticos.com) pelo Claude Code: gerar imagem, escrever artigo, voz, música e mais, na sua conta. Login pelo código de sapiensinteticos.com/conectar-claude. mcprush.com-bd2545268b8471cdb213c674",
   "type": "module",
