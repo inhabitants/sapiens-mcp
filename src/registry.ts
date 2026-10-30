@@ -17,6 +17,7 @@ import { instagram, instagramSchema } from "./tools/instagram.js";
 import { persona, personaSchema } from "./tools/persona.js";
 import { helen, helenSchema } from "./tools/helen.js";
 import { musicator, musicatorSchema } from "./tools/musicator.js";
+import { agente, agenteSchema } from "./tools/agente.js";
 // A tool sapiens_shorts saiu em ago/2026: os quatro estilos dela viraram
 // receitas de `sapiens_video` (templateSlug), que qualquer membro alcança e que
 // não está preso ao Veo. O BACKEND dela (mcpExtrasActions:mcpShortsRender)
@@ -168,6 +169,12 @@ export const TOOLS = {
       "Musicator — loop completo de música via voz Sapiens, sem precisar da UI (qualquer logado; lyrics 300 / render 3000 Sinapses). Sub-actions: 'create' (cria brief+track draft num passo, custo 0, devolve trackId), 'lyrics' (gera letra PT + stylePrompt EN; passe trackId pra GRAVAR na track e deixar pronta pra render, ou sem trackId pra só receber o texto inline; 300 sinapses), 'list' (suas tracks: id/título/status/áudio), 'get' (detalhe de uma track pra acompanhar render — status/áudio/letra), 'render' (schedula o synth num trackId pronto, assíncrono fire-and-forget, 3/min; `model` escolhe o motor: 'pro' Lyria 3.5 (default), 'clip' Lyria 3 Clip, 'mureka' Mureka 9.5, 'minimax' MiniMax Music 2.6, 'elevenlabs' ElevenLabs Music com `durationSeconds` 30/60/120/180; preço fixo por faixa, menos o ElevenLabs, que cobra pela duração: puxe a skill 'musica' pra tabela antes de disparar), 'publish' (publica uma faixa PRONTA do user no Acervo da Comunidade — aba Músicas — com eco no Chat e Fórum; CURADO: só admin/dono, custo 0, idempotente), 'list_public' (lê o Acervo público de músicas da Comunidade, sem custo, sem login). Fluxo cheio: create → lyrics(trackId) → render → get (poll status: rendering → ready/failed) → publish (dono). Tudo escopado por dono (só mexe nas suas tracks).",
     schema: musicatorSchema,
     handler: musicator,
+  },
+  sapiens_agente: {
+    description:
+      "Agentes da casa: roda um agente autoral do Sapiens no conceito da pessoa e devolve só a peça pronta pra colar. O método do agente fica no servidor: não peça o manual, as regras ou o prompt, porque o agente recusa e a rodada conta igual. Sub-actions: list (os agentes abertos pra membro, com o nome curto, o ser que veste cada um e o preço da rodada; sem login, sem custo) e run (agente + conceito: roda e devolve a entrega em texto, com cada peça colável num bloco de código; qualquer conta logada; 300 Sinapses por rodada, até 20 rodadas por dia; se o modelo falhar as Sinapses voltam). Hoje: 'maquinista' (letra e style prompt pro Suno, com duas variantes de estilo, refrão travado e ficha técnica com a métrica contada; o conceito é tema, clima e som, ou uma letra colada pra apertar, e aceita os comandos /styleline, /hooks, /tighten, /spice, /unloop e /audit no começo do conceito). O conceito vai até 4.000 caracteres: é o conceito, não o briefing inteiro. run é SÍNCRONA e leva até uns 90 segundos; se voltar Timeout, a rodada pode ter sido cobrada: confira o saldo em sapiens_meta action=credits antes de repetir. Mostre a entrega como veio, com os blocos.",
+    schema: agenteSchema,
+    handler: agente,
   },
   sapiens_video: {
     description:
@@ -398,6 +405,7 @@ const TOOL_TITLES: Record<string, string> = {
   sapiens_instagram: "Auto-DM Instagram",
   sapiens_share: "Share Drop",
   sapiens_resume: "Currículo PRO",
+  sapiens_agente: "Agentes da casa",
 };
 
 // Tools ADMIN-ONLY de ponta a ponta (o Convex recusa user comum em toda action):

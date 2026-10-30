@@ -121,7 +121,7 @@ test("remoto: tools/list com token não-verificável = lista cheia (fail-open)",
   const msg = await readRpcResponse(res, 2);
   const tools = msg.result?.tools;
   assert.ok(Array.isArray(tools), "tools/list responde");
-  assert.equal(tools.length, 39, "tier desconhecido lista o catálogo cheio (menos as locais)");
+  assert.equal(tools.length, 40, "tier desconhecido lista o catálogo cheio (menos as locais)");
   assert.ok(
     !tools.some((t) => t.name === "sapiens_pontes"),
     "sapiens_pontes só existe no stdio: a chave de provedor não sobe pro remoto",
