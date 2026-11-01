@@ -54,6 +54,7 @@ export const repertorioSchema = z.object({
     "search_tools",
     "add_tool",
     "catalog_tool",
+    "admin_tool",
   ]),
   // Reads
   userId: z
@@ -94,33 +95,44 @@ export const repertorioSchema = z.object({
     .string()
     .optional()
     .describe(
-      "Pra add_tool: o toolId EXATO de um candidato do action=search_tools (catálogo aitag). Dedup por (userId, source aitag, externalId=toolId). Pra catalog_tool: o toolId NOVO da ficha, em kebab-case minúsculo (vira o endereço aitag.app/tool/<toolId>).",
+      "Pra add_tool: o toolId EXATO de um candidato do action=search_tools (catálogo aitag). Dedup por (userId, source aitag, externalId=toolId). Pra catalog_tool: o toolId NOVO da ficha, em kebab-case minúsculo (vira o endereço aitag.app/tool/<toolId>). Pra admin_tool: o toolId da ficha a editar (o do search_tools) ou o da ficha nova.",
     ),
   // catalog_tool (ADMIN): cadastra ferramenta open source no catálogo do AItag.
-  // Lista fechada de propósito: curadoria, afiliação, nota e ícone continuam
-  // gesto do dono no aitag.app/admin.
-  name: z.string().optional().describe("Pra catalog_tool: o nome do produto como o projeto escreve (HyperFrames, não hyperframes)."),
+  // Lista fechada de propósito: curadoria, afiliação e nota ficam no admin_tool,
+  // que é o gesto do dono e só roda sob ordem dele.
+  name: z.string().optional().describe("Pra catalog_tool/admin_tool: o nome do produto como o projeto escreve (HyperFrames, não hyperframes)."),
   githubUrl: z
     .string()
     .optional()
-    .describe("Pra catalog_tool: o repo, https://github.com/<owner>/<repo>. É a chave do dedup: o mesmo repo com outro toolId devolve a ficha que já existe."),
-  websiteUrl: z.string().optional().describe("Pra catalog_tool: a homepage do projeto (https). Ausente, vale o githubUrl."),
+    .describe("Pra catalog_tool: o repo, https://github.com/<owner>/<repo>. É a chave do dedup: o mesmo repo com outro toolId devolve a ficha que já existe. Pra admin_tool: opcional; vindo, a ficha vira open source."),
+  websiteUrl: z.string().optional().describe("Pra catalog_tool/admin_tool: a homepage do projeto (https), sem tracking: é dela que sai o screenshot. Ausente, vale o githubUrl."),
   categoryEn: z
     .string()
     .optional()
     .describe(
-      "Pra catalog_tool: UMA destas, exata: Text & Writing, Image & Design, Video & Animation, Voice & Audio, Coding & Development, Marketing & SEO, Data Analysis & Productivity, Research & Education, Agents & Bots, Creative Automation, Privacy & Web3, Experimental Tools, Technical Utilities, Aggregators & Meta Tools, Adult 18+.",
+      "Pra catalog_tool/admin_tool: UMA destas, exata: Text & Writing, Image & Design, Video & Animation, Voice & Audio, Coding & Development, Marketing & SEO, Data Analysis & Productivity, Research & Education, Agents & Bots, Creative Automation, Privacy & Web3, Experimental Tools, Technical Utilities, Aggregators & Meta Tools, Adult 18+.",
     ),
-  categoryPt: z.string().optional().describe("Pra catalog_tool: opcional; ausente, o servidor copia a de uma vizinha da mesma categoria."),
-  descriptionEn: z.string().optional().describe("Pra catalog_tool: uma frase do que a ferramenta faz, em inglês (até 400)."),
-  descriptionPt: z.string().optional().describe("Pra catalog_tool: a mesma frase em português (até 400)."),
+  categoryPt: z.string().optional().describe("Pra catalog_tool/admin_tool: opcional; ausente, o servidor copia a de uma vizinha da mesma categoria."),
+  descriptionEn: z.string().optional().describe("Pra catalog_tool/admin_tool: uma frase do que a ferramenta faz, em inglês (até 400)."),
+  descriptionPt: z.string().optional().describe("Pra catalog_tool/admin_tool: a mesma frase em português (até 400)."),
   reviewEn: z
     .string()
     .optional()
-    .describe("Pra catalog_tool: a análise editorial em inglês, 3 a 5 frases na voz da casa. É o gate de indexação da página: sem ela, a ficha fica fora do Google."),
-  reviewPt: z.string().optional().describe("Pra catalog_tool: a análise editorial em português."),
-  tagsEn: z.array(z.string()).optional().describe("Pra catalog_tool: até 10 tags em inglês."),
-  tagsPt: z.array(z.string()).optional().describe("Pra catalog_tool: até 10 tags em português."),
+    .describe("Pra catalog_tool/admin_tool: a análise editorial em inglês, 3 a 5 frases na voz da casa. É o gate de indexação da página: sem ela, a ficha fica fora do Google."),
+  reviewPt: z.string().optional().describe("Pra catalog_tool/admin_tool: a análise editorial em português."),
+  tagsEn: z.array(z.string()).optional().describe("Pra catalog_tool/admin_tool: até 10 tags em inglês."),
+  tagsPt: z.array(z.string()).optional().describe("Pra catalog_tool/admin_tool: até 10 tags em português."),
+  // admin_tool (ADMIN, sob ordem do dono): o que o aitag.app/admin faz.
+  referralUrl: z
+    .string()
+    .optional()
+    .describe("Pra admin_tool: o link do botão Visitar, com o código de afiliado do dono (https). Tem que cair no site da ferramenta (agensi.io/r/X sobre agensi.io) ou em rede de afiliado com a marca do site no subdomínio (<marca>.sjv.io, <marca>.pxf.io, <marca>.partnerlinks.io); tolt.link só troca link que já estava nele. Fora disso o servidor recusa e o link entra pelo aitag.app/admin. Ausente na ficha nova, vale o websiteUrl."),
+  nota: z.number().int().min(0).max(100).optional().describe("Pra admin_tool: a nota da ficha no AItag, inteiro de 0 a 100. Ordena o catálogo."),
+  isOpenSource: z.boolean().optional().describe("Pra admin_tool: liga ou desliga o selo open source. Ausente na ficha nova, vale true se veio githubUrl."),
+  isCurated: z.boolean().optional().describe("Pra admin_tool: Staff Pick (curadoria da casa)."),
+  isActive: z.boolean().optional().describe("Pra admin_tool: false tira a ficha do ar sem apagar."),
+  xUrl: z.string().optional().describe("Pra admin_tool: o perfil da ferramenta no X (https://x.com/<handle>)."),
+  brandHandle: z.string().optional().describe("Pra admin_tool: o @ da marca, sem o @."),
   favorite: z
     .boolean()
     .optional()
@@ -201,6 +213,34 @@ export async function repertorio(args: RepertorioArgs): Promise<any> {
       reviewPt: args.reviewPt,
       tagsEn: args.tagsEn,
       tagsPt: args.tagsPt,
+    });
+  }
+
+  // admin_tool (ADMIN): cria ou edita ficha do AItag como o aitag.app/admin,
+  // fechada inclusive, com nota, afiliado e curadoria. Edita só os campos que
+  // vierem. Quem gateia é o Convex (requireMcpAdmin).
+  if (args.action === "admin_tool") {
+    return await convexMutation("aitag/mcpCatalog:mcpAdminUpsertTool", {
+      sessionToken: getSessionToken(),
+      toolId: need(args.toolId, "toolId"),
+      name: args.name,
+      websiteUrl: args.websiteUrl,
+      referralUrl: args.referralUrl,
+      githubUrl: args.githubUrl,
+      isOpenSource: args.isOpenSource,
+      nota: args.nota,
+      categoryEn: args.categoryEn,
+      categoryPt: args.categoryPt,
+      descriptionEn: args.descriptionEn,
+      descriptionPt: args.descriptionPt,
+      reviewEn: args.reviewEn,
+      reviewPt: args.reviewPt,
+      tagsEn: args.tagsEn,
+      tagsPt: args.tagsPt,
+      xUrl: args.xUrl,
+      brandHandle: args.brandHandle,
+      isCurated: args.isCurated,
+      isActive: args.isActive,
     });
   }
 
