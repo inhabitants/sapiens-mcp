@@ -49,7 +49,7 @@ export const aulaSchema = z.object({
     .any()
     .optional()
     .describe(
-      "Objeto completo da aula (obrigatório pra upsert). Campos top-level: title (obrig), subtitle?, data? (YYYY-MM-DD), duration?, tag?, mentorAgenda?, slides[] (≥1). Cada slide é { type, ...campos }. Tipos: cover (eyebrow/title/subtitle/meta), cover-image/section-image/content-image (imageUrl + campos), agenda (items:[{num,title,subtitle,time}]), content (eyebrow/title/body[markdown ou HTML]/list[]/listType), two-col (cols:[{h,body}]), video (videoUrl OU videos:[{h,videoUrl,caption}] pra comparar lado a lado), quote (text/attribution), callout (tone:tip|warn|note/tag/body), comic (panels:[{imageUrl,caption}]), pause, close (eyebrow/title/items[]). Voz Sapiens: 1ª pessoa, anti-corporate, SEM travessão (—). O servidor re-linta a voz e grava voiceWarnings.",
+      "Objeto completo da aula (obrigatório pra upsert). Campos top-level: title (obrig), subtitle?, data? (YYYY-MM-DD), duration?, tag?, mentorAgenda?, slides[] (≥1). Cada slide é { type, ...campos }. Tipos: cover (eyebrow/title/subtitle/meta), cover-image/section-image/content-image (imageUrl + campos), agenda (items:[{num,title,subtitle,time}]), content (eyebrow/title/body[markdown ou HTML]/list[]/listType), two-col (cols:[{h,body}]), video (videoUrl OU videos:[{h,videoUrl,caption}] pra comparar lado a lado), quote (text/attribution), callout (tone:tip|warn|note/tag/body), comic (panels:[{imageUrl,caption}]), pause, close (eyebrow/title/items[]). Voz Sapiens: 1ª pessoa, anti-corporate, SEM travessão (U+2014). O servidor re-linta a voz e grava voiceWarnings.",
     ),
   moduleId: z
     .string()

@@ -209,7 +209,7 @@ export const pipelineSchema = z.object({
     .string()
     .optional()
     .describe(
-      "carousels_standalone:_id — get_carousel/update_carousel/carousel_auto_images/carousel_generate_image. Vem de generate_carousel ou list_carousels. No carousel_auto_images, alternativa: productionId (carrossel da pipeline).",
+      "carousels_standalone:_id: get_carousel/update_carousel/carousel_auto_images/carousel_generate_image. Vem de generate_carousel ou list_carousels. No carousel_auto_images, alternativa: productionId (carrossel da pipeline).",
     ),
   slideId: z
     .string()
@@ -248,19 +248,19 @@ export const pipelineSchema = z.object({
   sourceId: z
     .string()
     .optional()
-    .describe("contentSources:_id — get_source/create_production/generate_carousel_production/remove_source/set_source_done/update_source_notes. Vem de list_sources/add_article_as_source."),
+    .describe("contentSources:_id: get_source/create_production/generate_carousel_production/remove_source/set_source_done/update_source_notes. Vem de list_sources/add_article_as_source."),
   productionId: z
     .string()
     .optional()
-    .describe("contentProductions:_id — get_production/update_production/finalize_production/remove_production/list_versions/carousel_auto_images (carrossel da pipeline). Vem de create_production ou generate_carousel_production."),
+    .describe("contentProductions:_id: get_production/update_production/finalize_production/remove_production/list_versions/carousel_auto_images (carrossel da pipeline). Vem de create_production ou generate_carousel_production."),
   publishableId: z
     .string()
     .optional()
-    .describe("contentPublishables:_id — set_publishable_title/restore_version."),
+    .describe("contentPublishables:_id: set_publishable_title/restore_version."),
   articleId: z
     .string()
     .optional()
-    .describe("articles:_id — add_article_as_source e generate_carousel (fonte artigo). Vem de list_articles."),
+    .describe("articles:_id: add_article_as_source e generate_carousel (fonte artigo). Vem de list_articles."),
 
   // create / add
   format: z.enum(ACCEPTED_FORMATS).optional(),

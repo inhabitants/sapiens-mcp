@@ -285,7 +285,7 @@ export const characterSchema = z.object({
     .string()
     .optional()
     .describe(
-      "Pra add_image: alternativa ao imageUrl — ID de imagem da SUA galeria (generatedImages:_id, via sapiens_gallery action=list). O backend resolve a url e confere que é sua.",
+      "Pra add_image: alternativa ao imageUrl, o ID de imagem da SUA galeria (generatedImages:_id, via sapiens_gallery action=list). O backend resolve a url e confere que é sua.",
     ),
   isMain: z
     .boolean()

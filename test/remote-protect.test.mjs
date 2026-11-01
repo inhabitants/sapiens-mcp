@@ -11,7 +11,11 @@ import { createServer } from "node:http";
 const ACCOUNTS = {
   "tok-admin-123456": { user: { _id: "u-admin", isAdmin: true }, balance: { total: 9999 } },
   "tok-user-rico-12": { user: { _id: "u-rico", isAdmin: false }, balance: { total: 500 } },
-  "tok-user-zero-12": { user: { _id: "u-zero", isAdmin: false }, balance: { total: 0 } },
+  "tok-user-zero-12": { user: { _id: "u-zero", isAdmin: false }, balance: { total: 0 }, apiLivreUsd: 0 },
+  // Zero Sinapse e saldo em dólar na API: a outra carteira da mesma conta abre o gate.
+  "tok-user-dolar-1": { user: { _id: "u-dolar", isAdmin: false }, balance: { total: 0 }, apiLivreUsd: 3.75 },
+  // Backend antes do deploy (sem o campo): conta como zero, igual ao gate antigo.
+  "tok-user-velho-1": { user: { _id: "u-velho", isAdmin: false }, balance: { total: 0 } },
 };
 
 const telemetry = [];
@@ -121,13 +125,16 @@ test("gate: token inválido não leva catálogo nem dispatch", async () => {
   assert.match(c.result.content[0].text, /sessão remota recusada/);
 });
 
-test("gate: sem Sinapses bloqueia tool, mas sapiens_meta fica pra diagnóstico", async () => {
+test("gate: zero nos dois bloqueia tool, mas sapiens_meta fica pra diagnóstico", async () => {
   const blocked = await readRpcResponse(
     await handler(call(5, "sapiens_gallery", { action: "list" }, { token: "tok-user-zero-12" })),
     5,
   );
   assert.equal(blocked.result?.isError, true);
-  assert.match(blocked.result.content[0].text, /sem Sinapses/);
+  assert.match(blocked.result.content[0].text, /sem saldo nas duas carteiras/);
+  assert.match(blocked.result.content[0].text, /Sinapses/);
+  assert.match(blocked.result.content[0].text, /stablecoin/);
+  assert.doesNotMatch(blocked.result.content[0].text, /cripto/i);
 
   const meta = await readRpcResponse(
     await handler(call(6, "sapiens_meta", { action: "app_url" }, { token: "tok-user-zero-12" })),
@@ -144,7 +151,26 @@ test("gate: com saldo o dispatch acontece (erro vem do backend, não do gate)", 
   );
   assert.equal(c.result?.isError, true, "fake não implementa gallery");
   assert.match(c.result.content[0].text, /não implementada/, "passou do gate e chegou no backend");
-  assert.ok(!/sem Sinapses/.test(c.result.content[0].text));
+  assert.ok(!/sem saldo/.test(c.result.content[0].text));
+});
+
+test("gate: zero Sinapse, saldo em dólar na API passa", async () => {
+  const c = await readRpcResponse(
+    await handler(call(30, "sapiens_gallery", { action: "list" }, { token: "tok-user-dolar-1" })),
+    30,
+  );
+  assert.equal(c.result?.isError, true, "fake não implementa gallery");
+  assert.match(c.result.content[0].text, /não implementada/, "o dólar da API abriu o gate");
+  assert.ok(!/sem saldo/.test(c.result.content[0].text));
+});
+
+test("gate: backend sem o campo apiLivreUsd conta como zero (deploy atrás do pacote)", async () => {
+  const c = await readRpcResponse(
+    await handler(call(31, "sapiens_gallery", { action: "list" }, { token: "tok-user-velho-1" })),
+    31,
+  );
+  assert.equal(c.result?.isError, true);
+  assert.match(c.result.content[0].text, /sem saldo nas duas carteiras/);
 });
 
 test("telemetria: tools/call de sessão válida loga no Convex", async () => {

@@ -587,7 +587,7 @@ export const videoSchema = z.object({
     )
     .optional()
     .describe(
-      "References em base64 (escape hatch / Motion / Shot Mimic). i2v: role 'start' (imagem). Motion: 'start' (pessoa) + 'driving' (vídeo de movimento, <=5MB, MÁX 10s — o Kling Motion recusa referência acima de 10s e cobra pela duração do clipe; corte o trecho antes). Shot Mimic: 'start' (personagem) + 'driving' (previs ou clipe do plano a imitar, <=5MB, MÁX 15s — acima o provider corta em 15s). Pra frame inicial/final a partir do seu acervo, prefira start/endImage* abaixo (sem precisar de base64). Nos Spicy (h3-spicy, seedance-spicy, ltx-spicy) references base64 NÃO vale: o frame vem só de startImageId/startImageUrl de peça sua gerada na casa.",
+      "References em base64 (escape hatch / Motion / Shot Mimic). i2v: role 'start' (imagem). Motion: 'start' (pessoa) + 'driving' (vídeo de movimento, <=5MB, MÁX 10s, o Kling Motion recusa referência acima de 10s e cobra pela duração do clipe; corte o trecho antes). Shot Mimic: 'start' (personagem) + 'driving' (previs ou clipe do plano a imitar, <=5MB, MÁX 15s, acima o provider corta em 15s). Pra frame inicial/final a partir do seu acervo, prefira start/endImage* abaixo (sem precisar de base64). Nos Spicy (h3-spicy, seedance-spicy, ltx-spicy) references base64 NÃO vale: o frame vem só de startImageId/startImageUrl de peça sua gerada na casa.",
     ),
   // Frame inicial/final por REFERÊNCIA (resolvido server-side, igual à imagem):
   // id da própria galeria OU url allowlist (galeria/Acervo/personagens). Mais
@@ -692,7 +692,7 @@ export const videoSchema = z.object({
     .string()
     .optional()
     .describe(
-      "Frame INICIAL (i2v) a partir de um ARQUIVO LOCAL do seu PC — só no MCP instalado (stdio), não na conexão remota. " +
+      "Frame INICIAL (i2v) a partir de um ARQUIVO LOCAL do seu PC: só no MCP instalado (stdio), não na conexão remota. " +
         "Passe o caminho absoluto (ex: 'C:\\\\Users\\\\voce\\\\HERO\\\\1.png'); o processo lê o arquivo e sobe como frame inicial, igual a subir a imagem no gerador do site. PNG/JPEG/WebP, até 8MB. " +
         "É 1 imagem inicial por vídeo (o modelo do site): pra vários vídeos, rode create uma vez por imagem. Mutuamente exclusivo com startImageId/startImageUrl. " +
         "Nos Spicy (h3-spicy, seedance-spicy, ltx-spicy) arquivo local NÃO vale: o frame vem só de startImageId/startImageUrl de peça sua gerada na casa.",
@@ -701,7 +701,7 @@ export const videoSchema = z.object({
     .string()
     .optional()
     .describe(
-      "Frame FINAL a partir de um ARQUIVO LOCAL do seu PC — só no MCP instalado (stdio). Caminho absoluto; PNG/JPEG/WebP até 8MB. Vira reference role 'end' (suporte varia por modelo). 1 imagem por vídeo. Mutuamente exclusivo com endImageId/endImageUrl.",
+      "Frame FINAL a partir de um ARQUIVO LOCAL do seu PC: só no MCP instalado (stdio). Caminho absoluto; PNG/JPEG/WebP até 8MB. Vira reference role 'end' (suporte varia por modelo). 1 imagem por vídeo. Mutuamente exclusivo com endImageId/endImageUrl.",
     ),
   referenceImagePaths: z
     .array(z.string())
@@ -790,7 +790,7 @@ export async function localFrameReferences(
   if (args.startImagePath) {
     if (args.startImageId || args.startImageUrl) {
       throw new Error(
-        "Frame inicial: escolha UMA via — startImagePath (arquivo local) OU startImageId/startImageUrl (galeria/Acervo), não as duas.",
+        "Frame inicial: escolha UMA via entre startImagePath (arquivo local) e startImageId/startImageUrl (galeria/Acervo), não as duas.",
       );
     }
     refs.push(await readLocalImageAsReference(args.startImagePath, "start"));
@@ -798,7 +798,7 @@ export async function localFrameReferences(
   if (args.endImagePath) {
     if (args.endImageId || args.endImageUrl) {
       throw new Error(
-        "Frame final: escolha UMA via — endImagePath (arquivo local) OU endImageId/endImageUrl (galeria/Acervo), não as duas.",
+        "Frame final: escolha UMA via entre endImagePath (arquivo local) e endImageId/endImageUrl (galeria/Acervo), não as duas.",
       );
     }
     refs.push(await readLocalImageAsReference(args.endImagePath, "end"));

@@ -13,6 +13,7 @@ import { getMcpVersion } from "../version.js";
 import { setTierFromIsAdmin } from "../tier.js";
 import { CANAL, comoAtualizar, ondeFicaAChave, type Canal } from "../canal.js";
 import { valorDeChave } from "./pontes.js";
+import { lerContaDaApi, type ContaApiCrua } from "./contaApi.js";
 
 const ORIGEM: Record<Canal, string> = {
   npm: "pelo npm (provável cache do npx)",
@@ -32,7 +33,7 @@ const readMcpVersion = getMcpVersion;
  *
  * Serve a duas superfícies: `action=version` (diagnóstico sob demanda) e
  * `action=start` (a porta de entrada, que avisa sozinha). Client atrasado é
- * invisível pra quem usa — o agente chama uma rota velha, toma erro do servidor
+ * invisível pra quem usa: o agente chama uma rota velha, toma erro do servidor
  * e conclui qualquer coisa. Um cliente do Repertório passou por isso em
  * jul/2026: MCP preso em versão de junho, "adicionei o filme!" sem item nenhum.
  */
@@ -75,6 +76,7 @@ export const metaSchema = z.object({
     "version",
     "pontes",
     "precos",
+    "api",
   ]),
   code: z
     .string()
@@ -293,7 +295,7 @@ const FIRST_POWERS: { icon: string; title: string; cost: string; try: string }[]
   ];
 
 // MODO COMPANHIA: puxa o directive de voz de quem está em cena (backend
-// companionVoice:mcpGetCompanion). Best-effort — se falhar, o start/whoami segue
+// companionVoice:mcpGetCompanion). Best-effort: se falhar, o start/whoami segue
 // como operador neutro. Devolve:
 //   { active:true,  name, avatarUrl, voiceDirective, offer }  -> vista a voz dela
 //   { active:false, name, invite, offer }                     -> em cena, mas fora
@@ -341,8 +343,8 @@ export async function meta(args: MetaArgs): Promise<any> {
   if (args.action === "start") {
     // start é a porta de entrada e NÃO exige login (esse é o ponto). Mas
     // getSessionToken() LANÇA quando não há sessão (nunca retorna vazio), então
-    // sem este try/catch o primeiro contato — justo o cenário que o start existe
-    // pra resolver — estourava isError em vez de devolver o onboarding curado.
+    // sem este try/catch o primeiro contato, justo o cenário que o start existe
+    // pra resolver, estourava isError em vez de devolver o onboarding curado.
     let token: string | null = null;
     try {
       token = getSessionToken();
@@ -548,7 +550,7 @@ export async function meta(args: MetaArgs): Promise<any> {
     setTierFromIsAdmin(who?.user ? !!who.user.isAdmin : null);
     // Detecta um SAPIENS_DESKTOP_SESSION_TOKEN no ambiente que difere do token
     // recém-salvo. Desde a v1.9.1 o login em disco tem prioridade, então esse
-    // env é ignorado — mas avisamos pra ninguém ficar confuso com um token
+    // env é ignorado, mas avisamos pra ninguém ficar confuso com um token
     // velho de .env.local sobrando (era exatamente o que mascarava o login
     // funcionando "pela metade").
     const envTok = process.env.SAPIENS_DESKTOP_SESSION_TOKEN;
@@ -568,7 +570,7 @@ export async function meta(args: MetaArgs): Promise<any> {
         ? {
             note:
               "Achei um SAPIENS_DESKTOP_SESSION_TOKEN no ambiente (.env.local ou config do MCP). " +
-              "Desde a v1.9.1 o login em disco tem prioridade, então essa variável é ignorada — pode " +
+              "Desde a v1.9.1 o login em disco tem prioridade, então essa variável é ignorada. Pode " +
               "remover essa linha do .env.local pra evitar confusão (ou rode logout pra forçar o uso do env).",
           }
         : {}),
@@ -668,6 +670,24 @@ export async function meta(args: MetaArgs): Promise<any> {
     });
     if (!tabela) return { ok: false, error: "A tabela de preço é só pra conta ativa." };
     return tabela;
+  }
+
+  // api: a conta da API (saldo em dólar, chaves, recarga automática, rendimento),
+  // SÓ LEITURA. Assinar, mover dinheiro, mudar o limite da carteira, ligar
+  // recarga e criar chave ficam no site, com a carteira da pessoa e o MFA.
+  if (args.action === "api") {
+    let conta: ContaApiCrua | null;
+    try {
+      conta = (await convexQuery("mcpConta:mcpApiStatus", { sessionToken })) as ContaApiCrua | null;
+    } catch (e) {
+      // Pacote na frente do deploy: o servidor ainda não tem a leitura.
+      if (!/Could not find public function/i.test(describeConvexError(e))) throw e;
+      throw new Error(
+        "action=api ainda não chegou no servidor. Enquanto isso, o saldo e as chaves da API estão em sapiensinteticos.com/dashboard/developers#api.",
+      );
+    }
+    if (!conta) return { ok: false, resumo: "A API ainda não abriu pra esta conta." };
+    return lerContaDaApi(conta);
   }
 
   if (args.action === "whoami") {

@@ -638,3 +638,101 @@ test("renderSkill: ': ', aspas e quebra de linha na description não vazam pro Y
     "  source: sapiens-mcp (sapiensinteticos.com)",
   ]);
 });
+
+// ---------- sapiens_meta action=api: a conta da API, só leitura ----------
+//
+// O backend (mcpConta:mcpApiStatus) manda os números crus; o lerContaDaApi
+// escreve o resumo na voz da casa. O que importa: dólar separado das Sinapses,
+// stablecoin (nunca "cripto"), sem em-dash, e a regra do só leitura sempre junto.
+
+import { lerContaDaApi, usd } from "../dist/tools/contaApi.js";
+
+const CONTA_CRUA = {
+  aberta: true,
+  saldoUsd: 5,
+  reservadoUsd: 1.25,
+  livreUsd: 3.75,
+  testeUsd: 0.4,
+  testeVenceEm: Date.UTC(2026, 10, 10),
+  gastoHojeUsd: 0.027,
+  chaves: [
+    { nome: "lote", prefixo: "sk-sapiens-ab12…9f3c", tetoDiaUsd: 2, gastoHojeUsd: 0.15, ultimoUsoEm: Date.UTC(2026, 9, 31), revogada: false },
+    { nome: "velha", prefixo: "sk-sapiens-cd34…0a1b", tetoDiaUsd: null, gastoHojeUsd: 0, ultimoUsoEm: null, revogada: true },
+  ],
+  recargaAutomatica: { tipo: "stablecoin", modo: "pacote", ativa: true, gatilhoUsd: 2, pacoteUsd: 10, tetoMensalUsd: 100, usadoNoMesUsd: 20, estado: "ligada" },
+  rendimento: { ligado: true, cofre: "Gauntlet USDC Prime (Morpho)", termo: "2026-10-23", termoAtual: "2026-10-31", aceitoEm: 123, termoVencido: true },
+  links: {
+    api: "https://www.sapiensinteticos.com/dashboard/developers#api",
+    carteira: "https://www.sapiensinteticos.com/dashboard/developers#carteira",
+    conectarClaude: "https://www.sapiensinteticos.com/conectar-claude",
+  },
+};
+
+test("contaApi: usd na régua da casa (vírgula, centavo quebrado até 4 casas)", () => {
+  assert.equal(usd(3.75), "US$ 3,75");
+  assert.equal(usd(0.027), "US$ 0,027");
+  assert.equal(usd(0), "US$ 0,00");
+  assert.equal(usd(1234.5), "US$ 1.234,50");
+});
+
+test("contaApi: resumo curto em pt-BR, stablecoin, dólar à parte e a regra do só leitura", () => {
+  const out = lerContaDaApi(CONTA_CRUA);
+  assert.match(out.resumo, /Saldo da API: US\$ 5,00, livre US\$ 3,75 \(US\$ 1,25 preso em chamada aberta\)/);
+  assert.match(out.resumo, /separado das Sinapses/);
+  assert.match(out.resumo, /US\$ 0,40 é crédito de teste e vence em 10\/11/);
+  assert.match(out.resumo, /1 chave ativa, 1 revogada/);
+  assert.match(out.resumo, /stablecoin \(USDC na Base\) ligada: quando o livre cai abaixo de US\$ 2,00, pelo menos US\$ 10,00 por vez, até US\$ 100,00 no mês \(US\$ 20,00 usados\)/);
+  assert.match(out.resumo, /aceite o termo novo/);
+  assert.match(out.regra, /Só leitura/);
+  assert.match(out.regra, /developers#api/);
+  for (const texto of [out.resumo, out.regra]) {
+    assert.doesNotMatch(texto, /—/);
+    assert.doesNotMatch(texto, /cripto/i);
+  }
+  assert.equal(out.saldo.livreUsd, 3.75);
+  assert.equal(out.chaves[0].ultimoUsoEm, "2026-10-31T00:00:00.000Z");
+  assert.equal(out.chaves[1].ultimoUsoEm, null);
+  assert.equal(out.saldo.testeVenceEm, "2026-11-10T00:00:00.000Z");
+});
+
+test("contaApi: o \"Usar na API\" (carteira como saldo) não inventa teto do mês e aponta o limite gravado na carteira", () => {
+  const out = lerContaDaApi({
+    ...CONTA_CRUA,
+    recargaAutomatica: { tipo: "stablecoin", modo: "carteira", ativa: true, gatilhoUsd: 2, pacoteUsd: 5, tetoMensalUsd: null, usadoNoMesUsd: 15, estado: "ligada" },
+  });
+  assert.match(
+    out.resumo,
+    /A API consome da sua carteira em stablecoin \(USDC na Base\) quando o livre cai abaixo de US\$ 2,00, pelo menos US\$ 5,00 por vez, até o limite que você gravou na carteira \(no site\)\. Este mês já saíram US\$ 15,00 dali\./,
+  );
+  assert.doesNotMatch(out.resumo, /1\.000\.000/);
+  assert.doesNotMatch(out.resumo, /no mês \(/);
+  assert.doesNotMatch(out.resumo, /entra US/);
+  assert.doesNotMatch(out.resumo, /—/);
+});
+
+test("contaApi: recarga no cartão entra o pacote fechado, com o teto do mês", () => {
+  const out = lerContaDaApi({
+    ...CONTA_CRUA,
+    recargaAutomatica: { tipo: "cartao", modo: "pacote", ativa: true, gatilhoUsd: 5, pacoteUsd: 25, tetoMensalUsd: 100, usadoNoMesUsd: 0, estado: "ligada" },
+  });
+  assert.match(out.resumo, /Recarga automática no cartão ligada: quando o livre cai abaixo de US\$ 5,00, entra US\$ 25,00, até US\$ 100,00 no mês \(US\$ 0,00 usados\)\./);
+});
+
+test("contaApi: sem recarga, sem chave e porta fechada (admin) viram linha curta", () => {
+  const out = lerContaDaApi({
+    ...CONTA_CRUA,
+    aberta: false,
+    testeUsd: 0,
+    testeVenceEm: null,
+    reservadoUsd: 0,
+    chaves: [],
+    recargaAutomatica: { tipo: null, modo: null, ativa: false, gatilhoUsd: null, pacoteUsd: null, tetoMensalUsd: null, usadoNoMesUsd: null, estado: "desligada" },
+    rendimento: { ligado: false, cofre: "Gauntlet USDC Prime (Morpho)", termo: null, aceitoEm: null, termoVencido: false },
+  });
+  assert.doesNotMatch(out.resumo, /preso em chamada/);
+  assert.doesNotMatch(out.resumo, /teste/);
+  assert.match(out.resumo, /Nenhuma chave ativa/);
+  assert.match(out.resumo, /Recarga automática desligada\./);
+  assert.doesNotMatch(out.resumo, /Rendimento/);
+  assert.match(out.resumo, /fechada pro público/);
+});

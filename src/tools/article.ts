@@ -76,7 +76,7 @@ export const articleSchema = z.object({
     )
     .optional()
     .describe(
-      "update: SUBSTITUI as ilustrações inline do corpo (tabela article_visuals). Passe o array COMPLETO (não faz merge) — todas as imagens que o artigo deve ter, na ordem. O conjunto antigo vai pro histórico (manual_replace). Use pra recapear artigo num novo estilo. url tem que ser host Sapiens (Bunny/Convex).",
+      "update: SUBSTITUI as ilustrações inline do corpo (tabela article_visuals). Passe o array COMPLETO (não faz merge): todas as imagens que o artigo deve ter, na ordem. O conjunto antigo vai pro histórico (manual_replace). Use pra recapear artigo num novo estilo. url tem que ser host Sapiens (Bunny/Convex).",
     ),
   conceptMap: z
     .object({

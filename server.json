@@ -3,8 +3,17 @@
   "name": "com.sapiensinteticos/sapiens",
   "title": "Sapiens Sintéticos",
   "description": "Operate your Sapiens Sintéticos AI studio: generate image, article, voice, music and video.",
-  "version": "1.106.0",
+  "version": "1.107.0",
   "websiteUrl": "https://www.sapiensinteticos.com/conectar-claude",
+  "icons": [
+    {
+      "src": "https://www.sapiensinteticos.com/apple-touch-icon.png",
+      "mimeType": "image/png",
+      "sizes": [
+        "180x180"
+      ]
+    }
+  ],
   "repository": {
     "url": "https://github.com/inhabitants/sapiens-mcp",
     "source": "github"
@@ -13,7 +22,7 @@
     {
       "registryType": "npm",
       "identifier": "sapiens-mcp",
-      "version": "1.106.0",
+      "version": "1.107.0",
       "transport": {
         "type": "stdio"
       }

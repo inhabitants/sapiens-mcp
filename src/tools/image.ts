@@ -32,7 +32,7 @@ const MODELS = [
   "seedream-5-0-pro", // Seedream 5.0 Pro, topo da linha (roda no pacote pago)
   // xAI Grok Imagine. Moderação frouxa (+18), aceita refs (img2img) + aspect.
   "grok-2-image", // grok-imagine-image · COM refs · adder até 2K
-  "grok-2-image-quality", // grok-imagine-image-quality, mais fiel pra character lock · COM refs · adder até 2K
+  "grok-2-image-quality", // grok-imagine-image-2.0 em quality low (o -quality foi aposentado em 02/11/2026) · COM refs · adder até 2K
   "grok-imagine-2", // grok-imagine-image-2.0, a geração nova (ago/2026) · COM refs · adder até 2K
   // Degen (uncensored, gate +18 na galeria). WaveSpeed = rápido (6-25s):
   // NUDEZ É NÍVEL, NÃO MOTOR (set/2026): três pares abaixo são a MESMA escolha com

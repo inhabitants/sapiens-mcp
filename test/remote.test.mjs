@@ -182,3 +182,34 @@ test("remoto: prompts/list responde no transporte HTTP", async () => {
     "prompts disponíveis no remoto",
   );
 });
+
+// Descoberta anônima (anonymousDiscovery): initialize e as listas sem bearer,
+// tools/call ainda no 401 com WWW-Authenticate (é ele que puxa o OAuth).
+const anonHandler = createSapiensRemoteHandler({
+  basePath: "/api/mcp",
+  resourceMetadataPath: "/.well-known/oauth-protected-resource",
+  resourceUrl: "http://sapiens.test",
+  anonymousDiscovery: true,
+});
+
+test("anônimo: initialize e tools/list sem bearer respondem, com o catálogo de membro", async () => {
+  const init = await anonHandler(rpc(INIT, { auth: false }));
+  assert.equal(init.status, 200);
+  assert.equal((await readRpcResponse(init, 1)).result?.serverInfo?.name, "mcp-sapiens");
+
+  const res = await anonHandler(
+    rpc({ jsonrpc: "2.0", id: 6, method: "tools/list", params: {} }, { auth: false }),
+  );
+  assert.equal(res.status, 200);
+  const tools = (await readRpcResponse(res, 6)).result?.tools;
+  assert.equal(tools.length, 30, "sem sessão lista o tier user, nunca as de admin");
+});
+
+test("anônimo: tools/call sem bearer segue 401 apontando o PRM", async () => {
+  const call = { jsonrpc: "2.0", id: 7, method: "tools/call", params: { name: "sapiens_meta", arguments: { action: "whoami" } } };
+  for (const body of [call, [{ jsonrpc: "2.0", id: 8, method: "tools/list" }, call]]) {
+    const res = await anonHandler(rpc(body, { auth: false }));
+    assert.equal(res.status, 401);
+    assert.match(res.headers.get("www-authenticate") ?? "", /resource_metadata=.*oauth-protected-resource/);
+  }
+});

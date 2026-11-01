@@ -59,7 +59,7 @@ export const referenceSchema = z.object({
     .string()
     .optional()
     .describe(
-      "Só 'resolve': o ID citável do asset, formato <tipo>_<id> — img_… (imagem), vid_… (vídeo), " +
+      "Só 'resolve': o ID citável do asset, formato <tipo>_<id>: img_… (imagem), vid_… (vídeo), " +
         "film_… (vídeo programático), trk_… (música), comic_… (tirinha), char_… (personagem). " +
         "É o ID que o usuário copia no detalhe do item.",
     ),
@@ -123,7 +123,7 @@ export const referenceSchema = z.object({
     .boolean()
     .optional()
     .describe(
-      "Só bucket 'pose_map': apenas as poses que o dono marcou com estrela. É o recorte mais forte que existe — comece por ele quando o pedido for vago.",
+      "Só bucket 'pose_map': apenas as poses que o dono marcou com estrela. É o recorte mais forte que existe: comece por ele quando o pedido for vago.",
     ),
   collection: z
     .string()
@@ -244,7 +244,7 @@ export async function reference(args: ReferenceArgs): Promise<any> {
         "Asset resolvido por posse + alcance. `mine`=seu, `isPublic`=público (seu ou de terceiro). " +
         "Use a `url` como referência: em sapiens_image passe em referenceImageUrls; em sapiens_video em " +
         "startImageUrl/endImageUrl (a url da casa já é allowlistada). Se não for seu nem público, o servidor " +
-        "recusa — não force.",
+        "recusa: não force.",
     };
   }
 

@@ -83,7 +83,7 @@ export const repertorioSchema = z.object({
     .string()
     .optional()
     .describe(
-      "Pra add_item: o externalId EXATO do candidato do resolve (imdbID p/ manual, id do provider p/ resto). NÃO fabrique/UUID — id que não resolve no provider é rejeitado. Dedup por (userId, source, externalId).",
+      "Pra add_item: o externalId EXATO do candidato do resolve (imdbID p/ manual, id do provider p/ resto). NÃO fabrique/UUID: id que não resolve no provider é rejeitado. Dedup por (userId, source, externalId).",
     ),
   // NOTA: metadado da obra (title/year/posterUrl/genres/...) NÃO é aceito aqui
   // de propósito: o servidor re-resolve no provider e grava o canônico

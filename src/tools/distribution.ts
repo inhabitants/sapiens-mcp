@@ -11,9 +11,10 @@ import {
  * sapiens_distribution: o Despachar peças pelo agente.
  *
  * A peça pronta (imagem, vídeo, carrossel, artigo) entra na FILA do Distribution
- * Workflow com canal, copy e a aba de quem ela é. Nada aqui posta em rede
- * nenhuma: quem despacha continua sendo a tela, porque é lá que mora a conta
- * conectada. O que a tool faz é tirar o trabalho de digitar peça por peça.
+ * Workflow com canal, copy e a aba de quem ela é. O queue não posta; marcar
+ * hora (status=agendado) sim, porque o tique da agenda publica sozinho a peça
+ * marcada em quase todo canal (só o Instagram da casa, o X do Borderless e o
+ * YouTube da casa esperam o clique, apps/sapiens/convex/shared/agendaPeloSite.ts).
  *
  * ADMIN-ONLY de propósito. A rota /experimentos/distribution-workflow também é:
  * despacho depende de rede conectada e hoje só a casa tem. Membro que chamar
@@ -369,7 +370,9 @@ export const distributionSchema = z.object({
   scheduledFor: z
     .number()
     .optional()
-    .describe("status=agendado: timestamp em ms de quando ela sai."),
+    .describe(
+      "status=agendado: timestamp em ms de quando ela sai. Marcar é aprovar: na hora, o tique publica sozinho, menos no Instagram da casa, no X do Borderless e no YouTube da casa, onde só toca a campainha.",
+    ),
   limit: z.number().int().positive().max(60).optional().describe("list: default 20."),
   bio: z
     .string()

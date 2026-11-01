@@ -50,7 +50,7 @@ export async function search(args: SearchArgs): Promise<any> {
     return {
       count: 0,
       results: [],
-      note: "query muito curta — passe pelo menos 2 chars",
+      note: "query muito curta: passe pelo menos 2 chars",
     };
   }
   return await convexQuery("mcpExtras:mcpSearchArticles", {

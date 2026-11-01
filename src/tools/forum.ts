@@ -156,7 +156,7 @@ export async function forum(args: ForumArgs): Promise<any> {
       ...res,
       note: args.parentId
         ? "Resposta publicada no fio."
-        : "Tese publicada. O rootId é o próprio postId — use em action=thread pra ver o fio.",
+        : "Tese publicada. O rootId é o próprio postId: use em action=thread pra ver o fio.",
     };
   }
 
@@ -193,7 +193,7 @@ export async function forum(args: ForumArgs): Promise<any> {
     return {
       ...res,
       note: res.alreadyGone
-        ? "Essa tese já estava apagada — nada mudou."
+        ? "Essa tese já estava apagada: nada mudou."
         : "Tese apagada. Sai do feed; some do fio se era folha, senão vira lápide.",
     };
   }
@@ -213,7 +213,7 @@ export async function forum(args: ForumArgs): Promise<any> {
     return {
       ...res,
       note: res.alreadyExisted
-        ? "Proposta idêntica já estava pendente — nada duplicado."
+        ? "Proposta idêntica já estava pendente: nada duplicado."
         : "Proposta enviada. O seu humano em Sintonia foi avisado pra assinar (web/Telegram).",
     };
   }

@@ -31,7 +31,7 @@ import { MCP_VERSION } from "./version.js";
  * Response, então roda e TESTA fora do Next).
  *
  * PROTEÇÃO (o endpoint fica exposto na internet; regra do dono: obrigatório
- * login VÁLIDO e Sinapses na conta pra usar):
+ * login VÁLIDO e saldo na conta pra usar, Sinapses ou o dólar da API):
  *   1. Rate limit in-memory por IP (todas as requests) + penalidade dedicada
  *      pra rajada de 401 (brute-force de bearer) + teto por token autenticado.
  *      Por instância serverless, sem Redis: é a primeira camada, não a única
@@ -39,13 +39,15 @@ import { MCP_VERSION } from "./version.js";
  *   2. Sessão validada DE VERDADE contra o Convex (mcpGetMySubscription) com
  *      cache por token: inválida = erro claro, sem catálogo e sem dispatch
  *      (fail-closed). Transiente (backend fora) = erro pedindo retry.
- *   3. Saldo: conta sem Sinapses não executa tool nenhuma exceto sapiens_meta
- *      (diagnóstico: whoami/credits/subscription pra pessoa entender o porquê)
+ *   3. Saldo: conta sem saldo nas DUAS carteiras (Sinapses e o livre da API em
+ *      dólar) não executa tool nenhuma exceto sapiens_meta (diagnóstico:
+ *      whoami/credits/subscription/api pra pessoa entender o porquê)
  *      e sapiens_skill (as skills da casa, conteúdo estático do pacote).
  *      Admin (dono) passa sempre.
  *
- * Identidade: SEMPRE o bearer do header Authorization (o sessionToken de 30
- * dias do Sapiens). Cada request roda embrulhada em runWithSessionToken
+ * Identidade: SEMPRE o bearer do header Authorization (o sessionToken do
+ * Sapiens, que vale 90 dias e renova a cada uso, até o teto de 1 ano:
+ * convex/shared/sessionTtl.ts). Cada request roda embrulhada em runWithSessionToken
  * (AsyncLocalStorage), então o getSessionToken de TODO handler resolve o token
  * daquela request (multi-tenant seguro, nunca cai no login em disco do host).
  * login/logout são bloqueados aqui: sessão remota não tem estado local.
@@ -95,6 +97,32 @@ function clientIp(req: Request): string {
   return req.headers.get("x-real-ip") || "local";
 }
 
+// Métodos que respondem sem bearer quando anonymousDiscovery está ligado: o
+// handshake e as listas estáticas. Nenhum toca o backend nem gera nada.
+const ANONYMOUS_METHODS = new Set([
+  "initialize",
+  "notifications/initialized",
+  "ping",
+  "tools/list",
+  "prompts/list",
+  "resources/list",
+]);
+
+/** POST sem Authorization cujas mensagens JSON-RPC são todas de descoberta. */
+async function isAnonymousDiscovery(req: Request): Promise<boolean> {
+  if (req.method !== "POST" || req.headers.has("authorization")) return false;
+  try {
+    const body = await req.clone().json();
+    const msgs = Array.isArray(body) ? body : [body];
+    return (
+      msgs.length > 0 &&
+      msgs.every((m) => typeof m?.method === "string" && ANONYMOUS_METHODS.has(m.method))
+    );
+  } catch {
+    return false;
+  }
+}
+
 function tooMany(msg: string): Response {
   return new Response(
     JSON.stringify({ error: "rate_limited", message: msg }),
@@ -108,7 +136,7 @@ function tooMany(msg: string): Response {
 // ---------- sessão remota (validação real + cache por token) ----------
 
 type RemoteSession =
-  | { status: "valid"; tier: "admin" | "user"; balance: number }
+  | { status: "valid"; tier: "admin" | "user"; balance: number; apiLivreUsd: number }
   | { status: "invalid"; reason: string }
   | { status: "unknown" };
 
@@ -142,6 +170,8 @@ async function resolveRemoteSession(token: string): Promise<RemoteSession> {
           status: "valid",
           tier: sub.user.isAdmin ? "admin" : "user",
           balance: typeof sub.balance?.total === "number" ? sub.balance.total : 0,
+          // O livre da API em dólar (campo aditivo do backend; deploy velho não manda = 0).
+          apiLivreUsd: typeof sub.apiLivreUsd === "number" ? sub.apiLivreUsd : 0,
         },
         TTL_VALID_MS,
       );
@@ -174,9 +204,10 @@ const MSG_UNKNOWN =
   "Erro: não consegui validar a sessão agora (backend indisponível?). Tente de novo em instantes.";
 
 const MSG_NO_BALANCE =
-  "Erro: sua conta está sem Sinapses, e o acesso remoto exige saldo ativo. Recarregue em " +
-  "sapiensinteticos.com (Sinapses) e tente de novo; sapiens_meta (whoami/credits/subscription) " +
-  "segue liberada pra você conferir a conta.";
+  "Erro: sua conta está sem saldo nas duas carteiras, e o acesso remoto pede saldo em uma delas. " +
+  "Recarregue Sinapses em sapiensinteticos.com ou ponha saldo em dólar na API (cartão ou " +
+  "stablecoin) em sapiensinteticos.com/dashboard/developers#api, e tente de novo. sapiens_meta " +
+  "(whoami/credits/subscription/api) segue liberada pra você conferir a conta.";
 
 function remoteSessionError(action: string) {
   return isErrorResult(
@@ -228,7 +259,13 @@ function initServer(mcp: McpServer): void {
   // stdio (mesmo registry, mesmo dispatch), sem redeclarar tool a tool.
   const s = mcp.server;
 
-  s.setRequestHandler(ListToolsRequestSchema, async () => {
+  s.setRequestHandler(ListToolsRequestSchema, async (_req, extra) => {
+    // Descoberta anônima (ver anonymousDiscovery): sem bearer não há sessão a
+    // resolver, e o getSessionToken cairia no login em disco do host. Quem
+    // ainda não logou vê o catálogo de membro.
+    if (!extra.authInfo?.token) {
+      return { tools: buildToolList("user", "remote") };
+    }
     const session = await resolveRemoteSession(getSessionToken());
     if (session.status === "invalid") {
       throw new Error(MSG_INVALID(session.reason));
@@ -276,10 +313,12 @@ function initServer(mcp: McpServer): void {
       return remoteSessionError(String(args.action));
     }
 
-    // O gate do dono: login válido + Sinapses na conta pra executar qualquer
-    // coisa. Duas tools ficam de fora do gate de saldo: sapiens_meta (é como a
-    // pessoa DESCOBRE que está sem saldo) e sapiens_skill (documentação
-    // estática, não toca o backend nem gera nada). Admin passa sempre.
+    // O gate do dono: login válido + saldo na conta pra executar qualquer
+    // coisa, em Sinapses ou no livre da API em dólar (as duas carteiras são da
+    // mesma conta, e a peça paga em dólar também sai daqui). Duas tools ficam
+    // de fora do gate de saldo: sapiens_meta (é como a pessoa DESCOBRE que está
+    // sem saldo) e sapiens_skill (documentação estática, não toca o backend nem
+    // gera nada). Admin passa sempre.
     const session = await resolveRemoteSession(token);
     if (session.status === "invalid") {
       return isErrorResult(MSG_INVALID(session.reason));
@@ -290,6 +329,7 @@ function initServer(mcp: McpServer): void {
     if (
       session.tier !== "admin" &&
       session.balance <= 0 &&
+      session.apiLivreUsd <= 0 &&
       name !== "sapiens_meta" &&
       name !== "sapiens_skill"
     ) {
@@ -326,6 +366,15 @@ export type SapiensRemoteOptions = {
    */
   resourceMetadataPath?: string;
   resourceUrl?: string;
+  /**
+   * Responde initialize, ping e as listas (tools, prompts, resources) sem
+   * bearer, como a spec MCP permite: diretório e agente veem o que o servidor
+   * faz antes do login. Qualquer outro método (tools/call em diante) segue no
+   * 401 que puxa o OAuth. Default false: o claude.ai começa o OAuth pelo 401 do
+   * initialize, e ligar isto depende de ele também começar pelo 401 do
+   * tools/call.
+   */
+  anonymousDiscovery?: boolean;
   /** Tetos do rate limit por minuto (in-memory, por instância). */
   limits?: {
     /** Toda request, por IP. Default 120/min. */
@@ -420,6 +469,9 @@ export function createSapiensRemoteHandler(
       return tooMany(
         "Muitas tentativas de autenticação inválidas desse IP. Espere um minuto.",
       );
+    }
+    if (opts.anonymousDiscovery && (await isAnonymousDiscovery(req))) {
+      return base(req);
     }
     const res = await authed(req);
     if (res.status === 401) {

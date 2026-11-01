@@ -70,10 +70,10 @@ const LIKERT_SCALE: Record<number, string> = {
 
 // Descrição curta de cada eixo (pra Claude contextualizar as perguntas).
 const AXES_INFO: Record<string, string> = {
-  EI: "Extroversão vs Introversão — de onde a pessoa tira energia.",
-  SN: "Sensorial vs Intuitivo — como capta informação (fatos vs padrões).",
-  TF: "Pensamento vs Sentimento — como decide (lógica vs impacto humano).",
-  JP: "Julgador vs Perceptivo — como lida com o mundo (fecha vs deixa aberto).",
+  EI: "Extroversão vs Introversão: de onde a pessoa tira energia.",
+  SN: "Sensorial vs Intuitivo: como capta informação (fatos vs padrões).",
+  TF: "Pensamento vs Sentimento: como decide (lógica vs impacto humano).",
+  JP: "Julgador vs Perceptivo: como lida com o mundo (fecha vs deixa aberto).",
 };
 
 // ============================================================
@@ -164,8 +164,8 @@ const VINCULO_QUESTIONS: Array<{ id: string; axis: "SA" | "DE"; text: string }> 
 ];
 
 const VINCULO_AXES_INFO: Record<string, string> = {
-  SA: "Sparring vs Acolhimento — a pessoa quer que a confrontem ou que a sustentem.",
-  DE: "Direção vs Execução — quer quem aponta o caminho ou quem senta e faz junto.",
+  SA: "Sparring vs Acolhimento: a pessoa quer que a confrontem ou que a sustentem.",
+  DE: "Direção vs Execução: quer quem aponta o caminho ou quem senta e faz junto.",
 };
 
 export const personaSchema = z.object({

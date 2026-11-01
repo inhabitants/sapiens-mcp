@@ -300,7 +300,7 @@ export async function sintetico(args: SinteticoArgs): Promise<any> {
       ...res,
       transferId,
       note: res.idempotent
-        ? "Esse transferId já tinha rodado — nada foi reenviado."
+        ? "Esse transferId já tinha rodado: nada foi reenviado."
         : `Enviou ${res.amount} Sinapses pro seu par em sintonia.`,
     };
   }
@@ -359,7 +359,7 @@ export async function sintetico(args: SinteticoArgs): Promise<any> {
     return {
       pending: rows,
       count: Array.isArray(rows) ? rows.length : 0,
-      note: "Admin-only. Cada item traz entryId — use em approve_access ou reject_access.",
+      note: "Admin-only. Cada item traz entryId: use em approve_access ou reject_access.",
     };
   }
 

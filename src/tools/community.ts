@@ -137,7 +137,7 @@ export async function community(args: CommunityArgs): Promise<any> {
       participants: people,
       note:
         "Pra falar direto com alguém, inclua o `mention` (ex: '@joao') no content " +
-        "do action=send — o servidor notifica a pessoa citada. isBot=true são personas " +
+        "do action=send: o servidor notifica a pessoa citada. isBot=true são personas " +
         "(ex: Helen), que respondem sozinhas quando marcadas.",
     };
   }

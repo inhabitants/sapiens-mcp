@@ -58,7 +58,7 @@ export const studiosSchema = z.object({
   slug: z
     .string()
     .optional()
-    .describe("Alternativa a publishableId — passe o slug direto."),
+    .describe("Alternativa a publishableId: passe o slug direto."),
 });
 
 export type StudiosArgs = z.infer<typeof studiosSchema>;
@@ -100,7 +100,7 @@ const STUDIOS = {
     convex: "personalityProfiles",
     mcpReady: true,
     mcpNote:
-      "Coberto via sapiens_persona. PRIMÁRIO (de graça, qualquer logado): get_quiz + submit_quiz + my_profile — aplica o teste conversando e ALIMENTA o personalityProfile do user. SECUNDÁRIO: generate + list_codes (arte dos arquétipos, 450 Sinapses).",
+      "Coberto via sapiens_persona. PRIMÁRIO (de graça, qualquer logado): get_quiz + submit_quiz + my_profile: aplica o teste conversando e ALIMENTA o personalityProfile do user. SECUNDÁRIO: generate + list_codes (arte dos arquétipos, 450 Sinapses).",
   },
   "sapiens-video": {
     name: "Sapiens Video (longer-form)",
