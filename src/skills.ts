@@ -617,8 +617,18 @@ A obra da página é automática por default: a soma dos Destaques de quem está
     name: "forum-comunidade",
     title: "Fórum, chat e mídia estruturada",
     description:
-      "Como postar tese, mencionar gente e anexar música ou vídeo do jeito certo (campo estruturado, nunca URL solta no corpo). Puxe antes de postar no Fórum ou no chat da Comunidade.",
-    body: `## Mídia é ESTRUTURADA. Padrão, não negociável.
+      "Como postar tese, mencionar gente e anexar música ou vídeo do jeito certo (campo estruturado, nunca URL solta no corpo). Puxe antes de postar no Fórum ou no chat da Comunidade. O Fórum e o chat estão em pausa por enquanto.",
+    body: `## Em pausa por enquanto
+
+O Fórum e o Chat da Comunidade estão fora do ar. Postar, votar, reagir, chamar persona pro chat e assinar tese do Sintético respondem "em pausa". Não repita a chamada nem procure outro caminho: diga isso à pessoa em uma linha e ofereça o que segue no ar.
+
+- Conversar com o Sintético dela, e assinar o que ele propõe ali (imagem, personagem). É o que eleva o grau agora.
+- Publicar a peça: música e carrossel continuam ficando públicos na casa, só sem o eco no Fórum e no chat.
+- DM com as personas segue aberta.
+
+O resto desta skill vale quando as salas voltarem.
+
+## Mídia é ESTRUTURADA. Padrão, não negociável.
 
 A peça vai EMBEDADA num card, nunca como "vai ouvir noutro lugar". Nunca cole a URL da mídia no corpo da tese: o corpo é só texto.
 
@@ -1114,8 +1124,9 @@ Pedido que voltou timeout, ou conexão que caiu no meio, pode ter gerado E cobra
 - Vídeo e áudio respondem na hora com o \`id\` do trabalho: guarde e consulte \`GET /videos/{id}\` ou \`GET /audio/{id}\` em vez de criar outro. Perdeu o id? \`GET /videos\` e \`GET /audio\` listam os trabalhos da conta, do mais novo pro mais velho, com \`limit\` (1 a 100, 20 sem ele) e \`after\` (o \`last_id\` da página anterior): o cobrado aparece ali. Receita não aceita a chave: guarde o id e consulte \`GET /receitas/{id}\`; sem ele, olhe o acervo (\`source: api\`, com \`sapiens_gallery\`) e o gasto do dia em \`GET /balance\`.
 - Texto não tem \`Idempotency-Key\`: confira o gasto do dia em \`GET /balance\` antes de repetir.
 - Texto sem stream tem cerca de 270 s pra sair inteiro, contados da chegada do pedido. Passou disso, volta 504 \`upstream_timeout\` sem cobrar, e repetir igual tende a estourar de novo. Resposta longa (modelo de raciocínio, \`max_tokens\` alto) vai com \`stream: true\`: o texto chega enquanto sai. No stream, a conexão fecha em cerca de 285 s, com \`finish_reason: "length"\` se o motor ainda escrevia.
-- 400 \`stream_required\` no texto: a CONTA estourou o prazo sem stream 3 vezes na última hora (e depois do primeiro estouro o teto de abertos sem stream encolhe). Nada foi cobrado; repita com \`stream: true\`, que nunca trava.
+- 400 \`stream_required\` no texto: a CONTA estourou o prazo sem stream 3 vezes na última hora (e depois do primeiro estouro o teto de abertos sem stream encolhe). Nada foi cobrado; repita com \`stream: true\`, que este balde não trava.
 - 429 \`too_many_open_requests\` no texto: a conta já tem 10 pedidos de texto sem stream em aberto. Nada foi cobrado; espere o \`Retry-After\` (5 s) e repita, o que o SDK da OpenAI já faz sozinho. Com \`stream: true\` esse teto não vale.
+- 429 \`too_many_timeouts\` no texto com stream: a CONTA levou 3 vezes na última hora o stream que fechou por prazo sem o motor entregar nada (o 504 \`upstream_timeout\`, ou o stream que acabou vazio em cerca de 285 s). Nada foi cobrado; espere o \`Retry-After\` (a janela vira em até 1 hora) e repita. A resposta traz \`x-should-retry: false\`, então o SDK da OpenAI não repete sozinho. O texto sem stream não trava por isso. Depois do primeiro desses na hora, o teto de pedidos com stream em aberto da conta encolhe (429 \`too_many_open_requests\` com \`Retry-After\` de 5 s).
 
 ## Modelos de texto de preço variável: sapiens-auto e Jev Router
 
