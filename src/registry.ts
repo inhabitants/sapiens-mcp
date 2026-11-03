@@ -52,6 +52,7 @@ import {
   touchSession,
 } from "./convexClient.js";
 import { skillMenuLine } from "./skills.js";
+import { separarImagens } from "./imagensNoChat.js";
 
 /**
  * REGISTRY compartilhado do sapiens-mcp: o catálogo de tools (descriptions +
@@ -492,7 +493,7 @@ export async function callTool(
   name: string,
   rawArgs: unknown,
 ): Promise<{
-  content: Array<{ type: "text"; text: string }>;
+  content: Array<{ type: "text"; text: string } | { type: "image"; data: string; mimeType: string }>;
   structuredContent?: Record<string, unknown>;
   isError?: boolean;
 }> {
@@ -529,7 +530,8 @@ export async function callTool(
 
   try {
     const args = tool.schema.parse(rawArgs ?? {});
-    const result = await tool.handler(args as any);
+    // A imagem que a tool manda pro chat sai do JSON e vira bloco `image` (imagensNoChat.ts).
+    const { resto: result, imagens } = separarImagens(await tool.handler(args as any));
     // structuredContent espelha o retorno pra consumidor programático (spec
     // 2025-06-18). Retrocompatível: client velho lê só o content textual. Como
     // structuredContent precisa ser objeto, embrulho array/escalar em {result}.
@@ -538,7 +540,10 @@ export async function callTool(
         ? (result as Record<string, unknown>)
         : { result };
     return {
-      content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+      content: [
+        { type: "text", text: JSON.stringify(result, null, 2) },
+        ...imagens.map((i) => ({ type: "image" as const, data: i.data, mimeType: i.mimeType })),
+      ],
       structuredContent,
     };
   } catch (e: any) {

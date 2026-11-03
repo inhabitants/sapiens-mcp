@@ -3,7 +3,7 @@
   "name": "com.sapiensinteticos/sapiens",
   "title": "Sapiens Sintéticos",
   "description": "Operate your Sapiens Sintéticos AI studio: generate image, article, voice, music and video.",
-  "version": "1.108.2",
+  "version": "1.108.3",
   "websiteUrl": "https://www.sapiensinteticos.com/conectar-claude",
   "icons": [
     {
@@ -22,7 +22,7 @@
     {
       "registryType": "npm",
       "identifier": "sapiens-mcp",
-      "version": "1.108.2",
+      "version": "1.108.3",
       "transport": {
         "type": "stdio"
       }

@@ -736,3 +736,15 @@ test("contaApi: sem recarga, sem chave e porta fechada (admin) viram linha curta
   assert.doesNotMatch(out.resumo, /Rendimento/);
   assert.match(out.resumo, /fechada pro público/);
 });
+
+test("a prévia da imagem vai pro chat como bloco image, fora do JSON, e só se couber", async () => {
+  const { separarImagens, imagemQueCabe, IMAGENS_NO_CHAT, IMAGEM_NO_CHAT_MAX_B64 } = await import("../dist/imagensNoChat.js");
+  const { resto, imagens } = separarImagens({ imageId: "abc", [IMAGENS_NO_CHAT]: [{ data: "UklGRg==", mimeType: "image/webp" }] });
+  assert.deepEqual(resto, { imageId: "abc" });
+  assert.deepEqual(imagens, [{ data: "UklGRg==", mimeType: "image/webp" }]);
+  // Sem a chave, nada muda; base64 vazio, grande demais ou de outro tipo não vai.
+  assert.deepEqual(separarImagens({ a: 1 }), { resto: { a: 1 }, imagens: [] });
+  assert.deepEqual(imagemQueCabe("", "image/webp"), []);
+  assert.deepEqual(imagemQueCabe("x".repeat(IMAGEM_NO_CHAT_MAX_B64 + 1), "image/webp"), []);
+  assert.deepEqual(imagemQueCabe("UklGRg==", "image/svg+xml"), []);
+});

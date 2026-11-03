@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { httpUrl } from "../schema.js";
 import { convexAction, convexQuery, describeConvexError, getSessionToken } from "../convexClient.js";
+import { IMAGENS_NO_CHAT, imagemQueCabe } from "../imagensNoChat.js";
 
 // IDs canônicos do catálogo (apps/sapiens/convex/shared/imageModels.ts).
 // IDs fora dessa lista caem no fallback e o pricing vira 999. Sempre usar os
@@ -538,8 +539,7 @@ export async function image(args: ImageArgs): Promise<any> {
   // motor (e no tamanho) é o default do template.
   const genModel = args.model ?? (args.templateSlug ? undefined : "nano-banana-2");
 
-  const result = await convexAction(
-    "desktopMcp:generateImageOnline",
+  const result = await semPreviaSeRecusar(
     {
       sessionToken,
       prompt: args.prompt,
@@ -570,11 +570,13 @@ export async function image(args: ImageArgs): Promise<any> {
       ...(args.transparentBackground === true ? { transparentBackground: true } : {}),
       // Idem: servidor de antes da LoRA própria recusaria o arg.
       ...(args.loras?.length ? { loras: args.loras } : {}),
-      // O base64 da peça não volta pro agente (ver o fim desta função), então
-      // nem sai do Convex: era o maior data egress da conta.
+      // Os bytes crus da peça (uns 8,6 MB em base64) não saem do Convex: eram o
+      // maior data egress da conta. Volta só a prévia leve (webp de 828 px),
+      // que vai pro chat como imagem (ver o fim desta função).
       semBase64: true,
+      previa: true,
     },
-    { ondeConferir: ONDE_CONFERIR_GENERATE },
+    (pedido) => convexAction("desktopMcp:generateImageOnline", pedido, { ondeConferir: ONDE_CONFERIR_GENERATE }),
   );
   // Backend de antes do campo não devolve motor nem ficha: cai no id pedido e
   // monta a ficha aqui. O nome bonito (modelName) só vem do servidor.
@@ -592,7 +594,7 @@ export async function image(args: ImageArgs): Promise<any> {
     // peça não passa por sapiens_gallery action=publish.
     acervoUrl,
     entrega:
-      "Ao mostrar a peça, diga o motor pelo modelName e mande o acervoUrl como link 'no acervo'. A peça é PRIVADA: link público só existe depois de sapiens_gallery action=publish (que devolve o endereço público).",
+      "Ao mostrar a peça, diga o motor pelo modelName e mande o acervoUrl como link 'no acervo'. A peça é PRIVADA: link público só existe depois de sapiens_gallery action=publish (que devolve o endereço público). Quando a prévia leve (webp de 828 px) vem junto como imagem nesta resposta, você já vê a peça: comente o que está nela sem baixar o url. O arquivo inteiro, na resolução pedida, é o url.",
     mimeType: result?.mimeType,
     // Recorte: o servidor só chega aqui depois de medir o alpha do arquivo.
     ...(args.transparentBackground === true ? { transparentBackground: true } : {}),
@@ -601,7 +603,24 @@ export async function image(args: ImageArgs): Promise<any> {
     // Pago em Sinapses: o que o extrato debitou (resolução, refs pagas e
     // override já dentro). Backend de antes do campo não manda, e aí não vem.
     ...(typeof result?.custoSinapses === "number" ? { custoSinapses: result.custoSinapses } : {}),
-    // Não incluir base64 no retorno (polui contexto). Quem quiser bytes
-    // chama sapiens_gallery action=get com includeBase64=true.
+    // O base64 não entra no JSON (polui contexto): a prévia leve vai pro chat
+    // como imagem, pelo registry (imagensNoChat.ts). Quem quiser os bytes da
+    // peça inteira chama sapiens_gallery action=get com includeBase64=true.
+    [IMAGENS_NO_CHAT]: imagemQueCabe(result?.base64, result?.mimeType),
   };
+}
+
+/**
+ * Servidor de antes da prévia (deploy do Convex atrasado em relação ao pacote
+ * ou ao site) recusa o arg `previa` que não conhece, e recusa ANTES do handler,
+ * sem debitar nada. A peça vale mais que a prévia: tenta de novo sem ela.
+ */
+async function semPreviaSeRecusar<T>(pedido: Record<string, unknown>, chamar: (p: Record<string, unknown>) => Promise<T>): Promise<T> {
+  try {
+    return await chamar(pedido);
+  } catch (e) {
+    if (!/extra field `?previa`?/i.test(describeConvexError(e))) throw e;
+    const { previa: _semPrevia, ...resto } = pedido;
+    return await chamar(resto);
+  }
 }
