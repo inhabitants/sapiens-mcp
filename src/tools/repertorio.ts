@@ -133,6 +133,13 @@ export const repertorioSchema = z.object({
   isActive: z.boolean().optional().describe("Pra admin_tool: false tira a ficha do ar sem apagar."),
   xUrl: z.string().optional().describe("Pra admin_tool: o perfil da ferramenta no X (https://x.com/<handle>)."),
   brandHandle: z.string().optional().describe("Pra admin_tool: o @ da marca, sem o @."),
+  links: z
+    .array(z.object({ label: z.string(), url: z.string() }))
+    .max(8)
+    .optional()
+    .describe(
+      "Pra admin_tool: os outros endereços que a pessoa vem buscar e o site não cobre, na ordem da página (bloco 'Onde achar', abaixo da análise): os pesos de cada checkpoint, o pacote do ComfyUI, a licença, a doc. label curto (até 40: 'Turbo weights', 'ComfyUI repack'), url https pública. O repo do githubUrl já aparece sozinho, não repita. A lista troca a inteira; vazia tira todos. O post da casa aponta pra ficha, e é daqui que a pessoa segue: ficha de modelo aberto leva os pesos aqui.",
+    ),
   favorite: z
     .boolean()
     .optional()
@@ -241,6 +248,7 @@ export async function repertorio(args: RepertorioArgs): Promise<any> {
       brandHandle: args.brandHandle,
       isCurated: args.isCurated,
       isActive: args.isActive,
+      links: args.links,
     });
   }
 
