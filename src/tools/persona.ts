@@ -7,7 +7,7 @@ import {
 } from "../convexClient.js";
 
 /**
- * Persona Sapiens — quiz MBTI + perfil do user + arte dos 16 arquétipos.
+ * Persona Sapiens: teste de personalidade (16 personas junguianas) + perfil do user + arte dos 16 arquétipos.
  *
  * PRIMÁRIO (de graça, qualquer conta logada): a pessoa interage com a PRÓPRIA
  * persona, conversando.
@@ -19,7 +19,7 @@ import {
  *     histórico. Pra "qual meu tipo?", "me explica meu perfil", "como evoluí?".
  *
  * SECUNDÁRIO (catálogo + arte):
- *   - list_codes: os 16 codes MBTI + grupo (NT/NF/SJ/SP). Estático.
+ *   - list_codes: os 16 codes de 4 letras + grupo (NT/NF/SJ/SP). Estático.
  *   - list_generated: quais artes de arquétipo já existem (bunnyUrl).
  *   - generate: gera a ilustração de UM arquétipo (450 Sinapses). Combina com
  *     "gera a arte do meu tipo" depois de descobrir o code no quiz.
@@ -180,7 +180,7 @@ export const personaSchema = z.object({
   code: z
     .enum(MBTI_CODES)
     .optional()
-    .describe("Pra action=generate: código MBTI a gerar a arte. Case-insensitive (normaliza pra maiúscula)."),
+    .describe("Pra action=generate: código de 4 letras (ex INTJ) a gerar a arte. Case-insensitive (normaliza pra maiúscula)."),
   answers: z
     .array(
       z.object({
@@ -308,7 +308,7 @@ export async function persona(args: PersonaArgs): Promise<any> {
   // -------- generate: arte de 1 arquétipo (450 Sinapses, qualquer logado) --------
   if (args.action === "generate") {
     if (!args.code) {
-      throw new Error("action=generate exige code MBTI (ex 'INTJ').");
+      throw new Error("action=generate exige code de 4 letras (ex 'INTJ').");
     }
     const sessionToken = getSessionToken();
     return await convexAction("mcpExtrasActions:mcpGeneratePersonaArt", {

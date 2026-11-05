@@ -56,7 +56,7 @@ export const SAPIENS_PROMPTS: SapiensPrompt[] = [
     name: "quiz-persona",
     title: "Quiz de Persona (16 arquétipos)",
     description:
-      "Aplica o quiz MBTI da casa conversando, calcula o tipo e salva no perfil (grátis).",
+      "Aplica o teste de personalidade da casa conversando, calcula o tipo e salva no perfil (grátis).",
     arguments: [],
     build: () =>
       "Quero fazer o quiz de Persona aqui no chat. Puxe as 48 perguntas com " +

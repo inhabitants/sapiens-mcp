@@ -14,7 +14,7 @@ import { convexQuery, convexMutation, getSessionToken } from "../convexClient.js
  *   - imagens geradas/publicadas → sapiens_gallery
  *   - repertório (filmes/séries/jogos/livros/música) → sapiens_repertorio
  *   - personagens → sapiens_character
- *   - persona/arquétipo MBTI → sapiens_persona action=my_profile
+ *   - persona/teste de personalidade → sapiens_persona action=my_profile
  *   - saldo detalhado por bucket → sapiens_meta action=subscription
  *
  * Sub-actions:
@@ -343,6 +343,6 @@ export async function profile(args: ProfileArgs): Promise<any> {
     note:
       "Card do perfil: identidade + nível + saldo + badges + golden tools (favoritos do aitag). " +
       "O resto do perfil tem tool própria: imagens=sapiens_gallery, repertório=sapiens_repertorio, " +
-      "personagens=sapiens_character, persona/MBTI=sapiens_persona action=my_profile.",
+      "personagens=sapiens_character, persona/teste de personalidade=sapiens_persona action=my_profile.",
   };
 }

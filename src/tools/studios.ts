@@ -93,7 +93,7 @@ const STUDIOS = {
   "persona-sapiens": {
     name: "Persona Sapiens",
     description:
-      "Teste de personalidade pra AUTOCONHECIMENTO (não é gerador de imagem): quiz que cruza MBTI com humores antigos, elementos e estilos. 48 perguntas Likert (~10 min), resultado com persona/animal cultural/sombra/espelho, salvo no perfil do user. Secundário: arte ilustrada dos 16 arquétipos MBTI (full-bleed, Sapiens style).",
+      "Teste de personalidade pra AUTOCONHECIMENTO (não é gerador de imagem): quiz que cruza as funções de Jung com humores antigos, elementos e estilos. 48 perguntas Likert (~10 min), resultado com persona/animal cultural/sombra/espelho, salvo no perfil do user. Secundário: arte ilustrada dos 16 arquétipos (full-bleed, Sapiens style).",
     url: `${APP}/experimentos/persona-sapiens`,
     status: "stable",
     tags: ["persona", "mbti", "quiz", "autoconhecimento", "perfil", "personalidade", "teste"],
