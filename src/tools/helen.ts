@@ -31,7 +31,7 @@ export const helenSchema = z.object({
     .string()
     .optional()
     .describe(
-      "ElevenLabs: 'eleven_v3' (default) ou 'eleven_multilingual_v2'. Google: 'gemini-3.1-flash-tts-preview' (default). Fish: 's2.1-pro-free' (S2.1 Pro, default) ou 'drama-3' (Drama 3: a direção vai no próprio text, '[sussurrando] frase' muda a atuação, '<emphasis>palavra</emphasis>' crava uma palavra; mesmo preço). Id desconhecido no Fish vira S2.1 Pro.",
+      "ElevenLabs: 'eleven_v3' (default) ou 'eleven_multilingual_v2'. Google: 'gemini-3.8-flash-tts' (default, Gemini 3.8 Flash TTS, fala as vozes nativas em português) ou 'gemini-3.1-flash-tts-preview' (só as clássicas; voz nativa pedida nele sai pelo 3.8). Fish: 's2.1-pro-free' (S2.1 Pro, default) ou 'drama-3' (Drama 3: a direção vai no próprio text, '[sussurrando] frase' muda a atuação, '<emphasis>palavra</emphasis>' crava uma palavra; mesmo preço). Id desconhecido no Fish vira S2.1 Pro.",
     ),
   voiceId: z
     .string()
@@ -43,7 +43,7 @@ export const helenSchema = z.object({
     .string()
     .optional()
     .describe(
-      "Google prebuilt voice (default Kore). Use list_presets pra ver opções.",
+      "Google prebuilt voice. Clássicas (Kore, Puck, Charon...) valem em todo modelo; nativas em português (ids 'pt-br-<papel>-<n>' e 'pt-pt-<papel>-<n>', ex 'pt-br-podcaster-1', 'pt-br-storyteller-6', 'pt-pt-tutor-3') só existem no Gemini 3.8 e soam como gente do Brasil ou de Portugal, sem forçar sotaque por prompt. Default Kore. Use list_presets pra ver opções.",
     ),
   fishReferenceId: z
     .string()
@@ -116,12 +116,17 @@ const PRESETS = {
     ],
   },
   google: {
-    note: "Google Gemini TTS. modelId 'gemini-3.1-flash-tts-preview'. Mesmo preço dos outros motores: 500 Sinapses por 1.200 caracteres, mínimo 50.",
+    note: "Google Gemini TTS. modelId 'gemini-3.8-flash-tts' (Gemini 3.8 Flash TTS, o default). Duas famílias de voz: as CLÁSSICAS (Kore, Puck...) valem em todo modelo; as NATIVAS em português (163: 107 do Brasil, 56 de Portugal, ids 'pt-br-<papel>-<n>' e 'pt-pt-<papel>-<n>') só existem no 3.8, e voz nativa pedida em outro modelo sai pelo 3.8. Papéis: advisor, assistant, commercial, concierge, csagent, podcaster, storyteller, techagent, training, tutor; números de 1 a 12 no Brasil e de 1 a 8 em Portugal, não todos em todo papel. O catálogo inteiro, com timbre, gênero e idade, aparece no seletor de sapiensinteticos.com/experimentos/voz. Pra fala em português, comece por uma nativa: o sotaque sai da voz, sem prompt de estilo pedindo. Mesmo preço dos outros motores: 500 Sinapses por 1.200 caracteres, mínimo 50.",
     voices: [
-      { voiceName: "Kore", use: "feminina, neutra (default)" },
-      { voiceName: "Aoede", use: "feminina, melódica" },
-      { voiceName: "Charon", use: "masculina, profunda" },
-      { voiceName: "Fenrir", use: "masculina, mais áspera" },
+      { voiceName: "pt-br-commercial-5", use: "nativa pt-BR, masculina, grave, quente e envolvente (27 anos)" },
+      { voiceName: "pt-br-podcaster-1", use: "nativa pt-BR, masculina, grave, de conversa com humor seco (48 anos)" },
+      { voiceName: "pt-br-storyteller-6", use: "nativa pt-BR, masculina, grave, narração de boa (27 anos)" },
+      { voiceName: "pt-br-advisor-1", use: "nativa pt-BR, feminina, quente e envolvente (41 anos)" },
+      { voiceName: "pt-pt-storyteller-1", use: "nativa pt-PT, feminina, narração natural e clara (43 anos)" },
+      { voiceName: "Kore", use: "clássica, feminina, neutra (default)" },
+      { voiceName: "Aoede", use: "clássica, feminina, melódica" },
+      { voiceName: "Charon", use: "clássica, masculina, profunda" },
+      { voiceName: "Fenrir", use: "clássica, masculina, mais áspera" },
     ],
     stylePreambles: [
       "Read this in a thoughtful, almost-whispered tone:",
@@ -165,9 +170,10 @@ export async function helen(args: HelenArgs): Promise<any> {
           // S2.1 Pro. O Drama 3 vem pedido em modelId ('drama-3'); o servidor
           // resolve pela allowlist dele e id desconhecido vira S2.1.
           ? "s2.1-pro-free"
-          // 3.1 Flash é o único TTS do Google que gera nas contas free da casa
-          // (o 2.5 responde 200 sem áudio nelas e só sai na conta central).
-          : "gemini-3.1-flash-tts-preview");
+          // Gemini 3.8 Flash TTS: gera nas contas free da casa (o 2.5 responde
+          // 200 sem áudio nelas e só sai na conta central) e é o único que fala
+          // as vozes nativas em português.
+          : "gemini-3.8-flash-tts");
 
     if (provider === "elevenlabs" && !args.voiceId) {
       throw new Error(
