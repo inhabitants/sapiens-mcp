@@ -194,9 +194,11 @@ import { httpUrl } from "../schema.js";
  *   - sapiens-video-omni-12        Gemini Omni 1.2: texto ou imagem -> vídeo de 4, 6, 8, 10, 12 ou 15s (sem
  *                                   durationSec, 10s), com áudio nativo embutido, em 360p, 720p,
  *                                   1080p ou 4k (preço por segundo: 1/3, 1x, 1,5x e 3x do 720p; sem
- *                                   resolution, 720p). Aceita até 3 imagens suas (frame inicial,
- *                                   frame final ou referência de personagem/estilo); vídeo de
- *                                   MOVIMENTO não (pra coreografia, Seedance).
+ *                                   resolution, 720p). Aceita até 6 imagens de referência (3 por
+ *                                   personagem, 2 personagens) além do frame inicial e do final, e
+ *                                   até 3 VÍDEOS de referência de até 3 s cada (1 só no take de 11
+ *                                   a 15 s, e só em take novo): o clipe dá a APARÊNCIA de quem
+ *                                   aparece nele, não o movimento (pra coreografia, Seedance).
  *                                   EDIÇÃO conversacional: `editOfImageId` aponta um vídeo Omni seu e
  *                                   o prompt edita a MESMA cena.
  *                                   VÍDEO-FONTE: `sourceVideoId` (vídeo da sua galeria) ou
@@ -618,7 +620,7 @@ export const videoSchema = z.object({
     .array(z.string())
     .optional()
     .describe(
-      "action=create (Seedance 2.0/Fast/Mini/2.5 até 4; H3 até 9; Omni 1.2 até 3; Kling, Hailuo, WAN 2.5 e 3.0 e os dois Spicy NÃO): generatedImages:_id da SUA galeria " +
+      "action=create (Seedance 2.0/Fast/Mini/2.5 até 4; H3 até 9; Omni 1.2 até 6, 3 por personagem; Kling, Hailuo, WAN 2.5 e 3.0 e os dois Spicy NÃO): generatedImages:_id da SUA galeria " +
         "como imagens de REFERÊNCIA (role 'ref'). Diferente de startImageId: NÃO viram o 1º frame, guiam " +
         "estilo/personagem/composição. Fluxo storyboard: gere a folha com sapiens_image " +
         "templateSlug='storyboard-sapiens-v1' (ou -vertical-v1) e passe folha + personagem aqui. " +
@@ -629,7 +631,7 @@ export const videoSchema = z.object({
     .array(httpUrl())
     .optional()
     .describe(
-      "action=create (mesmos motores e tetos de referenceImageIds: Seedance até 4, H3 até 9, Omni 1.2 até 3): URLs públicas (Bunny/Convex/Wikimedia) como imagens de " +
+      "action=create (mesmos motores e tetos de referenceImageIds: Seedance até 4, H3 até 9, Omni 1.2 até 6): URLs públicas (Bunny/Convex/Wikimedia) como imagens de " +
         "REFERÊNCIA (role 'ref'). Soma com referenceImageIds. No prompt, cite as referências por descrição " +
         "(ex: 'use the storyboard reference as ordered key poses; ignore line-sketch artifacts').",
     ),
@@ -637,7 +639,7 @@ export const videoSchema = z.object({
     .array(httpUrl())
     .optional()
     .describe(
-      "action=create (Seedance 2.0/Fast/Mini/2.5: 1 vídeo; H3: até 3, somando 15s; P-Video-2 Pro: até 3, somando 15s, cada SEGUNDO cobrado à parte, medido pelo servidor antes do débito, e cada clipe cobra no máximo a duração do take + 1s): URL pública (host da casa) de um VÍDEO DE MOVIMENTO (role 'refvideo' -> reference_videos, <=15s): " +
+      "action=create (Seedance 2.0/Fast/Mini/2.5: 1 vídeo; H3: até 3, somando 15s; P-Video-2 Pro: até 3, somando 15s, cada SEGUNDO cobrado à parte, medido pelo servidor antes do débito, e cada clipe cobra no máximo a duração do take + 1s; Gemini Omni 1.2: até 3 clipes de até 3 s cada, 1 só no take de 11 a 15 s, só em take novo, e ali o clipe dá a APARÊNCIA de quem aparece nele (rosto, corpo, roupa), não o movimento, e não muda o preço): URL pública (host da casa) de um VÍDEO DE MOVIMENTO (role 'refvideo' -> reference_videos, <=15s): " +
         "a coreografia/câmera do clipe GUIA o take sem ser recriado plano a plano (isso é o Shot Mimic). " +
         "NÃO edita o clipe: o take sai com outra filmagem. Pra mudar um vídeo que já existe mantendo a filmagem, é model='sapiens-video-omni-12' com sourceVideoId/sourceVideoUrl. " +
         "Combina com o fluxo storyboard: folha = beats, vídeo = movimento, personagem = identidade. " +
