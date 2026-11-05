@@ -187,8 +187,11 @@ import { httpUrl } from "../schema.js";
  *                                   (vídeo de referência MÁX 15s — acima o provider corta em 15s)
  *   - sapiens-video-lite/fast/quality   Veo 3.1: SAIU. O Google apagou os três em
  *                                   22/10/2026; o backend recusa antes de cobrar. O
- *                                   sucessor é o sapiens-video-omni-11.
- *   - sapiens-video-omni-11        Gemini Omni 1.1: texto ou imagem -> vídeo de 4, 6, 8 ou 10s (sem
+ *                                   sucessor é o sapiens-video-omni-12.
+ *   - sapiens-video-omni-11        Gemini Omni 1.1: saiu da prateleira em 05/11/2026. Pedido novo
+ *                                   com o id roda no 1.2 (e é cobrado como ele); take antigo do
+ *                                   1.1 continua no 1.1.
+ *   - sapiens-video-omni-12        Gemini Omni 1.2: texto ou imagem -> vídeo de 4, 6, 8, 10, 12 ou 15s (sem
  *                                   durationSec, 10s), com áudio nativo embutido, em 360p, 720p,
  *                                   1080p ou 4k (preço por segundo: 1/3, 1x, 1,5x e 3x do 720p; sem
  *                                   resolution, 720p). Aceita até 3 imagens suas (frame inicial,
@@ -249,10 +252,12 @@ const VIDEO_MODELS = [
   "sapiens-video-shot-mimic",
   // Os três Veo 3.1 e o Omni 1.0 seguem no enum por retrocompat (cliente em
   // versão publicada manda o id e recebe a recusa limpa, sem cobrança): o Google
-  // apagou os quatro em 22/10/2026. Peça o Omni 1.1.
+  // apagou os quatro em 22/10/2026. Peça o Omni 1.2. O Omni 1.1 também fica:
+  // saiu da prateleira em 05/11/2026 e o servidor roda o pedido no 1.2.
   "sapiens-video-lite",
   "sapiens-video-fast",
   "sapiens-video-quality",
+  "sapiens-video-omni-12",
   "sapiens-video-omni-11",
   "sapiens-video-omni",
 ] as const;
@@ -465,7 +470,7 @@ export const videoSchema = z.object({
     .number()
     .optional()
     .describe(
-      "action=create e action=price: duração em segundos. Gemini Omni 1.1 4/6/8/10, Seedance 2.0/Shot Mimic 4-15, Seedance 2.5 4-30 (o preço acompanha: confirme a duração com a pessoa antes de passar de 15), Kling 3-15, WAN 2.5 5/10, WAN 3.0 5/8/10, H3 5/6/8/10/12/15 nos dois tiers (768p e 2k), P-Video-2 Pro 5/6/8/10/12/15, H3 Spicy 3-15, Seedance 2.0 Spicy 4-15 em 480p e 720p, 4-10 em 1080p. " +
+      "action=create e action=price: duração em segundos. Gemini Omni 1.2 4/6/8/10/12/15 (a continuação acrescenta até 10), Seedance 2.0/Shot Mimic 4-15, Seedance 2.5 4-30 (o preço acompanha: confirme a duração com a pessoa antes de passar de 15), Kling 3-15, WAN 2.5 5/10, WAN 3.0 5/8/10, H3 5/6/8/10/12/15 nos dois tiers (768p e 2k), P-Video-2 Pro 5/6/8/10/12/15, H3 Spicy 3-15, Seedance 2.0 Spicy 4-15 em 480p e 720p, 4-10 em 1080p. " +
         "O PREÇO ESCALA COM A DURAÇÃO. Duração ausente ou FORA do leque do motor cai no PISO, menos no Omni, que cai no padrão dele (10s). " +
         "action=shadows: duração do vídeo-fonte, se souber (cobra 200/s; sem ela, flat ~2000).",
     ),
@@ -473,8 +478,8 @@ export const videoSchema = z.object({
     .enum(["360p", "480p", "720p", "1080p", "768p", "2k", "4k"])
     .optional()
     .describe(
-      "action=create e action=price: resolução (Seedance, WAN 2.5 e 3.0, Shot Mimic, H3, P-Video-2 Pro ('480p'/'768p'), H3 Spicy, Seedance Spicy, Gemini Omni 1.1). NÃO existe default 720p aqui: resolução ausente, ou fora do que o motor aceita, cai no tier MAIS CARO do motor, menos no Gemini Omni 1.1, que fica no 720p (o tier que ele vendeu antes de ter escolha). " +
-        "O Gemini Omni 1.1 vai de '360p' a '4k' (360p custa 1/3 do 720p, 1080p 1,5x, 4k 3x). " +
+      "action=create e action=price: resolução (Seedance, WAN 2.5 e 3.0, Shot Mimic, H3, P-Video-2 Pro ('480p'/'768p'), H3 Spicy, Seedance Spicy, Gemini Omni 1.2). NÃO existe default 720p aqui: resolução ausente, ou fora do que o motor aceita, cai no tier MAIS CARO do motor, menos no Gemini Omni 1.2, que fica no 720p (o tier que ele vendeu antes de ter escolha). " +
+        "O Gemini Omni 1.2 vai de '360p' a '4k' (360p custa 1/3 do 720p, 1080p 1,5x, 4k 3x). " +
         "É isso que faz um create sem este campo custar muito mais que o piso do catálogo (em sapiens-video-seedance vira 1080p, não 480p). Passe sempre a resolução que você quer pagar, e confira com action=price antes. " +
         "O H3 usa '768p' ou '2k' (sem eles cai no 2k, que custa 33% mais por segundo); o H3 Spicy usa '480p'/'768p'/'1080p'. Kling e a linha Hailuo 2.3 não usam este campo (resolução fixa pelo motor).",
     ),
@@ -486,7 +491,7 @@ export const videoSchema = z.object({
     .string()
     .optional()
     .describe(
-      "action=create model=sapiens-video-omni-11 (ou -omni): EDIÇÃO conversacional ('Nano Banana de vídeo'). " +
+      "action=create model=sapiens-video-omni-12 (ou -omni-11): EDIÇÃO conversacional ('Nano Banana de vídeo'). " +
         "Passe o imageId de um vídeo Omni SEU já gerado e o prompt vira instrução de edição sobre a MESMA cena " +
         "(ex: 'troca o urso polar por um Papai Noel com um presente'), preservando câmera, ambiente e timing. " +
         "Cada edição debita como uma geração Omni nova e devolve um vídeo novo (que também pode ser editado). " +
@@ -496,7 +501,7 @@ export const videoSchema = z.object({
     .string()
     .optional()
     .describe(
-      "action=create model=sapiens-video-omni-11: VÍDEO-FONTE, o imageId de um vídeo SEU pronto (da galeria, qualquer motor ou subido por ingest), até 10 s. " +
+      "action=create model=sapiens-video-omni-12: VÍDEO-FONTE, o imageId de um vídeo SEU pronto (da galeria, qualquer motor ou subido por ingest), até 15 s. " +
         "O Omni recebe o clipe inteiro e o edita (sourceVideoMode='edit', o padrão: a MESMA cena com a mudança do prompt, ex: 'troca o homem pelo personagem da imagem de referência, mantém tudo o resto') " +
         "ou o estende (sourceVideoMode='extend': o pedaço seguinte no tempo). Imagens de personagem/estilo vão junto em referenceImageIds/Urls (até 3); startImage*/endImage* não, o primeiro quadro é o do vídeo. " +
         "Cobrança: a edição cobra o degrau de duração que cobre o clipe (7,3 s cobra 8 s) na resolution pedida; a extensão cobra o durationSec do pedaço novo. A proporção é a do clipe. " +
@@ -506,7 +511,7 @@ export const videoSchema = z.object({
     .string()
     .optional()
     .describe(
-      "action=create model=sapiens-video-omni-11: o mesmo que sourceVideoId, por URL pública de host da casa (Bunny/Convex), mp4 até 10 s. Mande um OU outro.",
+      "action=create model=sapiens-video-omni-12: o mesmo que sourceVideoId, por URL pública de host da casa (Bunny/Convex), mp4 até 15 s. Mande um OU outro.",
     ),
   sourceVideoMode: z
     .enum(["edit", "extend"])
@@ -613,7 +618,7 @@ export const videoSchema = z.object({
     .array(z.string())
     .optional()
     .describe(
-      "action=create (Seedance 2.0/Fast/Mini/2.5 até 4; H3 até 9; Omni 1.1 até 3; Kling, Hailuo, WAN 2.5 e 3.0 e os dois Spicy NÃO): generatedImages:_id da SUA galeria " +
+      "action=create (Seedance 2.0/Fast/Mini/2.5 até 4; H3 até 9; Omni 1.2 até 3; Kling, Hailuo, WAN 2.5 e 3.0 e os dois Spicy NÃO): generatedImages:_id da SUA galeria " +
         "como imagens de REFERÊNCIA (role 'ref'). Diferente de startImageId: NÃO viram o 1º frame, guiam " +
         "estilo/personagem/composição. Fluxo storyboard: gere a folha com sapiens_image " +
         "templateSlug='storyboard-sapiens-v1' (ou -vertical-v1) e passe folha + personagem aqui. " +
@@ -624,7 +629,7 @@ export const videoSchema = z.object({
     .array(httpUrl())
     .optional()
     .describe(
-      "action=create (mesmos motores e tetos de referenceImageIds: Seedance até 4, H3 até 9, Omni 1.1 até 3): URLs públicas (Bunny/Convex/Wikimedia) como imagens de " +
+      "action=create (mesmos motores e tetos de referenceImageIds: Seedance até 4, H3 até 9, Omni 1.2 até 3): URLs públicas (Bunny/Convex/Wikimedia) como imagens de " +
         "REFERÊNCIA (role 'ref'). Soma com referenceImageIds. No prompt, cite as referências por descrição " +
         "(ex: 'use the storyboard reference as ordered key poses; ignore line-sketch artifacts').",
     ),
@@ -634,7 +639,7 @@ export const videoSchema = z.object({
     .describe(
       "action=create (Seedance 2.0/Fast/Mini/2.5: 1 vídeo; H3: até 3, somando 15s; P-Video-2 Pro: até 3, somando 15s, cada SEGUNDO cobrado à parte, medido pelo servidor antes do débito, e cada clipe cobra no máximo a duração do take + 1s): URL pública (host da casa) de um VÍDEO DE MOVIMENTO (role 'refvideo' -> reference_videos, <=15s): " +
         "a coreografia/câmera do clipe GUIA o take sem ser recriado plano a plano (isso é o Shot Mimic). " +
-        "NÃO edita o clipe: o take sai com outra filmagem. Pra mudar um vídeo que já existe mantendo a filmagem, é model='sapiens-video-omni-11' com sourceVideoId/sourceVideoUrl. " +
+        "NÃO edita o clipe: o take sai com outra filmagem. Pra mudar um vídeo que já existe mantendo a filmagem, é model='sapiens-video-omni-12' com sourceVideoId/sourceVideoUrl. " +
         "Combina com o fluxo storyboard: folha = beats, vídeo = movimento, personagem = identidade. " +
         "Depth Maps do banco de motion servem direto (ADMIN: descubra com action=shadows-list).",
     ),
