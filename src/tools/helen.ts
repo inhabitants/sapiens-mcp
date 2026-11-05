@@ -31,7 +31,7 @@ export const helenSchema = z.object({
     .string()
     .optional()
     .describe(
-      "ElevenLabs: 'eleven_v3' (default) ou 'eleven_multilingual_v2'. Google: 'gemini-3.8-flash-tts' (default, Gemini 3.8 Flash TTS, fala as vozes nativas em português) ou 'gemini-3.1-flash-tts-preview' (só as clássicas; voz nativa pedida nele sai pelo 3.8). Fish: 's2.1-pro-free' (S2.1 Pro, default) ou 'drama-3' (Drama 3: a direção vai no próprio text, '[sussurrando] frase' muda a atuação, '<emphasis>palavra</emphasis>' crava uma palavra; mesmo preço). Id desconhecido no Fish vira S2.1 Pro.",
+      "ElevenLabs: 'eleven_v3' (default) ou 'eleven_multilingual_v2'. Google: 'gemini-3.8-flash-tts' (default, Gemini 3.8 Flash TTS, fala as vozes nativas em português) ou 'gemini-3.1-flash-tts-preview' (só as clássicas; voz nativa pedida nele sai pelo 3.8). Fish: 's2.1-pro-free' (S2.1 Pro, default) ou 'drama-3' (Drama 3: a direção vai no próprio text, '[sussurrando] frase' muda a atuação, '<emphasis>palavra</emphasis>' crava uma palavra; mesmo preço). Id desconhecido vira o padrão do motor: Gemini 3.8 Flash TTS no Google, S2.1 Pro no Fish.",
     ),
   voiceId: z
     .string()
@@ -49,7 +49,7 @@ export const helenSchema = z.object({
     .string()
     .optional()
     .describe(
-      "Fish: id da voz no acervo do fish.audio. Sem ele vai a voz default do modelo.",
+      "Fish: id da voz no acervo do fish.audio, só na conta admin. No membro o servidor ignora e a fala sai na voz da casa.",
     ),
   language: z
     .enum(["auto", "pt", "en", "ja", "es", "ko", "zh", "fr", "it", "de"])
@@ -136,7 +136,7 @@ const PRESETS = {
     ],
   },
   fish: {
-    note: "Fish Audio, dois modelos no mesmo preço, os dois detectam o idioma pelo texto. S2.1 Pro (default, sem modelId) é o motor mais forte da casa em japonês, mandarim e coreano: cena de anime, fala de personagem, narração em ja pedem ele. Drama 3 (modelId='drama-3') é a fala dirigida: a direção vai escrita no text, entre colchetes antes da frase ('[sussurrando, meio sem graça] ...') ou em tag por palavra (<whisper>, <emphasis>, <soft>, <fast>, <slow>, <stress>, <forceful>); a direção não é lida em voz alta. Voz opcional em fishReferenceId; sem ela, a voz default.",
+    note: "Fish Audio, dois modelos no mesmo preço, os dois detectam o idioma pelo texto. S2.1 Pro (default, sem modelId) é o motor mais forte da casa em japonês, mandarim e coreano: cena de anime, fala de personagem, narração em ja pedem ele. Drama 3 (modelId='drama-3') é a fala dirigida: a direção vai escrita no text, entre colchetes antes da frase ('[sussurrando, meio sem graça] ...') ou em tag por palavra (<whisper>, <emphasis>, <soft>, <fast>, <slow>, <stress>, <forceful>); a direção não é lida em voz alta. A voz é a da casa (fishReferenceId só vale na conta admin).",
     voices: [
       {
         fishReferenceId: null,
