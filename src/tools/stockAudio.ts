@@ -81,7 +81,7 @@ export const stockAudioSchema = z.object({
     .enum(["mirelo", "elevenlabs"])
     .optional()
     .describe(
-      "action=generate: 'mirelo' (padrão, 35 Sinapses/s, mín 70) | 'elevenlabs' (premium, 60/s, mín 120).",
+      "action=generate: 'elevenlabs' (padrão, 35 Sinapses/s, mín 70; segue o texto ao pé da letra) | 'mirelo' (35 Sinapses/s, mín 70; lê a descrição com liberdade).",
     ),
   promptInfluence: z
     .number()

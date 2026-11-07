@@ -27,6 +27,8 @@ const MODELS = ["feed", "reflexao", "case", "editorial"] as const;
 export const carrosselSchema = z.object({
   action: z
     .enum([
+      "create",
+      "search_images",
       "generate",
       "list",
       "get",
@@ -37,7 +39,8 @@ export const carrosselSchema = z.object({
       "cover",
     ])
     .describe(
-      "generate (gera um carrossel do zero a partir de brief OU artigo, 350 Sinapses, estorna se falhar) · list (seus carrosséis) · get (payload inteiro + catálogo de layouts, paletas, folhas e a assinatura, tudo pra você escrever os slides) · update (grava o payload inteiro de volta, normalizado no servidor) · auto_images (a IA escolhe fotos do banco pros slides, 60 Sinapses; generateMissing gera as que faltarem, ~450 cada) · generate_image (foto nova pra UM slide, ~450) · set_image (põe no slide uma peça SUA ou pública, pelo ID citável img_…, sem custo) · cover (a Capa IA: capa 16:9 com o texto queimado, fatiada em duas e posta na frente do carrossel, cobra pelo motor da capa).",
+      "create (GRÁTIS: cria o carrossel com o texto que VOCÊ escreveu, a casa só grava; sem payload nasce vazio e você segue por get → update) · search_images (GRÁTIS: busca fotos no banco da casa por palavra, devolve o id pra set_image) · generate (a IA da casa escreve do zero a partir de brief OU artigo, 350 Sinapses, estorna se falhar) · list (seus carrosséis) · get (payload inteiro + catálogo de layouts, paletas, folhas e a assinatura, tudo pra você escrever os slides) · update (grava o payload inteiro de volta, normalizado no servidor, grátis) · auto_images (a IA escolhe fotos do banco pros slides, 60 Sinapses; generateMissing gera as que faltarem, ~450 cada) · generate_image (foto NOVA pra UM slide, cobra pelo motor: imageModel 'flux-3-klein' é o barato, 60 Sinapses) · set_image (põe no slide uma foto do banco pelo stockImageId OU uma peça sua ou pública pelo img_…, grátis) · cover (a Capa IA: capa 16:9 com o texto queimado, fatiada em duas e posta na frente do carrossel, cobra pelo motor da capa). " +
+        "Caminho de custo ZERO: create → get (catálogo) → update (seus textos) → search_images → set_image em cada slide de foto → mande a url do editor pra pessoa abrir e baixar.",
     ),
   // generate
   brief: z
@@ -61,7 +64,17 @@ export const carrosselSchema = z.object({
   aspect: z
     .enum(["4:5", "9:16"])
     .optional()
-    .describe("generate: o TAMANHO da folha. '4:5' (padrão, o feed do Instagram mostra inteira) ou '9:16' (tela cheia). Dá pra trocar depois no editor."),
+    .describe("generate e create: o TAMANHO da folha. '4:5' (padrão, o feed do Instagram mostra inteira) ou '9:16' (tela cheia). Dá pra trocar depois no editor."),
+  // search_images
+  query: z
+    .string()
+    .optional()
+    .describe("search_images: o que procurar, em palavras do assunto da foto (ex.: 'mar noturno', 'mãos', 'cidade chuva'). Busca em título, tags e descrição. Sem query devolve as mais recentes."),
+  orientation: z
+    .enum(["vertical", "horizontal", "square"])
+    .optional()
+    .describe("search_images: filtra pelo formato da foto. Pra folha 4:5 ou 9:16, prefira 'vertical'."),
+  limit: z.number().int().min(1).max(40).optional().describe("search_images: quantas fotos (default 12, max 40)."),
   brandSlug: z
     .string()
     .optional()
@@ -80,17 +93,17 @@ export const carrosselSchema = z.object({
   carouselId: z
     .string()
     .optional()
-    .describe("O id do carrossel (vem do generate e do list). Obrigatório em get, update, auto_images, generate_image, set_image; opcional no cover (sem ele a capa só é gerada)."),
+    .describe("O id do carrossel (vem do create, do generate e do list). Obrigatório em get, update, auto_images, generate_image, set_image; opcional no cover (sem ele a capa só é gerada)."),
   payload: z
     .any()
     .optional()
     .describe(
-      "update: o payload INTEIRO, no shape do get: { theme: { palette, sheet, signature, brand?, fonts? }, slides: [{ id, templateId, slots, image }], meta }. Preserve image dos slides que você não mexeu e o theme inteiro (folha, assinatura, cor e fonte do brand): o que faltar volta pro padrão. " +
+      "create (opcional) e update: o payload INTEIRO, no shape do get: { theme: { palette, sheet, signature, brand?, fonts? }, slides: [{ id, templateId, slots, image }], meta }. Preserve image dos slides que você não mexeu e o theme inteiro (folha, assinatura, cor e fonte do brand): o que faltar volta pro padrão. " +
         "Na peça que veste um brand (palette 'brand'), theme.brand traz os tokens de cor (bg, text, accent, kicker em hex) e theme.fonts a tipografia ({ display: família do título, text: família do corpo }, sem fonts = a da casa). Pra trocar a cor de DESTAQUE, ponha o mesmo hex em accent e kicker. " +
         "Carrossel que vem de FORA (outro app, outro editor): case cada slide de lá com um layout do catálogo do get pelo PAPEL (role: capa, corpo, cta), pela foto (requiresImage) e pelos slots, e ponha o texto nos slots daquele layout; o estilo (cor, fonte, logo) vem do brand, não do layout. Layout de fora sem par no catálogo vira o corpo mais próximo, nunca layout inventado. " +
         "Foto NOVA não entra por URL aqui: use set_image (ID da peça) ou generate_image.",
     ),
-  title: z.string().optional().describe("update: novo título do carrossel (opcional)."),
+  title: z.string().optional().describe("create e update: o título do carrossel (opcional)."),
   baseUpdatedAt: z
     .number()
     .optional()
@@ -108,10 +121,20 @@ export const carrosselSchema = z.object({
     .describe("auto_images: true gera foto nova pros slides que o banco não cobriu (até 4, ~450 Sinapses cada). Avise o custo antes."),
   slideId: z.string().optional().describe("generate_image e set_image: o id do slide (vem do get)."),
   customPrompt: z.string().optional().describe("generate_image: direção da cena (opcional; sem ela a cena sai do texto do slide)."),
+  imageModel: z
+    .enum(["nano-banana-2", "flux-3-klein"])
+    .optional()
+    .describe(
+      "generate_image: o motor da foto. 'nano-banana-2' (Nano Banana 2.1, padrão: segue o estilo do banco por referência, preço do catálogo em sapiens_image action=models) ou 'flux-3-klein' (FLUX 3 Image Klein: o barato, 60 Sinapses a foto, texto puro; preço que vale SÓ aqui, no slide do carrossel, e a foto não rende prêmio de publicar). Avise o custo antes.",
+    ),
   handle: z
     .string()
     .optional()
-    .describe("set_image: o ID citável da peça (img_…), que o usuário copia no detalhe dela ou vem de sapiens_reference/sapiens_gallery. Peça sua ou pública."),
+    .describe("set_image: o ID citável da peça (img_…), que o usuário copia no detalhe dela ou vem de sapiens_reference/sapiens_gallery. Peça sua ou pública. Use handle OU stockImageId."),
+  stockImageId: z
+    .string()
+    .optional()
+    .describe("set_image: o id de uma foto do banco da casa (o campo id do search_images). Grátis. Use stockImageId OU handle."),
   focalX: z.number().min(0).max(1).optional().describe("set_image: ponto focal horizontal (0 a 1, default 0.5)."),
   focalY: z.number().min(0).max(1).optional().describe("set_image: ponto focal vertical (0 a 1, default 0.5)."),
   // cover
@@ -139,9 +162,43 @@ function coercePayload(raw: unknown): unknown {
 }
 
 export async function carrossel(args: CarrosselArgs): Promise<any> {
+  // O banco da casa é público (a linha ativa): a busca não pede login, e a
+  // pessoa pode escolher as fotos antes mesmo de conectar a conta.
+  if (args.action === "search_images") {
+    const limit = args.limit ?? 12;
+    const fotos: any[] = await convexQuery("stock:getImages", {
+      limit,
+      ...(args.query?.trim() ? { search: args.query.trim() } : {}),
+      ...(args.orientation ? { orientation: args.orientation } : {}),
+    });
+    return {
+      custo: 0,
+      total: fotos.length,
+      fotos: (fotos ?? []).map((f) => ({
+        id: f._id,
+        title: f.title,
+        description: f.description ?? null,
+        tags: f.tags ?? [],
+        width: f.width ?? null,
+        height: f.height ?? null,
+        thumbnailUrl: f.thumbnailUrl ?? f.url,
+      })),
+      dica: "Ponha a foto num slide com action=set_image carouselId=… slideId=… stockImageId=<id>. Só slide de layout com foto (requiresImage no get) mostra a imagem.",
+    };
+  }
+
   const sessionToken = getSessionToken();
 
   switch (args.action) {
+    case "create":
+      // GRÁTIS: quem escreve é você; a casa valida e grava.
+      return await convexMutation("carouselMcp:mcpCreateCarouselFree", {
+        sessionToken,
+        ...(args.payload !== undefined ? { payload: coercePayload(args.payload) } : {}),
+        ...(args.title?.trim() ? { title: args.title.trim() } : {}),
+        ...(args.aspect ? { aspect: args.aspect } : {}),
+      });
+
     case "generate": {
       const brief = args.brief?.trim();
       const fontes = [brief, args.articleId, args.userArticleId].filter(Boolean).length;
@@ -198,17 +255,24 @@ export async function carrossel(args: CarrosselArgs): Promise<any> {
         carouselId: need(args.carouselId, "carouselId"),
         slideId: need(args.slideId, "slideId"),
         ...(args.customPrompt ? { customPrompt: args.customPrompt } : {}),
+        ...(args.imageModel ? { imageModel: args.imageModel } : {}),
       });
 
-    case "set_image":
+    case "set_image": {
+      const handle = args.handle?.trim();
+      const stockImageId = args.stockImageId?.trim();
+      if (!!handle === !!stockImageId) {
+        throw new Error("set_image: passe UM dos dois, handle (img_…) OU stockImageId (do search_images).");
+      }
       return await convexMutation("carouselMcp:mcpSetSlideImage", {
         sessionToken,
         carouselId: need(args.carouselId, "carouselId"),
         slideId: need(args.slideId, "slideId"),
-        handle: need(args.handle, "handle"),
+        ...(handle ? { handle } : { stockImageId }),
         ...(args.focalX !== undefined ? { focalX: args.focalX } : {}),
         ...(args.focalY !== undefined ? { focalY: args.focalY } : {}),
       });
+    }
 
     case "cover":
       return await convexAction("capaIa:mcpCapaIa", {
