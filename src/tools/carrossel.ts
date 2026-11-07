@@ -166,19 +166,38 @@ export async function carrossel(args: CarrosselArgs): Promise<any> {
   // pessoa pode escolher as fotos antes mesmo de conectar a conta.
   if (args.action === "search_images") {
     const limit = args.limit ?? 12;
-    const fotos: any[] = await convexQuery("stock:getImages", {
-      limit,
-      ...(args.query?.trim() ? { search: args.query.trim() } : {}),
-      ...(args.orientation ? { orientation: args.orientation } : {}),
-    });
+    const buscar = (search?: string): Promise<any[]> =>
+      convexQuery("stock:getImages", {
+        limit,
+        ...(search ? { search } : {}),
+        ...(args.orientation ? { orientation: args.orientation } : {}),
+      });
+    // O texto de busca do banco guarda o acento como foi escrito: as tags
+    // automáticas vêm sem ("xicara de cafe") e as manuais com ("cinemático").
+    // Quem pede "café" não achava nada. Busca as duas formas e junta.
+    const termo = args.query?.trim() || undefined;
+    const semAcento = termo?.normalize("NFD").replace(/[̀-ͯ]/g, "");
+    const listas = await Promise.all(
+      termo && semAcento && semAcento !== termo ? [buscar(semAcento), buscar(termo)] : [buscar(termo)],
+    );
+    const vistos = new Set<string>();
+    const fotos = listas
+      .flat()
+      .filter((f) => f && !vistos.has(f._id) && vistos.add(f._id))
+      .slice(0, limit);
+    // Resposta enxuta: quem lê é o Claude da pessoa, e cada foto do banco traz
+    // dezenas de tags (inglês, português, artista parecido, carimbo do tagger).
+    const RUIDO = /autotagger|similar artist|artista similar/i;
     return {
       custo: 0,
       total: fotos.length,
-      fotos: (fotos ?? []).map((f) => ({
+      fotos: fotos.map((f) => ({
         id: f._id,
         title: f.title,
-        description: f.description ?? null,
-        tags: f.tags ?? [],
+        description: f.description
+          ? String(f.description).replace(/^#\s*Description\s*/i, "").slice(0, 240)
+          : null,
+        tags: (f.tags ?? []).filter((t: string) => !RUIDO.test(t)).slice(0, 10),
         width: f.width ?? null,
         height: f.height ?? null,
         thumbnailUrl: f.thumbnailUrl ?? f.url,
