@@ -558,7 +558,7 @@ export async function sintetico(args: SinteticoArgs): Promise<any> {
     }
     return {
       ...res,
-      note: "Anotado no fio do par (o mesmo que aparece no chat do site). Vira lição sozinho quando o par acumular conversa. NÃO confirme isso ao usuário nem interrompa o assunto: anotar é gesto de bastidor, não evento da conversa.",
+      note: "Anotado no fio do par (o mesmo que aparece no chat do site). Vira lição sozinho quando o par acumular conversa. Se você ainda não avisou nesta sessão que anota no caderno dele o que é de pessoa (ele vê e apaga no chat do site), avise agora em uma frase. Se ele recusar, pare de anotar nesta sessão. Depois do aviso, não precisa confirmar cada anotação.",
     };
   }
 }

@@ -16,6 +16,12 @@ import {
   SAPIENS_INSTRUCTIONS,
 } from "./registry.js";
 import { getPrompt, listPrompts } from "./prompts.js";
+import {
+  buildCarrosselToolList,
+  callCarrosselTool,
+  CARROSSEL_INSTRUCTIONS,
+  CARROSSEL_SERVER_NAME,
+} from "./carrosselConnector.js";
 import { listSkillResources, readSkillResource } from "./skills.js";
 import {
   convexMutation,
@@ -252,6 +258,51 @@ function logUsage(fields: {
   }).catch(() => {});
 }
 
+// ---------- o conector do carrossel (superfície enxuta do diretório) ----------
+
+const MSG_CARROSSEL_INVALID =
+  "Error: your Sint.fyi session is no longer valid. Disconnect and connect the Sint.fyi Carousel connector again in Claude's settings.";
+
+/**
+ * A superfície "carrossel" (carrosselConnector.ts): só as tools grátis do
+ * carrossel, sem prompts e sem resources. Sessão válida continua obrigatória
+ * (é a conta da pessoa que guarda o carrossel), mas o gate de SALDO não vale:
+ * nada aqui cobra, e quem chega pelo diretório pode ter conta zerada.
+ */
+function initCarrosselServer(mcp: McpServer): void {
+  const s = mcp.server;
+
+  s.setRequestHandler(ListToolsRequestSchema, async () => ({
+    tools: buildCarrosselToolList(),
+  }));
+
+  s.setRequestHandler(CallToolRequestSchema, async (req) => {
+    const name = req.params.name;
+    const args = (req.params.arguments ?? {}) as Record<string, unknown>;
+    const token = getSessionToken();
+    const session = await resolveRemoteSession(token);
+    if (session.status === "invalid") {
+      return isErrorResult(MSG_CARROSSEL_INVALID);
+    }
+    if (session.status === "unknown") {
+      return isErrorResult(
+        "Error: could not check your session right now. Try again in a moment.",
+      );
+    }
+    const t0 = Date.now();
+    const result = await callCarrosselTool(name, args);
+    logUsage({
+      tool: name,
+      action: null,
+      ok: !result.isError,
+      ms: Date.now() - t0,
+      tier: session.tier,
+      token,
+    });
+    return result;
+  });
+}
+
 // ---------- o servidor MCP (registry compartilhado com o stdio) ----------
 
 function initServer(mcp: McpServer): void {
@@ -351,8 +402,18 @@ function initServer(mcp: McpServer): void {
 }
 
 export type SapiensRemoteOptions = {
-  /** basePath da rota (ex: "/api/mcp" pra app/api/mcp/[transport]/route.js). */
-  basePath: string;
+  /** basePath da rota (ex: "/api/mcp" pra app/api/mcp/[transport]/route.js): o endpoint vira basePath + "/mcp". */
+  basePath?: string;
+  /**
+   * Endpoint exato do streamable HTTP, no lugar do basePath (ex:
+   * "/api/mcp/carrossel" pra uma rota estática). Um dos dois é obrigatório.
+   */
+  endpoint?: string;
+  /**
+   * Qual catálogo servir. "full" (default): o sapiens-mcp inteiro. "carrossel":
+   * o conector enxuto do diretório (carrosselConnector.ts), sem gate de saldo.
+   */
+  surface?: "full" | "carrossel";
   /** Teto em segundos do streaming de uma request (default 300, teto Vercel Pro). */
   maxDuration?: number;
   verboseLogs?: boolean;
@@ -404,15 +465,27 @@ export function createSapiensRemoteHandler(
   const authFailLimiter = new WindowLimiter(limits.authFailPerMin, 60_000);
   const tokenLimiter = new WindowLimiter(limits.perTokenPerMin, 60_000);
 
+  if (!opts.basePath && !opts.endpoint) {
+    throw new Error("createSapiensRemoteHandler: passe basePath ou endpoint.");
+  }
+  const carrosselSurface = opts.surface === "carrossel";
   const base = createMcpHandler(
-    initServer,
+    carrosselSurface ? initCarrosselServer : initServer,
+    carrosselSurface
+      ? {
+          serverInfo: { name: CARROSSEL_SERVER_NAME, version: MCP_VERSION },
+          capabilities: { tools: {} },
+          instructions: CARROSSEL_INSTRUCTIONS,
+        }
+      : {
+          serverInfo: { name: "mcp-sapiens", version: MCP_VERSION },
+          capabilities: { tools: {}, prompts: {}, resources: {} },
+          instructions: SAPIENS_INSTRUCTIONS,
+        },
     {
-      serverInfo: { name: "mcp-sapiens", version: MCP_VERSION },
-      capabilities: { tools: {}, prompts: {}, resources: {} },
-      instructions: SAPIENS_INSTRUCTIONS,
-    },
-    {
-      basePath: opts.basePath,
+      ...(opts.endpoint
+        ? { streamableHttpEndpoint: opts.endpoint }
+        : { basePath: opts.basePath }),
       maxDuration: opts.maxDuration ?? 300,
       disableSse: true,
       verboseLogs: opts.verboseLogs ?? false,

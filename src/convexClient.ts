@@ -35,9 +35,12 @@ function loadLocalEnv() {
     path.resolve(repoRoot(), "apps", "sapiens", ".env.local"),
     path.resolve(repoRoot(), "apps", "sapiens", ".env"),
   ];
+  // turbopackIgnore: o remoto (/api/mcp no site) importa este arquivo, e sem o
+  // comentário o Turbopack empacota o apps/sapiens inteiro naquela função. Na
+  // Vercel nenhum desses .env existe; o env vem do projeto.
   for (const p of candidates) {
-    if (fs.existsSync(p)) {
-      const content = fs.readFileSync(p, "utf8");
+    if (fs.existsSync(/*turbopackIgnore: true*/ p)) {
+      const content = fs.readFileSync(/*turbopackIgnore: true*/ p, "utf8");
       for (const line of content.split(/\r?\n/)) {
         const m = line.match(/^([A-Z0-9_]+)=(.*)$/);
         if (m && !process.env[m[1]]) {
@@ -69,9 +72,9 @@ function readPluginSessionToken(): string | null {
     path.resolve(repoRoot(), ".claude-plugin", "session.local.json"),
   ];
   for (const p of candidates) {
-    if (!fs.existsSync(p)) continue;
+    if (!fs.existsSync(/*turbopackIgnore: true*/ p)) continue;
     try {
-      const raw = JSON.parse(fs.readFileSync(p, "utf8")) as {
+      const raw = JSON.parse(fs.readFileSync(/*turbopackIgnore: true*/ p, "utf8")) as {
         sessionToken?: string;
         expiresAt?: number;
       };

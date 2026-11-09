@@ -1,6 +1,6 @@
 {
   "name": "sapiens-mcp",
-  "version": "1.113.1",
+  "version": "1.113.2",
   "mcpName": "com.sapiensinteticos/sapiens",
   "description": "MCP server pra operar o Sapiens Sintéticos (sapiensinteticos.com) pelo Claude Code: gerar imagem, escrever artigo, voz, música e mais, na sua conta. Login pelo código de sapiensinteticos.com/conectar-claude. mcprush.com-bd2545268b8471cdb213c674",
   "type": "module",
@@ -36,7 +36,7 @@
     "dev": "tsx src/index.ts",
     "start": "node dist/index.js",
     "pretest": "npm run build",
-    "test": "node --test --test-force-exit test/unit.test.mjs test/server.test.mjs test/remote.test.mjs test/remote-protect.test.mjs test/pontes.test.mjs",
+    "test": "node --test --test-force-exit test/unit.test.mjs test/server.test.mjs test/remote.test.mjs test/remote-protect.test.mjs test/pontes.test.mjs test/carrossel-connector.test.mjs",
     "prepublishOnly": "npm run build"
   },
   "repository": {
