@@ -35,8 +35,10 @@ O modelo repete esses porque soam competentes. Todos caem.
 - **Frase vazia**: "vale destacar", "é importante notar", "no final das contas", "quando se trata de", "nos dias de hoje".
 - **Rodízio de sinônimo**: o agente, depois o assistente, depois a ferramenta, tudo pra mesma coisa. Repetir a palavra certa é precisão.
 - **Kicker de falsa profundidade**: a última linha "funda" que vira aforismo. Deleta, não reescreve numa metáfora melhor. Termina na frase concreta que já estava lá.
-
-Hedge não entra nessa lista: "ao meu ver", "por enquanto", "talvez" assinam a voz e ficam.
+- **Muleta de hedge**: "ao meu ver", "na minha opinião", "tendo a achar", "talvez" que não carrega dúvida. Corta e afirma. Incerteza real fica, dita como fato: "testei só no plano grátis", "até o preço cair".
+- **Palavra difícil**: "utilizar", "possuir", "visando", "a fim de", "devido ao fato de". Usar, ter, pra, porque.
+- **Advérbio no lugar do número**: "melhorou significativamente", "caiu drasticamente". Fala o número.
+- **Passiva com agente**: "foi lançado pela OpenAI" vira "a OpenAI lançou". Quem fez é o sujeito.
 
 ## Revisar sem apagar a pessoa
 

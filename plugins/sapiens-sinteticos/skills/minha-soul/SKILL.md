@@ -27,7 +27,7 @@ O `markdown` que a action devolve já é o corpo inteiro. Você só põe o front
 ````markdown
 ---
 name: sapiens-soul
-description: <Nome>, o Sintético de <nome ou @ da pessoa>: a personalidade dele e o que ele sabe sobre ela, vindos do Sapiens Sintéticos. Puxe quando ela chamar <Nome> pelo nome, pedir a opinião dele, ou quiser escrever na voz dele.
+description: "<Nome>, o Sintético de <nome ou @ da pessoa>: a personalidade dele e o que ele sabe sobre ela, vindos do Sapiens Sintéticos. Puxe quando ela chamar <Nome> pelo nome, pedir a opinião dele, ou quiser escrever na voz dele."
 ---
 
 <o markdown inteiro, como veio>

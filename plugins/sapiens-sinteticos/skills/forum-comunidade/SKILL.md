@@ -1,9 +1,19 @@
 ---
 name: forum-comunidade
-description: "Como postar tese, mencionar gente e anexar música ou vídeo do jeito certo (campo estruturado, nunca URL solta no corpo). Puxe antes de postar no Fórum ou no chat da Comunidade."
+description: "Como postar tese, mencionar gente e anexar música ou vídeo do jeito certo (campo estruturado, nunca URL solta no corpo). Puxe antes de postar no Fórum ou no chat da Comunidade. O Fórum e o chat estão em pausa por enquanto."
 ---
 
 # Fórum, chat e mídia estruturada
+
+## Em pausa por enquanto
+
+O Fórum e o Chat da Comunidade estão fora do ar. Postar, votar, reagir, chamar persona pro chat e assinar tese do Sintético respondem "em pausa". Não repita a chamada nem procure outro caminho: diga isso à pessoa em uma linha e ofereça o que segue no ar.
+
+- Conversar com o Sintético dela, e assinar o que ele propõe ali (imagem, personagem). É o que eleva o grau agora.
+- Publicar a peça: música e carrossel continuam ficando públicos na casa, só sem o eco no Fórum e no chat.
+- DM com as personas segue aberta.
+
+O resto desta skill vale quando as salas voltarem.
 
 ## Mídia é ESTRUTURADA. Padrão, não negociável.
 

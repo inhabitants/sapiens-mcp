@@ -16,7 +16,7 @@ Use a API quando a pessoa quer automatizar fora da conversa (script, app, agente
 
 ## Onde fica
 
-Tudo mora em Developers, no fim do menu do site: criar e revogar chave, teto de gasto por dia de cada chave, recarga (cartão ou USDC da carteira dela) e o extrato. Se a seção API não aparece lá, ela ainda não abriu pra conta.
+Tudo mora em Developers, no fim do menu do site: criar e revogar chave, teto de gasto por dia de cada chave, recarga (cartão, ou stablecoin: USDC na Base, da carteira dela) e o extrato. Se a seção API não aparece lá, ela ainda não abriu pra conta.
 
 A chave aparece UMA vez, na criação. Peça pra ela guardar numa variável de ambiente (`SAPIENS_API_KEY`). Nunca peça a chave no chat e nunca escreva a chave em código, commit ou log.
 
@@ -37,6 +37,24 @@ Baixe e leia ANTES de escrever o código. Num agente com pasta de skills, ele en
 - Vídeo cota de graça antes (`POST /videos/quote`), aceita `webhook_url` pra avisar quando termina e devolve a `url` do mp4 guardado. Falha do motor volta pro saldo sozinha.
 - Saldo que acabou volta 402 `insufficient_balance` com `recharge_url` no erro: o código da pessoa deve mostrar esse link (recarga no cartão ou em stablecoin) em vez de só falhar.
 - Uma chamada de teste antes de qualquer lote. Nunca vídeo em laço.
+
+## O saldo é em dólar, à parte das Sinapses
+
+O saldo da API é em DÓLAR e mora separado das Sinapses: recarregar Sinapse não põe nada na API, e o dólar da API não vira Sinapse. Pra ver pela conversa o saldo, o livre (o saldo menos o que está preso em chamada aberta), o crédito de teste, o gasto do dia, as chaves e a recarga automática: `sapiens_meta action=api`. É só leitura. Recarga, chave nova, teto da chave e carteira são no site, em Developers, com a carteira da pessoa e o segundo fator.
+
+## Timeout não é falha: nunca repita uma criação paga às cegas
+
+Pedido que voltou timeout, ou conexão que caiu no meio, pode ter gerado E cobrado. Antes de repetir, confira:
+
+- Imagem (`POST /images/generations`): mande `Idempotency-Key` com um UUID por pedido e, se a conexão cair, repita com a MESMA chave. Pedido pronto volta igual, sem cobrar de novo. Guarde o `request_id` (no corpo e no header `x-sapiens-request-id`) e consulte `GET /images/generations/{request_id}`: se o pedido existe, ele já foi cobrado.
+- Vídeo (`POST /videos`), áudio (`POST /audio`) e voz (`POST /audio/speech`) aceitam `Idempotency-Key` do mesmo jeito, por 24 horas: a repetição com o MESMO corpo e a MESMA chave devolve o mesmo trabalho (ou a mesma fala), sem cobrar de novo (`x-sapiens-idempotent-replay: true`); ainda entrando, 409 `idempotency_in_progress` com `Retry-After` (espere e repita com a mesma chave); a mesma chave com outro corpo, 422. Fala sem arquivo guardado (mandada com `store: false`, em `pcm`, ou com a faixa apagada do acervo) não tem o que devolver: a repetição volta 409 `idempotency_already_charged` (já cobrada, nada cobrado de novo); vídeo ou áudio cobrado sem trabalho que a porta leia volta o mesmo 409, e aí confira em `GET /videos` ou `GET /audio`. Mande uma chave nova por pedido novo.
+- Resposta com `x-should-retry: false` no vídeo, no áudio ou na voz (502 `upstream_error`; 503 só no vídeo; 500 `internal_error` no vídeo e no áudio quando entrou na fila e o registro falhou): o balcão pode ter recebido o pedido sem devolver o ticket. Nada foi cobrado da pessoa e o pedido não aparece em `GET /videos` nem `GET /audio`. NÃO repita sozinho com a mesma chave: ela fica presa e volta 409 `idempotency_ambiguous` (também com `x-should-retry: false`), sem gerar. Pra gerar de novo, use uma chave nova. O SDK da OpenAI respeita o header e não repete.
+- Vídeo e áudio respondem na hora com o `id` do trabalho: guarde e consulte `GET /videos/{id}` ou `GET /audio/{id}` em vez de criar outro. Perdeu o id? `GET /videos` e `GET /audio` listam os trabalhos da conta, do mais novo pro mais velho, com `limit` (1 a 100, 20 sem ele) e `after` (o `last_id` da página anterior): o cobrado aparece ali. Receita não aceita a chave: guarde o id e consulte `GET /receitas/{id}`; sem ele, olhe o acervo (`source: api`, com `sapiens_gallery`) e o gasto do dia em `GET /balance`.
+- Texto não tem `Idempotency-Key`: confira o gasto do dia em `GET /balance` antes de repetir.
+- Texto sem stream tem cerca de 270 s pra sair inteiro, contados da chegada do pedido. Passou disso, volta 504 `upstream_timeout` sem cobrar, e repetir igual tende a estourar de novo. Resposta longa (modelo de raciocínio, `max_tokens` alto) vai com `stream: true`: o texto chega enquanto sai. No stream, a conexão fecha em cerca de 285 s, com `finish_reason: "length"` se o motor ainda escrevia.
+- 400 `stream_required` no texto: a CONTA estourou o prazo sem stream 3 vezes na última hora (e depois do primeiro estouro o teto de abertos sem stream encolhe). Nada foi cobrado; repita com `stream: true`, que este balde não trava.
+- 429 `too_many_open_requests` no texto: a conta já tem 10 pedidos de texto sem stream em aberto. Nada foi cobrado; espere o `Retry-After` (5 s) e repita, o que o SDK da OpenAI já faz sozinho. Com `stream: true` esse teto não vale.
+- 429 `too_many_timeouts` no texto com stream: a CONTA levou 3 vezes na última hora o stream que fechou por prazo sem o motor entregar nada (o 504 `upstream_timeout`, ou o stream que acabou vazio em cerca de 285 s). Nada foi cobrado; espere o `Retry-After` (a janela vira em até 1 hora) e repita. A resposta traz `x-should-retry: false`, então o SDK da OpenAI não repete sozinho. O texto sem stream não trava por isso. Depois do primeiro desses na hora, o teto de pedidos com stream em aberto da conta encolhe (429 `too_many_open_requests` com `Retry-After` de 5 s).
 
 ## Modelos de texto de preço variável: sapiens-auto e Jev Router
 

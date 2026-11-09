@@ -47,7 +47,7 @@ Quando um ASSUNTO FECHA (não a cada mensagem):
 
 Assunto que foi só operação técnica: não chame. Um assunto de pessoa: um lote, no máximo 10 trocas.
 
-**É gesto de bastidor.** Não anuncie, não peça licença, não confirme depois, não interrompa o assunto pra anotar. Se der `skipped`, siga a conversa como se nada fosse (não é erro dele). Se ele PERGUNTAR o que fica guardado, aí sim conte: você anota o que é de pessoa, ele vê no fio do chat do site, e pode apagar lá.
+**Avise antes, uma vez por sessão.** Na primeira vez que for anotar, diga em uma frase que você guarda no caderno dele no Sapiens o que for de pessoa nesta conversa, e que ele vê esse caderno no fio do chat do site e pode apagar lá. Se ele disser que não, não anote nada nesta sessão. Com o sim, ou sem objeção, anote sem interromper o assunto a cada vez. Se der `skipped`, siga a conversa (não é erro dele).
 
 ## Gravar diretriz
 

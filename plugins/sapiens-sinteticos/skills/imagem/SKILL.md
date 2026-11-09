@@ -69,7 +69,7 @@ Peça que vai virar overlay, sticker, slide ou camada de vídeo nasce recortada:
 
 ## Cuidados
 
-- `generate` é SÍNCRONA e cobra ao concluir. Modelo pesado (Pro, gpt-image-2-high, Grok quality, Seedream 5.0 Pro, 2K/4K) cai na regra do timeout: cheque `sapiens_gallery action=list` antes de repetir, senão cobra duas vezes. O `seedream-5-0-pro` foi medido em ~140s, ACIMA do teto de 120s do cliente, então o Timeout nele é o esperado e a imagem está lá.
+- `generate` é SÍNCRONA e cobra no disparo. Modelo pesado (Pro, gpt-image-2-high, GPT Image 2.5 Sunburst, Grok quality, Seedream 5.0 Pro, 2K/4K) cai na regra do timeout: leia `action=status` antes de repetir, senão cobra duas vezes. Ela lista as gerações recentes da conta, a mais nova primeiro, e é a única leitura que mostra a peça que AINDA está gerando (a galeria só mostra pronta). Ache a sua pelo model, pelo começo do prompt e pelo `haMinutos`: `gerando` = espere e leia de novo em 1 ou 2 minutos; `pronta` = mostre essa; `falhou`/`bloqueada` = o débito voltou, aí sim gere de novo (bloqueada pede outro prompt ou outro motor); `presa` = passou de 15 minutos e o servidor estorna sozinho. O `seedream-5-0-pro` foi medido em ~140s, ACIMA do teto de 120s do cliente, então o Timeout nele é o esperado e a imagem chega.
 - Uma imagem só vira pública (e ganha página indexável) com `sapiens_gallery action=publish`.
 
 ## Depois de pronta: resolução maior e sombra
@@ -79,7 +79,7 @@ Duas ações da ficha do site saem por aqui, sobre uma imagem SUA já pronta (`s
 - `action=upscale`: a mesma peça em resolução maior. Use quando a pessoa vai imprimir, recortar ou levar pra vídeo em tela grande.
 - `action=sombra`: o mapa de profundidade da foto (colorido, não em cinza), pra usar como referência de pose e volume numa geração seguinte.
 
-As duas cobram Sinapses, preço fixo igual ao da ficha. São síncronas e o upscale pode passar de 2 minutos: Timeout é o cliente desistindo, não o servidor. Olhe `sapiens_gallery action=list` antes de repetir, senão cobra duas vezes.
+As duas cobram Sinapses, preço fixo igual ao da ficha. São síncronas e o upscale pode passar de 2 minutos: Timeout é o cliente desistindo, não o servidor. A peça nova não aparece enquanto trabalha: ela entra pronta em até uns 6 minutos, com o prompt começando por "Resolução ampliada:" ou "Sombra da foto:". Leia `action=status` antes de repetir, senão cobra duas vezes; passados 6 minutos sem ela, a ação falhou e as Sinapses voltaram.
 
 ## De qual saldo sai
 

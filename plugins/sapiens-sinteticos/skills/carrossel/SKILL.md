@@ -1,6 +1,6 @@
 ---
 name: carrossel
-description: "O carrossel do Instagram pelo agente: gerar do brief ou de um artigo, reescrever os slides direto no payload, pôr foto da galeria da pessoa, a capa IA, e onde ela baixa. Puxe ANTES de sapiens_carrossel."
+description: "O carrossel do Instagram pelo agente: o caminho de custo zero (você escreve, foto do banco da casa), gerar do brief ou de um artigo pela IA da casa, reescrever os slides direto no payload, pôr foto da galeria da pessoa, a capa IA, e onde ela baixa. Puxe ANTES de sapiens_carrossel."
 ---
 
 # Carrossel: gerar, escrever, pôr foto e entregar
@@ -9,12 +9,25 @@ description: "O carrossel do Instagram pelo agente: gerar do brief ou de um arti
 
 Um carrossel é uma RECEITA: tema (paleta, folha e assinatura) mais slides, cada um com um layout (`templateId`) e os textos dele (`slots`). O desenho sai dessa receita no editor da pessoa, que é também onde ela baixa os arquivos. Você escreve a receita; ela abre, confere e baixa.
 
-## O fluxo
+## O caminho de custo zero (você escreve, a casa grava)
+
+Quem escreve o texto é VOCÊ, no plano da pessoa: a casa não gasta token, então não cobra. É o caminho padrão quando ela só quer o carrossel pronto e não pediu a IA da casa.
+
+1. `action=create` cria o carrossel. Sem `payload` nasce vazio; com `aspect` escolhe a folha (`4:5` padrão). Grátis, teto de 20 novos por dia por conta.
+2. `action=get` traz o catálogo de layouts (os `slots` e o limite de cada um, quais têm foto em `requiresImage`).
+3. Escreva os slides e grave com `action=update` (payload inteiro + `baseUpdatedAt`). Puxe a skill `voz-da-casa` antes. Já sabendo o catálogo, dá pra mandar o payload direto no `create` e pular este passo.
+4. `action=search_images query=<o assunto da foto> orientation=vertical` busca no banco de fotos da casa, grátis e sem login. Escolha pelo título, tags e descrição.
+5. `action=set_image stockImageId=<id>` em cada slide de layout com foto. Grátis.
+6. Mande a `url` do editor: ela abre, confere e baixa.
+
+Foto que o banco não cobre: `action=generate_image` gera uma nova pra um slide. `imageModel=flux-3-klein` (FLUX 3 Image Klein) é o barato, 60 Sinapses a foto, texto puro: preço que vale SÓ no slide do carrossel, e essa foto não rende o prêmio de publicar se for publicada sozinha. `nano-banana-2` (Nano Banana 2.1, o padrão) segue o estilo do banco por referência e cobra pelo catálogo (`sapiens_image action=models`). Avise o preço e espere o sim antes.
+
+## O fluxo com a IA da casa
 
 1. `sapiens_carrossel action=generate` com `brief` (o tema e o ângulo, um parágrafo) OU `articleId` (artigo publicado) OU `userArticleId` (artigo dela). Custa 350 Sinapses, já com a escolha de fotos, e estorna se falhar. Devolve o `id` e a `url` do editor.
 2. `action=get` traz o payload inteiro e o catálogo: os layouts com os slots de cada um, as paletas, as folhas e a assinatura. Leia antes de mexer.
 3. `action=update` grava o payload INTEIRO de volta. Reescreva os textos com a voz da pessoa (puxe a skill `voz-da-casa`). Mande o `theme` inteiro e o `image` de todo slide que você não mexeu: o que faltar volta pro padrão e a foto do slide some. Mande também `baseUpdatedAt` com o `updatedAt` do get: se o carrossel mudou depois (uma foto gerada, uma edição dela no editor), o update recusa em vez de apagar isso, e aí você faz get de novo. Foto nova não entra por URL no update, só pelo passo 4.
-4. Foto: `action=auto_images` (60) deixa a IA escolher do banco; `action=set_image` põe uma peça DA PESSOA pelo ID citável (`img_…`, de `sapiens_reference` ou `sapiens_gallery`), de graça; `action=generate_image` gera uma nova pra um slide, ~450 cada.
+4. Foto: `action=auto_images` (60) deixa a IA escolher do banco; `action=set_image` põe uma foto do banco (`stockImageId`, do `search_images`) ou uma peça DA PESSOA pelo ID citável (`img_…`, de `sapiens_reference` ou `sapiens_gallery`), de graça; `action=generate_image` gera uma nova pra um slide, pelo preço do motor (`imageModel`).
 5. Mande a `url` do editor. É lá que ela confere, ajusta e baixa.
 
 ## A forma e o tamanho

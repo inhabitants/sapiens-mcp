@@ -35,7 +35,7 @@ Depois de pronta: `action=publish` põe a faixa no Acervo da Comunidade (só adm
 Efeito é CURTO. Música inteira é no Musicator, não aqui.
 
 1. Procure pronto primeiro: `sapiens_stock_audio action=list kind=sfx`. Grátis.
-2. Não achou: `action=generate` com `prompt` e `durationSeconds` (1 a 15, default 5) e `provider` ('mirelo' padrão 35 Sinapses/s mín 70, 'elevenlabs' premium 60/s mín 120). `promptInfluence` (0..1) só vale no elevenlabs.
+2. Não achou: `action=generate` com `prompt` e `durationSeconds` (1 a 15, default 5) e `provider` ('elevenlabs' padrão 35 Sinapses/s mín 70, 'mirelo' 35 Sinapses/s mín 70). `promptInfluence` (0..1) só vale no elevenlabs.
 3. É assíncrono: devolve `generationId`, acompanhe com `action=generation-status` até 'ready' (traz audioUrl) ou 'failed' (reembolsa sozinho).
 
 ## Sonorizar um clipe

@@ -21,9 +21,11 @@ Não despeje a lista inteira de tools. O start guia.
 
 | O que gerou | Onde conferir |
 |---|---|
-| imagem | `sapiens_gallery action=list` |
+| imagem (generate, upscale, sombra) | `sapiens_image action=status` |
 | artigo do perfil | `sapiens_write action=list` |
 | carrossel | `sapiens_carrossel action=list` |
+
+Imagem tem leitura própria porque a galeria (`sapiens_gallery action=list`) só mostra peça PRONTA: a que ainda está gerando não aparece lá, parece que falhou, e repetir cobra de novo. O `status` lista as gerações recentes da conta com o estado de cada uma: `gerando` (já cobrou, NÃO gere de novo, leia de novo em 1 ou 2 minutos), `pronta` (mostre essa), `falhou` ou `bloqueada` (o débito voltou, aí sim gere de novo) e `presa` (passou de 15 minutos gerando, a varredura do servidor estorna).
 
 **2. Disjuntor anti-loop.** Três falhas seguidas no MESMO tool fazem o cliente marcar o servidor como "unreachable" por ~56s. Parece que "o MCP caiu", mas foi argumento faltando. Quando um tool volta erro de validação ("exige X", "falta Y"), LEIA o erro e refaça a chamada COM o que falta. Nunca repita a chamada idêntica que falhou.
 

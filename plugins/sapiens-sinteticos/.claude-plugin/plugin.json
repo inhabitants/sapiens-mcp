@@ -1,7 +1,7 @@
 {
   "name": "sapiens-sinteticos",
   "displayName": "Sapiens Sintéticos",
-  "version": "1.102.1",
+  "version": "1.113.2",
   "description": "Para o Claude Code: as skills do Sapiens Sintéticos e o servidor da sua conta, rodando no seu computador. Gera em Sinapse ou com a sua chave (fal, Kie, WaveSpeed, Replicate ou OpenRouter), guardada na sua máquina.",
   "author": {
     "name": "Sapiens Sintéticos",
