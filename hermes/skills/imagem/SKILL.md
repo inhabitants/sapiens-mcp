@@ -19,11 +19,10 @@ O preço de `models` é o do 1K. Sem `size`, nano-banana-2, nano-banana-max e a 
 
 ## Escolher motor em dois passos
 
-A lista de action=models é longa e segue a ordem da prateleira da casa, não o preço, e nenhuma das duas é a pergunta de quem vai gerar. Três campos do payload resolvem isso:
+A lista de action=models é longa e segue a ordem da prateleira da casa, não o preço, e nenhuma das duas é a pergunta de quem vai gerar. Dois campos do payload resolvem isso:
 
-- bestFor: pra que o motor serve, num vocabulário fechado (foto, anime, texto pra palavra legível na arte, personagem pra segurar a mesma pessoa, adulto). FILTRE por aqui antes de comparar preço.
+- bestFor: pra que o motor serve, num vocabulário fechado (foto, anime, texto pra palavra legível na arte, personagem pra segurar a mesma pessoa). FILTRE por aqui antes de comparar preço.
 - family + variant: motores com a MESMA family são o mesmo motor em versão diferente (Flux.2 Klein tem Base, Anime, Celular e Transparência; Krea 2 tem Realism e Transparência; Gemini tem 3 Pro e Nano Banana 2.1; GPT Image tem 2 Low, 2 High, 2.5 Flare e 2.5 Sunburst). O retorno traz um índice families já montado.
-- ousadia: nudez é NÍVEL, não motor. Quando o campo vem preenchido, a mesma escolha tem uma versão com nudez: gere com `ousadia.model` + `loraIntensity` (suave, medio, forte) pra ter nudez, e com o id da linha pra não ter. Não procure um motor "+18" ou "Nu" separado na lista: ele virou este campo.
 
 Texto legível na arte (placa, rótulo, pôster com acento): a família GPT Image é a de referência. Dentro dela, o 2.5 acerta letra pequena e acento cobrando menos que o 2 High; o Flare é o rápido, o Sunburst segura composição densa e edição em várias voltas. O preço vivo de cada um sai em action=models.
 

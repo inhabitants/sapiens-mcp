@@ -60,13 +60,13 @@ sapiens_character action=activate
 
 **O `style` é o irmão dele, e responde a outra pergunta.** A forma diz que CORPO é esse; o traço diz em que TÉCNICA ele é feito, e as mesmas três peças leem daqui. `auto` (o default) não afirma técnica nenhuma: a peça sai no traço que as imagens de referência já têm, e é isso que você quer na maioria das vezes. `realista` é fotografia, `anime` é cel shading com contorno de tinta, `manhwa` é pintura suave de webtoon, `3d` é render com material e oclusão, e `custom` usa a linha que você escreve em `styleNote` ("aquarela sobre papel texturizado, cor lavada", até 140 caracteres). Vale escrever quando o personagem TEM técnica definida: não dá pra usar folha de desenho num personagem realista, nem folha de realismo num desenho. Conserto de quem já existe, sem custo: `sapiens_character action=set_card characterId="<id>" style="realista"`.
 
-**Personagem que existe fora da casa tem ENDEREÇO, e o endereço mora na ficha.** Persona que roda de verdade tem conta em rede, tem Fanvue, tem um email que responde, e isso não é enfeite de cadastro: é o que separa uma ficha de um ser que a pessoa consegue seguir. Uma chamada, de graça, e é MERGE (mandar uma rede não apaga as outras):
+**Personagem que existe fora da casa tem ENDEREÇO, e o endereço mora na ficha.** Persona que roda de verdade tem conta em rede, tem um email que responde, e isso não é enfeite de cadastro: é o que separa uma ficha de um ser que a pessoa consegue seguir. Uma chamada, de graça, e é MERGE (mandar uma rede não apaga as outras):
 
 ```
-sapiens_character action=set_presence characterId="<id>" socials='{"instagram":"helenailith","fanvue":"helen"}' websiteUrl="helenai.wtf" email="helen@casa.com"
+sapiens_character action=set_presence characterId="<id>" socials='{"instagram":"helenailith"}' websiteUrl="helenai.wtf" email="helen@casa.com"
 ```
 
-Redes aceitas: instagram, tiktok, youtube, x, threads, bluesky, twitch, spotify, fanvue, patreon, onlyfans, telegram. Manda só o handle (o link inteiro colado também passa, o servidor corta). O email é o que responde POR ELE, não o seu. Pra apagar uma rede, manda ela vazia: `socials='{"instagram":""}'`. O que já está escrito volta em `action=get`, em duas formas: `presence` é o handle cru (o que se reedita) e `presenceLinks` é o link já montado (o que se mostra). A página pública do personagem desenha isso embaixo do nome.
+Redes aceitas: instagram, tiktok, youtube, x, threads, bluesky, twitch, spotify, patreon, telegram. Manda só o handle (o link inteiro colado também passa, o servidor corta). O email é o que responde POR ELE, não o seu. Pra apagar uma rede, manda ela vazia: `socials='{"instagram":""}'`. O que já está escrito volta em `action=get`, em duas formas: `presence` é o handle cru (o que se reedita) e `presenceLinks` é o link já montado (o que se mostra). A página pública do personagem desenha isso embaixo do nome.
 
 A partir daí ele é personagem reutilizável: entra como referência nas gerações daqui (`referenceImageUrls` em `sapiens_image`), rende ficha oficial desenhada no traço dele (`generate_sheet`) e aparece no perfil. Personagem que fica solto na galeria vira imagem bonita e some.
 
