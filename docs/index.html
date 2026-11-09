@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>sapiens-mcp · Sapiens Sintéticos</title>
+<meta name="description" content="Operate your Sapiens Sintéticos account from Claude, Cursor, Gemini CLI or any MCP client. Image, video, article, voice, music and your Repertório, from one conversation.">
+<link rel="canonical" href="https://inhabitants.github.io/sapiens-mcp/">
+<link rel="icon" href="https://www.sapiensinteticos.com/favicon.ico">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sapiens Sintéticos">
+<meta property="og:title" content="sapiens-mcp · You talk. Your AI does the work.">
+<meta property="og:description" content="Your Sapiens Sintéticos account inside any MCP client. On the official MCP registry as com.sapiensinteticos/sapiens.">
+<meta property="og:url" content="https://inhabitants.github.io/sapiens-mcp/">
+<meta property="og:image" content="https://sapiensinteticos.b-cdn.net/static/assets/og-default.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Geist+Mono:wght@400;500&family=League+Spartan:wght@300;400;600&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "sapiens-mcp",
+  "alternateName": "Sapiens MCP",
+  "url": "https://inhabitants.github.io/sapiens-mcp/",
+  "applicationCategory": "DeveloperApplication",
+  "applicationSubCategory": "Model Context Protocol Server",
+  "operatingSystem": "Any (MCP client)",
+  "identifier": "com.sapiensinteticos/sapiens",
+  "license": "https://spdx.org/licenses/MIT.html",
+  "downloadUrl": "https://www.npmjs.com/package/sapiens-mcp",
+  "sameAs": [
+    "https://github.com/inhabitants/sapiens-mcp",
+    "https://www.npmjs.com/package/sapiens-mcp",
+    "https://www.sapiensinteticos.com/sapiens-mcp"
+  ],
+  "publisher": {
+    "@type": "Organization",
+    "@id": "https://www.sapiensinteticos.com/#organization",
+    "name": "Sapiens Sintéticos",
+    "url": "https://www.sapiensinteticos.com"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD",
+    "description": "Connecting is free; generation spends Sinapses, the house credit, or your own provider key."
+  }
+}
+</script>
+<style>
+:root {
+  --bg: #0a0a0a;
+  --surface: #121212;
+  --line: #2a2a2a;
+  --ink: #F5F0E6;
+  --dim: #c4b8a0;
+  --faint: #8a8172;
+  --accent: #8EF1A4;
+  --accent-ink: #0a0a0a;
+  --serif: "Cormorant Garamond", Georgia, serif;
+  --sans: "League Spartan", system-ui, sans-serif;
+  --mono: "Geist Mono", ui-monospace, Menlo, monospace;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 1.55;
+  overflow-x: hidden;
+}
+a { color: inherit; text-underline-offset: 3px; text-decoration-color: color-mix(in srgb, var(--accent) 55%, transparent); }
+a:hover { color: var(--accent); }
+img, video { display: block; max-width: 100%; }
+.wrap { width: 100%; max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+@media (min-width: 768px) { .wrap { padding: 0 32px; } }
+
+/* topo */
+.top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-top: 20px; padding-bottom: 20px; }
+.mark { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.mark img.logo { width: 26px; height: 26px; }
+.mark img.word { height: 44px; width: auto; }
+.top nav { display: flex; gap: 20px; font-size: 15px; color: var(--dim); }
+.top nav a { text-decoration: none; }
+
+/* hero */
+.hero { display: grid; gap: 40px; padding-top: 48px; padding-bottom: 72px; align-items: center; }
+@media (min-width: 900px) { .hero { grid-template-columns: 1.05fr 1fr; gap: 56px; padding-top: 72px; } }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--dim); margin: 0 0 20px; }
+.eyebrow b { color: var(--accent); font-weight: 500; }
+h1 { font-family: var(--serif); font-weight: 500; font-style: italic; font-size: clamp(44px, 8vw, 84px); line-height: 1; letter-spacing: -.01em; margin: 0 0 24px; }
+.lede { font-size: 20px; color: var(--dim); max-width: 34ch; margin: 0 0 32px; }
+.lede strong { color: var(--ink); font-weight: 400; }
+.ctas { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 28px; }
+.btn { display: inline-flex; align-items: center; min-height: 48px; padding: 0 22px; border-radius: 999px; font-weight: 600; font-size: 16px; text-decoration: none; transition: transform 250ms var(--ease-out), background 250ms var(--ease-out); }
+.btn.primary { background: var(--accent); color: var(--accent-ink); }
+.btn.primary:hover { color: var(--accent-ink); transform: translateY(-1px); }
+.btn.ghost { border: 1px solid var(--line); color: var(--ink); }
+.btn.ghost:hover { border-color: var(--dim); color: var(--ink); }
+.hero figure { margin: 0; position: relative; }
+.hero figure img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 4px; }
+
+/* linha de comando: recua, o copiar é o único contraste */
+.cmd { display: flex; align-items: center; gap: 12px; max-width: 100%; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); padding: 10px 10px 10px 16px; }
+.cmd pre { margin: 0; flex: 1; min-width: 0; overflow-x: auto; font-family: var(--mono); font-size: 13.5px; line-height: 1.6; color: var(--faint); }
+.cmd pre::-webkit-scrollbar { height: 4px; }
+.cmd pre::-webkit-scrollbar-thumb { background: var(--line); }
+.copy { flex: none; align-self: flex-start; font-family: var(--mono); font-size: 12px; color: var(--accent); background: transparent; border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent); border-radius: 4px; padding: 5px 10px; cursor: pointer; }
+.copy:hover { background: color-mix(in srgb, var(--accent) 10%, transparent); }
+
+/* seções */
+section { border-top: 1px solid var(--line); padding: 72px 0; }
+h2 { font-family: var(--serif); font-weight: 500; font-size: clamp(34px, 5vw, 52px); line-height: 1.05; margin: 0 0 16px; }
+.sub { color: var(--dim); max-width: 52ch; margin: 0 0 40px; }
+
+.film { display: grid; gap: 32px; align-items: center; }
+@media (min-width: 900px) { .film { grid-template-columns: 1fr 1.6fr; } }
+.film video { width: 100%; aspect-ratio: 16 / 9; background: var(--surface); border-radius: 4px; }
+.film .links { font-size: 15px; color: var(--dim); }
+
+.doors { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+@media (min-width: 768px) { .doors { grid-template-columns: 1fr 1fr; } }
+.door { background: var(--bg); padding: 28px 24px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+@media (min-width: 768px) { .door.wide { grid-column: 1 / -1; } }
+.door .where { font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--accent); }
+.door h3 { font-family: var(--sans); font-weight: 600; font-size: 20px; margin: 0; }
+.door p { margin: 0; color: var(--dim); font-size: 16px; }
+.door .note { font-size: 14px; color: var(--faint); }
+.login { margin-top: 28px; color: var(--dim); font-size: 16px; }
+
+.does { list-style: none; padding: 0; margin: 0 0 32px; display: grid; gap: 0; }
+@media (min-width: 768px) { .does { grid-template-columns: 1fr 1fr; column-gap: 48px; } }
+.does li { padding: 16px 0; border-bottom: 1px solid var(--line); display: flex; gap: 16px; align-items: baseline; }
+.does li span { font-family: var(--mono); font-size: 12px; color: var(--faint); flex: none; width: 24px; }
+.fine { color: var(--dim); font-size: 16px; max-width: 60ch; margin: 0; }
+
+.keys { display: grid; gap: 40px; }
+@media (min-width: 900px) { .keys { grid-template-columns: 1fr 1fr; gap: 56px; } }
+.providers { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 20px; padding: 0; list-style: none; }
+.providers li { font-family: var(--mono); font-size: 13px; border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; color: var(--ink); }
+
+.house { display: grid; gap: 16px; }
+@media (min-width: 768px) { .house { grid-template-columns: repeat(3, 1fr); } }
+.home-card { display: block; text-decoration: none; border: 1px solid var(--line); border-radius: 6px; padding: 24px; transition: border-color 250ms var(--ease-out); }
+.home-card:hover { border-color: var(--accent); color: var(--ink); }
+.home-card .url { font-family: var(--mono); font-size: 12px; color: var(--accent); }
+.home-card h3 { font-family: var(--serif); font-weight: 500; font-size: 30px; margin: 10px 0 6px; }
+.home-card p { margin: 0; color: var(--dim); font-size: 16px; }
+.also { margin-top: 24px; font-size: 16px; color: var(--dim); }
+
+footer { border-top: 1px solid var(--line); padding: 40px 0 56px; }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 24px; justify-content: space-between; align-items: center; }
+footer .links { display: flex; flex-wrap: wrap; gap: 18px; font-size: 14px; color: var(--dim); }
+footer small { display: block; color: var(--faint); font-size: 13px; margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<header class="wrap top">
+  <a class="mark" href="https://www.sapiensinteticos.com" aria-label="Sapiens Sintéticos">
+    <img class="logo" src="https://www.sapiensinteticos.com/sapiens-sinteticos-logo-minima.png" alt="" width="26" height="26">
+    <img class="word" src="https://www.sapiensinteticos.com/brand/sint-fyi/sint-fyi-cream.png" alt="Sint.fyi" width="61" height="44">
+  </a>
+  <nav>
+    <a href="https://github.com/inhabitants/sapiens-mcp">GitHub</a>
+    <a href="https://www.npmjs.com/package/sapiens-mcp">npm</a>
+  </nav>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <div>
+      <p class="eyebrow">MCP server · <b>com.sapiensinteticos/sapiens</b></p>
+      <h1>You talk. Your AI does the work.</h1>
+      <p class="lede"><strong>sapiens-mcp</strong> puts your <a href="https://www.sapiensinteticos.com">Sapiens Sintéticos</a> account inside Claude, Cursor, Gemini CLI or any MCP client. Image, video, article, voice, music and your Repertório, from one conversation.</p>
+      <div class="ctas">
+        <a class="btn primary" href="https://www.sapiensinteticos.com/en/connect-claude">Connect your account</a>
+        <a class="btn ghost" href="https://www.sapiensinteticos.com/sapiens-mcp" hreflang="pt">Em português</a>
+      </div>
+      <div class="cmd"><pre>npx -y sapiens-mcp</pre><button class="copy" type="button">copy</button></div>
+    </div>
+    <figure>
+      <img src="https://sapiensinteticos.b-cdn.net/borderlessprotocol/2026/07/1785430717302_e8p3i4.webp" alt="Helen Ailith at a dark desk, forearms wrapped in a glowing green exoskeleton, moving slabs of light with open hands" fetchpriority="high">
+    </figure>
+  </div>
+
+  <section>
+    <div class="wrap film">
+      <div>
+        <h2>Fifteen seconds, sound on.</h2>
+        <p class="links"><a href="https://sapiensinteticos.b-cdn.net/videos/films/abre-alas/sapiens-mcp-intro-9x16-en-2e67ed46.mp4">Vertical cut</a> · <a href="https://sapiensinteticos.b-cdn.net/videos/films/abre-alas/sapiens-mcp-intro-pt-3e96346c.mp4" hreflang="pt">em português</a></p>
+      </div>
+      <video controls preload="none" playsinline poster="https://sapiensinteticos.b-cdn.net/videos/films/abre-alas/sapiens-mcp-intro-en-db494de3.jpg">
+        <source src="https://sapiensinteticos.b-cdn.net/videos/films/abre-alas/sapiens-mcp-intro-en-e17d0673.mp4" type="video/mp4">
+      </video>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>Four doors in.</h2>
+      <p class="sub">Same server, same account. Only the way you add it changes.</p>
+      <div class="doors">
+        <div class="door wide">
+          <span class="where">Claude Code</span>
+          <h3>The plugin</h3>
+          <p>The house skills and the server, one install.</p>
+          <div class="cmd"><pre>/plugin marketplace add inhabitants/sapiens-mcp
+/plugin install sapiens-sinteticos@sapiens-sinteticos</pre><button class="copy" type="button">copy</button></div>
+        </div>
+        <div class="door">
+          <span class="where">Claude chat · web, desktop, mobile</span>
+          <h3>The connector</h3>
+          <p>Add it once, talk from anywhere.</p>
+          <p><a href="https://www.sapiensinteticos.com/en/connect-claude">Connect Claude to Sapiens</a></p>
+        </div>
+        <div class="door">
+          <span class="where">Claude Desktop</span>
+          <h3>The extension</h3>
+          <p>One file, double click, your own provider keys.</p>
+          <p><a href="https://sapiensinteticos.b-cdn.net/mcpb/sapiens.mcpb">sapiens.mcpb</a></p>
+        </div>
+        <div class="door wide">
+          <span class="where">Cursor · Gemini CLI · any MCP client</span>
+          <h3>npm or remote</h3>
+          <div class="cmd"><pre>npx -y sapiens-mcp</pre><button class="copy" type="button">copy</button></div>
+          <div class="cmd"><pre>https://www.sapiensinteticos.com/api/mcp/mcp</pre><button class="copy" type="button">copy</button></div>
+          <p class="note">Remote takes <code>Authorization: Bearer &lt;sessionToken&gt;</code>. Keep the www: the bare domain redirects and the redirect drops the header.</p>
+        </div>
+      </div>
+      <p class="login">Log in with a code from the connect page. No API key, no card.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>One conversation, the whole studio.</h2>
+      <p class="sub">Ask in plain language. It lands in your account, not in a chat log.</p>
+      <ul class="does">
+        <li><span>01</span>Images, straight to your gallery</li>
+        <li><span>02</span>Video, from a still or a script</li>
+        <li><span>03</span>Articles in your own voice</li>
+        <li><span>04</span>Voice and narration</li>
+        <li><span>05</span>Music, lyrics to render</li>
+        <li><span>06</span>Repertório, the creative memory the rest reads from</li>
+        <li><span>07</span>Characters and personas</li>
+        <li><span>08</span>Fórum and community</li>
+      </ul>
+      <p class="fine">Every action names its cost in Sinapses before it runs, and a failed generation is refunded.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap keys">
+      <div>
+        <h2>Your key, zero Sinapse.</h2>
+        <p class="sub">Credit on a provider already? Generate at provider price, no house margin, and the piece still lands in your Repertório.</p>
+      </div>
+      <div>
+        <ul class="providers">
+          <li>fal</li><li>Kie</li><li>WaveSpeed</li><li>Replicate</li><li>OpenRouter</li>
+        </ul>
+        <p class="fine">The key goes from your machine to its own provider and nowhere else. Identity always comes from your login token, each account touches only what is its own, and the remote endpoint is fail-closed: no valid session, nothing runs.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>The house.</h2>
+      <p class="sub">Sister properties from the same Borderless studio.</p>
+      <div class="house">
+        <a class="home-card" href="https://www.sapiensinteticos.com">
+          <span class="url">sapiensinteticos.com</span>
+          <h3>Sapiens Sintéticos</h3>
+          <p>The lab where each person builds a studio next to their Sintético. This server's home.</p>
+        </a>
+        <a class="home-card" href="https://www.aitag.app">
+          <span class="url">aitag.app</span>
+          <h3>AItag</h3>
+          <p>A hand-curated directory of AI tools, BR and EU. The Repertório pulls from it.</p>
+        </a>
+        <a class="home-card" href="https://www.helenai.wtf">
+          <span class="url">helenai.wtf</span>
+          <h3>Helen</h3>
+          <p>Music, chat and comics. The style anchor of the house.</p>
+        </a>
+      </div>
+      <p class="also">Reading in Portuguese? <a href="https://www.sapiensinteticos.com/sapiens-mcp" hreflang="pt">Sapiens MCP, o Model Context Protocol em português</a>.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <a class="mark" href="https://www.sapiensinteticos.com" aria-label="Sapiens Sintéticos">
+        <img class="logo" src="https://www.sapiensinteticos.com/sapiens-sinteticos-logo-minima.png" alt="" width="26" height="26">
+        <img class="word" src="https://www.sapiensinteticos.com/brand/sint-fyi/sint-fyi-cream.png" alt="Sint.fyi" width="61" height="44">
+      </a>
+      <small>Sapiens Sintéticos, by <a href="https://inhabitants.zone">Borderless</a> · MIT license</small>
+    </div>
+    <div class="links">
+      <a href="https://github.com/inhabitants/sapiens-mcp">GitHub</a>
+      <a href="https://www.npmjs.com/package/sapiens-mcp">npm</a>
+      <a href="https://registry.modelcontextprotocol.io">MCP registry</a>
+      <a href="https://glama.ai/mcp/servers/inhabitants/sapiens-mcp">Glama</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('.copy').forEach(function (b) {
+  b.addEventListener('click', function () {
+    var text = b.parentElement.querySelector('pre').textContent;
+    var done = function () { b.textContent = 'copied'; setTimeout(function () { b.textContent = 'copy'; }, 1500); };
+    if (navigator.clipboard) { navigator.clipboard.writeText(text).then(done, function () {}); }
+  });
+});
+</script>
+</body>
+</html>
