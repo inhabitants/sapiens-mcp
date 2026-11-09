@@ -1,0 +1,22 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "sapiens-sinteticos",
+  "version": "1.113.1",
+  "description": "Your Sapiens Sintéticos account in Hermes: images, video, music, voice, characters, your repertoire and the members' forum, through the hosted Sapiens MCP server, with the house skills bundled.",
+  "author": {
+    "name": "Sapiens Sintéticos",
+    "url": "https://www.sapiensinteticos.com"
+  },
+  "homepage": "https://www.sapiensinteticos.com/en",
+  "repository": "https://github.com/inhabitants/sapiens-mcp",
+  "license": "MIT",
+  "keywords": [
+    "sapiens",
+    "mcp",
+    "image-generation",
+    "video-generation",
+    "music",
+    "characters",
+    "creative-studio"
+  ]
+}
