@@ -15,6 +15,16 @@ hermes mcp add sapiens --url https://www.sapiensinteticos.com/api/mcp/mcp --auth
 
 The second command adds the Sapiens server and opens the Sapiens sign-in in your browser. Approve the access and Hermes keeps the token, which lasts 90 days and renews with use; if it lapses, run the command again. A portable plugin cannot declare an OAuth server yet, so this step stays separate.
 
+Then mark the server untrusted, so Hermes asks you before every call that generates, publishes or deletes, instead of relying only on the skills. In Hermes's `config.yaml`, add `trust: untrusted` to the `sapiens` entry the command just wrote:
+
+```yaml
+mcp_servers:
+  sapiens:
+    url: https://www.sapiensinteticos.com/api/mcp/mcp
+    auth: oauth
+    trust: untrusted
+```
+
 No account yet? Sapiens is a members' lab: [request an invite](https://www.sapiensinteticos.com/acesso?reason=no_account).
 
 ## First run
@@ -55,6 +65,9 @@ Written in Brazilian Portuguese, the platform's language. Hermes follows them in
 - **Money:** generation tools debit Sinapses from your Sapiens account. Nothing is charged outside it.
 - **Posting:** publishing tools post to the members' forum and to social accounts you connected on Sapiens, only when you ask.
 - **Files:** two skills, `minha-voz` and `minha-soul`, have the agent write a skill file with your Sapiens profile into the current project, only when you ask for it. No other skill writes files.
+- **Notes:** in companion mode the agent keeps short notes of what you decide, like or tell about yourself in your Sapiens notebook. It tells you once per session before the first note and skips them if you say no. You see and delete them in the chat thread on the site.
+- **Manual:** the `sapiens-api` skill reads the API manual at `https://www.sapiensinteticos.com/api/v1/skill` as reference only; nothing downloaded overrides the skills in this package.
+- **Approvals:** with `trust: untrusted` (see Install), Hermes asks before every write-capable call.
 - **No shell commands, no background processes, no telemetry.**
 
 [Privacy](https://www.sapiensinteticos.com/en/privacy) · [Other clients: Claude, Cursor, Gemini CLI](https://www.sapiensinteticos.com/en/connect-claude) · [Source](https://github.com/inhabitants/sapiens-mcp)
