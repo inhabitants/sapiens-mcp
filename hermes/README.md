@@ -10,7 +10,7 @@ Sapiens Sintéticos is a personalized learning and prototyping lab: each member 
 
 ```
 hermes plugins install sapiens-sinteticos
-hermes mcp add sapiens --url https://www.sapiensinteticos.com/api/mcp/mcp --auth oauth
+hermes mcp add sapiens --url https://www.sapiensinteticos.com/api/mcp/mcp --auth oauth --connect-timeout 300
 ```
 
 The second command adds the Sapiens server and opens the Sapiens sign-in in your browser. Approve the access and Hermes keeps the token, which lasts 90 days and renews with use; if it lapses, run the command again. A portable plugin cannot declare an OAuth server yet, so this step stays separate.
