@@ -214,6 +214,7 @@ export const distributionSchema = z.object({
     "voices",
     "status",
     "edit",
+    "capa",
     "sign",
     "bio",
     "lineages",
@@ -272,7 +273,72 @@ export const distributionSchema = z.object({
     .string()
     .optional()
     .describe(
-      "queue/edit: a CAPA do vídeo, a imagem que o perfil do Instagram mostra no lugar de um quadro qualquer do Reel. Pela API ela só entra na hora de postar: Reel publicado só troca de capa à mão no app, então a capa nasce com a peça. É o molde de capa da casa (skill thumbnail, --formato reel, 1080x1920): renderize, suba com sapiens_gallery action=upload filePath=<o .jpg> e passe a url que ela devolve. Imagem (jpg, png, webp) num host da casa, e só em peça que leva vídeo; o servidor recusa o resto. Só o Reels do Instagram publica (instagram, instagram-pro, instagram-3..8 e instagram-up*); story e carrossel ignoram. Nas outras redes o campo viaja sem efeito: ponha a capa na MÃE do Bluesky e a teia leva até a filha do Instagram. Em edit, string vazia tira a capa.",
+      "queue/edit: a CAPA do vídeo, a imagem que o perfil do Instagram mostra no lugar de um quadro qualquer do Reel. Pela API ela só entra na hora de postar: Reel publicado só troca de capa à mão no app, então a capa nasce com a peça. O caminho curto é action=capa, que monta o molde da casa no servidor e já grava na peça: use este campo só quando a capa já existe como arquivo (o molde renderizado na skill thumbnail, --formato reel, 1080x1920, subido com sapiens_gallery action=upload filePath=<o .jpg>). Imagem (jpg, png, webp) num host da casa, e só em peça que leva vídeo; o servidor recusa o resto. Só o Reels do Instagram publica (instagram, instagram-pro, instagram-3..8 e instagram-up*); story e carrossel ignoram. Nas outras redes o campo viaja sem efeito: ponha a capa na MÃE do Bluesky e a teia leva até a filha do Instagram. Em edit, string vazia tira a capa.",
+    ),
+  capaDestaque: z
+    .string()
+    .max(40)
+    .optional()
+    .describe(
+      "capa: a linha de CIMA do título, no verde da casa. Em inglês, 2 a 4 palavras, que afirma (ex: 'She keeps'). Caixa alta é do molde: escreva normal. Linha larga encolhe sozinha até caber. Ao menos uma das duas linhas (capaDestaque ou capaTitulo) é obrigatória.",
+    ),
+  capaTitulo: z
+    .string()
+    .max(40)
+    .optional()
+    .describe(
+      "capa: a linha de BAIXO do título, em off-white (ex: 'The voice'). Mesma régua da de cima. Nada de nome de motor nem de 'AI' na capa: a copy da casa não declara IA.",
+    ),
+  capaBaseUrl: z
+    .string()
+    .optional()
+    .describe(
+      "capa: a IMAGEM que vai por baixo do título, quando não deve ser um quadro do vídeo (a arte do take, um quadro que você escolheu e subiu). Imagem jpg, png ou webp no CDN da casa, a url que sapiens_gallery devolve. Ausente, a base é um quadro do vídeo da peça.",
+    ),
+  capaVideoUrl: z
+    .string()
+    .optional()
+    .describe(
+      "capa, SEM itemId: o vídeo de onde sai o quadro da base (mp4, mov ou webm no CDN da casa). Com itemId não precisa: o servidor usa o vídeo da peça.",
+    ),
+  capaFrameAt: z
+    .number()
+    .min(0)
+    .max(600)
+    .optional()
+    .describe(
+      "capa: o SEGUNDO do vídeo de onde sai o quadro da base. Default 1 (muito take abre em preto no 0). Escolha o segundo em que o sujeito está inteiro e legível na metade de cima do quadro: o título ocupa a faixa de baixo.",
+    ),
+  capaAssinatura: z
+    .enum(["sint", "borderless"])
+    .optional()
+    .describe(
+      "capa: quem assina em cima do título. 'sint' (default) escreve Sint.fyi, a conta da casa; 'borderless' escreve Borderless, só pro Instagram do dono.",
+    ),
+  capaPatina: z
+    .enum(["leve", "media", "forte"])
+    .optional()
+    .describe(
+      "capa: a camada que apaga, desbota e desfoca a peça pra o título ser o que se lê primeiro. 'media' (default) é a da casa e é ela que faz o grid ler como série. 'leve' e 'forte' existem pra peça que já nasce muito escura ou muito clara, não pra variar o grid.",
+    ),
+  capaEncaixe: z
+    .enum(["auto", "cobre", "inteira"])
+    .optional()
+    .describe(
+      "capa: como a peça entra no quadro 9:16. 'auto' (default) decide pelo formato: peça em pé cobre o quadro inteiro, peça deitada ou 4:5 entra inteira acima do título, sobre ela mesma desfocada. 'cobre' e 'inteira' forçam.",
+    ),
+  capaFoco: z
+    .string()
+    .optional()
+    .describe(
+      "capa, só quando a peça cobre o quadro: de onde o corte olha, no formato do object-position do CSS, 'X% Y%'. Default '50% 50%'. Sujeito que fugiu pro alto: '50% 35%'.",
+    ),
+  igCollaborators: z
+    .array(z.string())
+    .max(3)
+    .optional()
+    .describe(
+      "queue/edit, só canal do Instagram por login (instagram, instagram-pro, instagram-3 em diante): os COLABORADORES do post, as contas que assinam junto. A Meta manda o convite, a conta aceita e o post passa a aparecer no feed dela também, pros seguidores dela. Até 3 usernames, com ou sem @ (o servidor limpa), e a conta convidada precisa ser pública. Vale em foto, carrossel e Reel; story sai sozinho. O post vai ao ar na hora mesmo com convite pendente, e quem aceitou não se lê pela API. É estrutura, não marcação: marcar alguém na legenda é texto da copy. Em edit, lista vazia tira todo mundo. Colaborador é convite a uma conta de verdade: só ponha quem o dono nomeou. Ex: ['helenai.wtf'].",
     ),
   assetUrl: z
     .string()
@@ -373,7 +439,7 @@ export const distributionSchema = z.object({
     .describe(
       "sign: true liga (o default), false desliga. queue: true enfileira a peça já com a assinatura ligada. A ASSINATURA carimba a IMAGEM e o VÍDEO da peça que moram no CDN da casa (o que sapiens_image/sapiens_video/sapiens_gallery devolvem), com o carimbo da LINHAGEM de quem assina a peça (a aba dela, ver lineages): no estilo casa, sint.fyi/<conta da linhagem na casa, ou o dono> no canto e, no vídeo, o fecho de 2 segundos no fim (o vídeo fica 2s mais longo); no estilo propria, só a marca da linhagem (ex: Velourie), sem nada da casa e sem fecho; no estilo nenhuma, o servidor recusa. O carimbo da casa é RECUSADO em peça +18 e em praça com teto adulto (fanvue, fanvue-dm, pornhub, redgifs, sexcom, civitai-red), porque sint.fyi é endereço da casa; a marca própria passa. A imagem do feed do Instagram é carimbada já recortada pra 4:5 a 1.91:1. O carimbo leva uns 30s na primeira vez (na hora quando a mídia já foi assinada antes), e enquanto ele não fica pronto a peça NÃO sai: o botão de postar da tela devolve o motivo.",
     ),
-  itemId: z.string().optional().describe("status/sign/edit: o id da peça (vem do list ou do queue)."),
+  itemId: z.string().optional().describe("status/sign/edit/capa: o id da peça (vem do list ou do queue). Em capa, é a peça que recebe a capa montada; sem ele a capa só é montada e devolvida."),
   status: z
     .enum(["fila", "agendado", "postado", "descartado"])
     .optional()
@@ -614,6 +680,8 @@ export async function distribution(args: DistributionArgs): Promise<any> {
       captionTracks: args.captionTracks,
       localizations: args.localizations,
       videoCoverUrl: args.videoCoverUrl,
+      // Só vai quando declarado: servidor anterior a 10/11/2026 não conhece o arg na fila.
+      igCollaborators: args.igCollaborators,
       assetUrl: args.assetUrl,
       assetKind: args.assetKind,
       assets: args.assets,
@@ -706,13 +774,14 @@ export async function distribution(args: DistributionArgs): Promise<any> {
       assetKind: args.assetKind,
       assets: args.assets,
       videoCoverUrl: args.videoCoverUrl,
+      igCollaborators: args.igCollaborators,
       // null viaja: é o gesto de devolver a peça pra régua.
       categoria: args.categoria,
     };
     const mudou = Object.entries(campos).filter(([, v]) => v !== undefined);
     if (mudou.length === 0) {
       throw new Error(
-        "action=edit: mande ao menos um campo pra trocar (copy, title, publicTitle, hashtags, notes, lang, replyText, assetUrl/assetKind, assets, videoCoverUrl ou categoria).",
+        "action=edit: mande ao menos um campo pra trocar (copy, title, publicTitle, hashtags, notes, lang, replyText, assetUrl/assetKind, assets, videoCoverUrl, igCollaborators ou categoria).",
       );
     }
     await convexMutation("distributionMcp:mcpUpdateItem", {
@@ -726,6 +795,61 @@ export async function distribution(args: DistributionArgs): Promise<any> {
       mudou: mudou.map(([k]) => k),
       instruction:
         "A peça continua na mesma lane e na mesma posição da fila, só com o que mudou. Texto de peça já postada o servidor recusa: o post na rede não muda junto. A categoria vale em qualquer lane.",
+    };
+  }
+
+  if (args.action === "capa") {
+    if (!args.capaDestaque?.trim() && !args.capaTitulo?.trim()) {
+      throw new Error("action=capa exige ao menos uma linha: capaDestaque (a de cima, em verde) ou capaTitulo (a de baixo).");
+    }
+    if (!args.itemId && !args.capaBaseUrl && !args.capaVideoUrl) {
+      throw new Error(
+        "action=capa exige a peça de baixo: itemId de uma peça com vídeo (a capa já fica gravada nela), ou capaBaseUrl / capaVideoUrl pra só montar e receber a url.",
+      );
+    }
+    const r: any = await convexAction(
+      "distributionMcp:mcpCapaDoReel",
+      {
+        sessionToken,
+        itemId: args.itemId,
+        destaque: args.capaDestaque,
+        titulo: args.capaTitulo,
+        baseUrl: args.capaBaseUrl,
+        videoUrl: args.capaVideoUrl,
+        frameAt: args.capaFrameAt,
+        assinatura: args.capaAssinatura,
+        patina: args.capaPatina,
+        encaixe: args.capaEncaixe,
+        foco: args.capaFoco,
+      },
+      {
+        ondeConferir: args.itemId
+          ? "sapiens_distribution action=list (o videoCoverUrl da peça diz se a capa entrou)"
+          : "nada foi gravado em peça nenhuma: pode repetir a chamada, o resultado é o mesmo arquivo",
+      },
+    );
+    return {
+      ok: true,
+      videoCoverUrl: r.videoCoverUrl,
+      itemId: r.itemId,
+      gravada: r.gravada,
+      encaixe: r.encaixe,
+      base: r.base,
+      corpos: r.corpos,
+      instruction: [
+        !r.gravada
+          ? "A capa está montada e NÃO está em peça nenhuma: passe esta url em videoCoverUrl no queue (ou no edit)."
+          : r.publicaCapa === false
+            ? "A capa está gravada nesta peça, que NÃO é de Instagram: aqui ela só fica guardada. Ela desce pras filhas do Instagram que nascerem DEPOIS pela teia; filha que já está na fila não recebe, e pede action=capa com o itemId dela."
+            : "A capa está gravada na peça e sai junto com o Reel.",
+        "ABRA a imagem e olhe antes de seguir: o sujeito tem que estar legível acima do título, e o título não pode cobrir o rosto. Fora do lugar, chame de novo com outro capaFrameAt, capaFoco ou capaEncaixe: a capa nova substitui a anterior na peça.",
+        r.corpos?.titulo === 60 || r.corpos?.destaque === 60
+          ? "Uma das linhas caiu no corpo mínimo (60): está comprida demais pro molde. Encurte pra 2 a 4 palavras."
+          : null,
+        "Mostre a capa ao dono como imagem. Reel que já foi ao ar não troca de capa pela API.",
+      ]
+        .filter(Boolean)
+        .join(" "),
     };
   }
 

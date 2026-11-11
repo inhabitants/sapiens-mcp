@@ -419,6 +419,42 @@ test("distributionSchema: queue aceita lang, assetPagePath e assetPageAssetId", 
   );
 });
 
+// A capa de Reel e o colaborador do Instagram pela conversa (11/11/2026): a
+// ação capa monta o molde no servidor, e o colaborador entra no queue e no edit.
+test("distributionSchema: capa aceita as duas linhas e os ajustes do molde; colaborador entra no queue e no edit", () => {
+  assert.doesNotThrow(() =>
+    distributionSchema.parse({
+      action: "capa",
+      itemId: "jd719afa3my34v9xt20w2ke3ys8dw0y7",
+      capaDestaque: "She keeps",
+      capaTitulo: "The voice",
+      capaFrameAt: 3.5,
+      capaAssinatura: "borderless",
+      capaPatina: "forte",
+      capaEncaixe: "inteira",
+      capaFoco: "50% 35%",
+    }),
+  );
+  // sem peça: só monta, a partir de uma imagem ou de um vídeo
+  assert.doesNotThrow(() =>
+    distributionSchema.parse({ action: "capa", capaTitulo: "The voice", capaBaseUrl: "https://sapiensinteticos.b-cdn.net/a.jpg" }),
+  );
+  // linha de parágrafo, pátina inventada e segundo negativo param aqui
+  assert.throws(() => distributionSchema.parse({ action: "capa", capaDestaque: "x".repeat(41) }), ZodError);
+  assert.throws(() => distributionSchema.parse({ action: "capa", capaTitulo: "x", capaPatina: "suave" }), ZodError);
+  assert.throws(() => distributionSchema.parse({ action: "capa", capaTitulo: "x", capaFrameAt: -1 }), ZodError);
+
+  assert.doesNotThrow(() =>
+    distributionSchema.parse({ action: "queue", title: "t", channel: "instagram", igCollaborators: ["helenai.wtf", "@borderle2s"] }),
+  );
+  assert.doesNotThrow(() => distributionSchema.parse({ action: "edit", itemId: "x", igCollaborators: [] }));
+  // a Meta para em 3
+  assert.throws(
+    () => distributionSchema.parse({ action: "queue", title: "t", channel: "instagram", igCollaborators: ["a", "b", "c", "d"] }),
+    ZodError,
+  );
+});
+
 // A assinatura do vídeo (23/09/2026): a chave da ficha pela conversa, e o
 // queue que já nasce assinado. signed é boolean de verdade, não string.
 test("distributionSchema: sign e queue aceitam signed", () => {
