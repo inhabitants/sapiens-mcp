@@ -407,6 +407,41 @@ const AVISO_INGEST =
   "Peça NATIVA: entra na timeline PRIVADA (isPublic false), igual a qualquer geração da casa. Ela NÃO publica sozinha e NÃO vai pra comunidade: publicar é ato separado do dono, por action=publish. Custo em Sinapses é 0 e ela NÃO leva assinatura C2PA, porque o motor rodou fora. Use ingest só quando a receita (ficha do personagem, prompt, folha) foi sua; peça achada pronta é action=upload. Mostre a peça com action=list kind=video (capa + player) em vez de devolver link solto.";
 
 /**
+ * O aviso do ingest com a linha do carimbo +18, pras DUAS portas do servidor.
+ * A porta do dono voltava só o aviso base, então quem ingeria por sourceUrl não
+ * tinha como saber se a peça nasceu carimbada (e ela nascia sem). O carimbo se
+ * lê no retorno (`adulta`), nunca se presume pela regra.
+ */
+function avisoDoIngest(
+  result:
+    | { adulta?: boolean; adultaPor?: string; jaIngerida?: boolean; carimboPendente?: string; imageId?: string }
+    | null
+    | undefined,
+): string {
+  // Re-ingest de peça que está SEM o +18 e que a regra de entrada carimbaria:
+  // o servidor não recarimba por classe (a row não distingue peça que nunca
+  // teve carimbo de peça vestida que a curadoria abriu), então quem tem a peça
+  // na frente decide. Sem este aviso, re-ingerir um nu que entrou limpo dava a
+  // impressão de ter consertado.
+  if (result?.carimboPendente) {
+    return (
+      AVISO_INGEST +
+      ` ATENÇÃO, CARIMBO +18 PENDENTE: esta peça já estava no acervo e está SEM o carimbo +18, e pela regra de entrada ela nasceria carimbada (provedor de peso aberto, provedor que a casa não conhece ou motor sem freio). Re-ingerir NÃO carimba. Se a peça tem nudez, carimbe agora: sapiens_gallery action=carimbo imageId=${result.imageId ?? "<o imageId deste retorno>"} adulta=true. Se é peça vestida, não faça nada: é assim que ela deve ficar.`
+    );
+  }
+  if (!result?.adulta) return AVISO_INGEST;
+  if (result.jaIngerida && result.adultaPor !== "declaracao") {
+    return AVISO_INGEST + " Esta peça já estava no acervo e está com o carimbo +18: nada mudou no carimbo.";
+  }
+  return (
+    AVISO_INGEST +
+    (result.adultaPor === "declaracao"
+      ? " Esta nasceu com o carimbo +18 que você declarou (unfiltered): publica e fica no seu perfil e no link, só não vai pra vitrine anônima. Você tira o carimbo na ficha se mudar de ideia."
+      : " Esta nasceu com o carimbo +18 por CLASSE (provedor de peso aberto ou motor sem freio): publica e fica no seu perfil e no link, só não vai pra vitrine anônima. Esse carimbo só a curadoria tira, igual ao motor sem freio da casa; peça VESTIDA que nasceu carimbada por classe sai com action=carimbo adulta=false, feito pela curadoria.")
+  );
+}
+
+/**
  * Os bytes da PONTE, resolvidos aqui (na máquina da pessoa no stdio; no
  * servidor do site no remoto, com o mesmo guard de host público do upload).
  * Devolve também a chave de idempotência: a própria URL quando veio de URL, ou
@@ -717,32 +752,31 @@ export async function gallery(args: GalleryArgs): Promise<any> {
     };
     if (args.sourceUrl && !temBytesLocais) {
       try {
+        // A declaração de sem filtro vai junto: a porta do dono passou a
+        // carimbar na entrada como a ponte (11/11/2026; antes gravava sem +18
+        // nenhum e dez nus da bancada entraram limpos). O arg só segue quando é
+        // true, porque servidor de antes recusa campo que não conhece.
         const result = await semSkillsSeRecusar(ficha, (f) =>
           convexAction("externalIngest:mcpIngestExternal", {
             sessionToken,
             sourceUrl: args.sourceUrl,
+            ...(args.unfiltered === true ? { unfiltered: true } : {}),
             ...f,
           }),
         );
-        return { ...result, aviso: AVISO_INGEST };
+        return { ...result, aviso: avisoDoIngest(result) };
       } catch (e) {
-        // Só as duas recusas que a ponte resolve caem pra ela. O resto (motor
-        // sem nome, personagem errado, tipo recusado) é erro de verdade e sobe.
+        // Só as recusas que a ponte resolve caem pra ela: cargo, host, e o
+        // servidor de antes do carimbo na porta do dono, que recusa o
+        // `unfiltered` antes do handler (a ponte já honra a declaração). O
+        // resto (motor sem nome, personagem errado, tipo recusado) é erro de
+        // verdade e sobe.
         const msg = describeConvexError(e);
-        if (!/restrita ao dono|Host não liberado/i.test(msg)) throw e;
+        if (!/restrita ao dono|Host não liberado|extra field `?unfiltered`?/i.test(msg)) throw e;
       }
     }
     const result = await ingestPelaPonte(sessionToken, args, ficha);
-    return {
-      ...result,
-      aviso:
-        AVISO_INGEST +
-        (result.adulta
-          ? result.adultaPor === "declaracao"
-            ? " Esta nasceu com o carimbo +18 que você declarou (unfiltered): publica e fica no seu perfil e no link, só não vai pra vitrine anônima. Você tira o carimbo na ficha se mudar de ideia."
-            : " Esta nasceu com o carimbo +18 por CLASSE (provedor de peso aberto ou motor sem freio): publica e fica no seu perfil e no link, só não vai pra vitrine anônima. Esse carimbo só a curadoria tira, igual ao motor sem freio da casa."
-          : ""),
-    };
+    return { ...result, aviso: avisoDoIngest(result) };
   }
 
   // cast: quem está EM CENA numa peça que já existe.

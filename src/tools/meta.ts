@@ -254,6 +254,26 @@ const PONTES: {
 /** Os balcões que a sapiens_pontes dirige daqui (os outros vão pelo harness + ingest). */
 const PORTA_LOCAL = ["fal", "kie", "wavespeed", "replicate", "openrouter"];
 
+// O que o start entrega a mais pra conta que nasceu do convite de creator
+// (users.creatorConvidado, carimbado no rito de nascimento). Texto pra MÁQUINA:
+// quem lê é o modelo do cliente, que conduz a conversa, por isso é longo e
+// repete. O canal do "o que faltou" é o chamado de suporte que já existe: cai
+// na fila do dono com aviso, sem endpoint novo.
+const CREATOR_CONVIDADO = {
+  directive: [
+    "Esta conta nasceu de um convite do dono da casa pra quem já cria. As Sinapses vieram de presente, e o combinado do convite é um só: a pessoa roda aqui o ciclo de produção DELA, e a casa aprende com o que faltar. Na primeira conversa, conduza assim, no lugar do 'comece pelo Repertório':",
+    "1. Pergunte, numa frase, o que ela produz e como é o ciclo dela hoje, do começo ao fim, com que ferramenta em cada etapa (por exemplo: referência, imagem base, vídeo, voz ou trilha, montagem, publicar). Ouça antes de mostrar a lista de tools.",
+    "2. Monte com ela o MESMO ciclo na casa, etapa por etapa, lendo a skill de cada fluxo (sapiens_skill) e cotando antes de gerar. Onde ela já tem chave num provedor, ofereça as duas portas (skill 'pontes').",
+    "3. Etapa que a casa NÃO cobre, cobre pior que a ferramenta dela, ou cobre com atrito (preço, espera, passo a mais, resultado abaixo): diga isso com franqueza, sem contornar nem prometer, e REGISTRE na hora com sapiens_support action=create. Um chamado por lacuna. Avise que registrou: o chamado vai direto pro dono, e foi isso que o convite pediu.",
+    "4. Fechou um ciclo inteiro? Registre também, dizendo quais etapas rodaram aqui. Saber o que já supre vale tanto quanto saber o que falta.",
+    "Não vire questionário: é conversa de trabalho, e a peça dela vem primeiro. Não repita a pergunta do ciclo em toda sessão: se sapiens_support action=list já mostra chamado 'Faltou no meu ciclo' ou 'Ciclo fechado', siga do ponto em que ela parou.",
+  ].join("\n"),
+  registrarLacuna:
+    "sapiens_support action=create subject='Faltou no meu ciclo: <a etapa em poucas palavras>' message='<o que ela queria fazer, a ferramenta que usa hoje pra isso, e o que exatamente faltou ou atrapalhou aqui>'",
+  registrarCicloFechado:
+    "sapiens_support action=create subject='Ciclo fechado: <o que ela produziu>' message='<as etapas que rodaram aqui, na ordem, e o que ela achou do resultado>'",
+};
+
 const FIRST_POWERS: { icon: string; title: string; cost: string; try: string }[] =
   [
     {
@@ -453,6 +473,11 @@ export async function meta(args: MetaArgs): Promise<any> {
         : {}),
       firstPowers: FIRST_POWERS,
       startHere,
+      // CREATOR CONVIDADO: a conta nasceu de um convite do dono pra quem já
+      // cria (users.creatorConvidado). O dono quer aprender com o ciclo dela,
+      // então a porta de entrada troca o "comece pelo Repertório" por uma
+      // pergunta, e cada etapa que a casa não cobre vira chamado.
+      ...(who?.user?.creatorConvidado ? { creatorConvidado: CREATOR_CONVIDADO } : {}),
       // Design system da conta: OFERTA, não default. Imagem avulsa continua
       // saindo crua (quem só quer uma imagem não deve nascer preso num estilo);
       // o artigo do perfil é que já herda o padrão sozinho, porque ali a peça é

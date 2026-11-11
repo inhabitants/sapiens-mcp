@@ -437,6 +437,7 @@ Pra mudar SÓ um pedaço da peça (trocar o objeto da mão, apagar uma placa, p�
 - OLHE a peça antes (\`sapiens_gallery action=get\`) pra estimar as coordenadas, e marque com folga: área justa corta a sombra e o reflexo do que entra.
 - O \`prompt\` descreve só o que entra na área, nunca a cena inteira.
 - Motor: o que tiver \`supportsMaskEdit\` em \`action=models\` (hoje nano-banana-2 e nano-banana-max). A peça sai na proporção e no tamanho da origem, lado maior até 2048, pelo preço da geração comum.
+- Tamanho: deixe o \`size\` no padrão (2K nesses dois motores) ou passe \`size: "2K"\`. Em \`size: "1K"\` o motor desenha em resolução menor e a casa estica o resultado pra caber na peça, então a área editada volta mole ao lado do resto nítido. Medido em 11/nov/2026 numa peça de 2048 de lado: a área guardou 18% da nitidez da origem em 1K e 76% em 2K. O 2K soma o adder de resolução ao preço (o valor vivo sai em \`action=models\`).
 - Recusa sem cobrar: área vazia, área que cobre quase a imagem toda (aí é \`mode=edit\` comum, sem \`maskRegions\`), mais de uma referência, motor sem o campo.
 
 ## Fundo transparente
