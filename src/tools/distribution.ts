@@ -143,7 +143,9 @@ const CHANNELS = [
   "pornhub",
   // As pracas que apontam pro Pornhub da Aria, no mesmo molde (pacote, mao
   // sobe). RedGifs: so video ate 60 s, e o pacote leva so tag (minimo 3).
-  // sex.com: titulo, descricao e o Source URL do pin.
+  // sex.com: titulo, descricao e o Source URL do pin. O sexcom foi APOSENTADO
+  // em 11/11/2026 (cadastro do site fechado): o literal fica pra quem roda
+  // versao velha, e o servidor recusa com o motivo (canaisAposentados.ts).
   "redgifs",
   "sexcom",
   // Segunda conta da mesma rede, nomeada (Model A).
@@ -484,7 +486,7 @@ export const distributionSchema = z.object({
     )
     .optional()
     .describe(
-      "tree-mark: as células da linhagem em `slug`, uma por rede da árvore (x, instagram, bluesky, email, telegram, tumblr, deviantart, threads, tiktok, youtube, fanvue, pornhub, redgifs, sexcom; a lista viva sai em tree, campo redes). handle = o @ (ou a URL do perfil, que vira @) ou, na rede email, o endereço: é a conta que existe lá fora; string vazia limpa. canal = a conta da casa que é desta linhagem nessa rede (instagram-6, x-buffer-3), só em rede de conta própria e nunca no bluesky, que é a mãe (lineage-save). dispensada = true quando a linhagem decidiu não ter a rede; X, Instagram, Bluesky, email e Telegram são obrigatórias e o servidor recusa. Tudo ou nada: uma célula recusada não grava nenhuma.",
+      "tree-mark: as células da linhagem em `slug`, uma por rede da árvore (x, instagram, bluesky, email, telegram, tumblr, deviantart, threads, tiktok, youtube, fanvue, pornhub, redgifs; a lista viva sai em tree, campo redes). handle = o @ (ou a URL do perfil, que vira @) ou, na rede email, o endereço: é a conta que existe lá fora; string vazia limpa. canal = a conta da casa que é desta linhagem nessa rede (instagram-6, x-buffer-3), só em rede de conta própria e nunca no bluesky, que é a mãe (lineage-save). dispensada = true quando a linhagem decidiu não ter a rede; X, Instagram, Bluesky, email e Telegram são obrigatórias e o servidor recusa. Tudo ou nada: uma célula recusada não grava nenhuma.",
     ),
   nome: z.string().optional().describe("lineage-new: o nome da linhagem (obrigatório). lineage-save: renomeia."),
   grupo: z

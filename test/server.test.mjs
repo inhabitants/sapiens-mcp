@@ -18,7 +18,7 @@ const PKG_ROOT = path.resolve(__dirname, "..");
 const SERVER = path.join(PKG_ROOT, "dist", "index.js");
 const pkg = JSON.parse(readFileSync(path.join(PKG_ROOT, "package.json"), "utf8"));
 
-// Contrato: o conjunto EXATO de 41 tools do stdio. Adicionar/remover/renomear
+// Contrato: o conjunto EXATO de 42 tools do stdio. Adicionar/remover/renomear
 // quebra este teste de propósito, forçando uma atualização consciente. O
 // remoto lista uma a menos (sapiens_pontes só existe na máquina da pessoa).
 const EXPECTED_TOOLS = [
@@ -63,6 +63,7 @@ const EXPECTED_TOOLS = [
   "sapiens_distribution",
   "sapiens_voice_jp",
   "sapiens_publicar",
+  "sapiens_portfolio",
 ].sort();
 
 const READ_ONLY = [
@@ -309,6 +310,7 @@ const ADMIN_ONLY = [
   // Motor de voz japonesa por fila numa GPU da casa: enquanto for japones-so,
   // membro nenhum precisa. Sai daqui junto com o gate do backend.
   "sapiens_voice_jp",
+  "sapiens_portfolio",
 ];
 
 test("tools/list por tier: user não vê as admin-only", async () => {
