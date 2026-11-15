@@ -202,3 +202,48 @@ test("rate limit: rajada de 401 vira 429 (freio de brute-force)", async () => {
   const r3 = await handlerLimited(list(22, { ip }));
   assert.equal(r3.status, 429, "depois de 2 falhas de auth, o IP espera a janela");
 });
+
+// A biblioteca aberta no REMOTO: mesma leitura do stdio (GET /api/biblioteca do
+// site), e fora do gate de saldo, porque é sapiens_meta. O fetch falso responde
+// só o endereço da biblioteca e deixa o Convex fake seguir pela rede.
+test("biblioteca: no remoto responde a lista mesmo com saldo zero", async () => {
+  const { BIBLIOTECA_URL } = await import("../dist/tools/biblioteca.js");
+  const original = globalThis.fetch;
+  globalThis.fetch = async (url, init) =>
+    String(url) === BIBLIOTECA_URL
+      ? new Response(
+          JSON.stringify({
+            versao: 1,
+            itens: [
+              {
+                slug: "stickers",
+                nome: { pt: "Figurinhas", en: "Stickers" },
+                tipo: { pt: "Kit", en: "Kit" },
+                linha: { pt: "Faz o pack do seu personagem.", en: "Make your character's pack." },
+                licenca: "CC BY 4.0",
+                repo: "https://github.com/inhabitants/stickers",
+                pagina: { pt: "https://www.sapiensinteticos.com/figurinhas/faca-a-sua", en: "https://www.sapiensinteticos.com/en/stickers/make-your-own" },
+                instalar: { onde: { pt: "Cola no seu agente", en: "Paste into your agent" }, texto: { pt: "Usa github.com/inhabitants/stickers.", en: "Use github.com/inhabitants/stickers." } },
+                porta: "free",
+              },
+            ],
+            modelos: [],
+          }),
+          { status: 200, headers: { "content-type": "application/json" } },
+        )
+      : original(url, init);
+  try {
+    const res = await readRpcResponse(
+      await handler(call(40, "sapiens_meta", { action: "biblioteca" }, { token: "tok-user-zero-12" })),
+      40,
+    );
+    assert.notEqual(res.result?.isError, true, res.result?.content?.[0]?.text);
+    const out = res.result.structuredContent;
+    assert.equal(out.ok, true);
+    assert.equal(out.projetos[0].nome, "Figurinhas");
+    assert.equal(out.projetos[0].licenca, "CC BY 4.0");
+    assert.equal(out.projetos[0].instalar.texto, "Usa github.com/inhabitants/stickers.");
+  } finally {
+    globalThis.fetch = original;
+  }
+});

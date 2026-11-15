@@ -89,6 +89,7 @@ Imagem tem leitura própria porque a galeria (\`sapiens_gallery action=list\`) s
 - \`sapiens_meta action=whoami\`: tier (user/admin) e saldo.
 - \`sapiens_meta action=formats\`: os schemas por formato.
 - \`sapiens_meta action=version\`: qual versão está rodando de verdade e se é a última. Não exige login.
+- \`sapiens_meta action=biblioteca\`: o que a casa tem aberto, de graça: os projetos open source (cada um com licença, repo e a frase de instalar pra colar no agente) e os modelos no Civitai. Não exige login. \`idioma=en\` devolve em inglês.
 - \`sapiens_image action=models\` e \`sapiens_video action=models\`: catálogo vivo com o preço ATUAL. Consulte em vez de chutar custo.
 - \`sapiens_meta action=precos\`: a tabela de preço em duas carteiras separadas: o App em Sinapses (por resolução e por segundo de vídeo) e a API em dólar, com saldo próprio. Sinapse não vira dólar. "A API sai mais barata que a fal.ai / WaveSpeed?" se responde com a parte \`api\`.`,
   },

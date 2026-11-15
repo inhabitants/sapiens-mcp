@@ -233,7 +233,8 @@ test("tools/list: contrato de nomes + annotations", async () => {
 // inputSchema.properties.action.enum de cada tool.
 const MUST_HAVE_ACTIONS = {
   // api: a conta da API só leitura, que o gate remoto também conta como saldo.
-  sapiens_meta: ["start", "login", "version", "subscription", "api"],
+  // biblioteca: a instruction do connector cita a porta pelo nome.
+  sapiens_meta: ["start", "login", "version", "subscription", "api", "biblioteca"],
   sapiens_image: ["generate", "models"],
   sapiens_video: ["create", "status", "models", "sonorize"],
   sapiens_musicator: ["create", "lyrics", "render", "get", "list_public"],

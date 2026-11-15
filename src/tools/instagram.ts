@@ -53,6 +53,12 @@ export const instagramSchema = z.object({
     .string()
     .optional()
     .describe("Escopo por post: id de mídia do Instagram; a regra só casa comentário DESSE post."),
+  invite: z
+    .string()
+    .optional()
+    .describe(
+      "Convite: SEGUNDA mensagem da regra, enviada quando a pessoa RESPONDE a DM da reply (a Meta só permite follow-up depois da resposta dela, por 24h). A reply precisa terminar numa pergunta, senão ninguém responde e o convite nunca sai. String vazia limpa; ausente não mexe. Ignorado em fallback.",
+    ),
   isFallback: z
     .boolean()
     .optional()
@@ -88,6 +94,7 @@ export async function instagram(args: InstagramArgs): Promise<any> {
         commentEcho: args.commentEcho,
         echoVariants: args.echoVariants,
         mediaId: args.mediaId,
+        invite: args.invite,
         isFallback: args.isFallback,
         active: args.active,
         priority: args.priority,

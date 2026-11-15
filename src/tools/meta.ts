@@ -14,6 +14,7 @@ import { setTierFromIsAdmin } from "../tier.js";
 import { CANAL, comoAtualizar, ondeFicaAChave, type Canal } from "../canal.js";
 import { valorDeChave } from "./pontes.js";
 import { lerContaDaApi, type ContaApiCrua } from "./contaApi.js";
+import { lerBiblioteca } from "./biblioteca.js";
 
 const ORIGEM: Record<Canal, string> = {
   npm: "pelo npm (provável cache do npx)",
@@ -77,6 +78,7 @@ export const metaSchema = z.object({
     "pontes",
     "precos",
     "api",
+    "biblioteca",
   ]),
   code: z
     .string()
@@ -96,6 +98,10 @@ export const metaSchema = z.object({
     .describe(
       "Só pra action=precos: filtra pelo nome do motor ou do modelo da API (ex: 'seedance', 'nano banana'), sem acento nem caixa.",
     ),
+  idioma: z
+    .enum(["pt", "en"])
+    .optional()
+    .describe("Só pra action=biblioteca: a língua da resposta. Padrão pt."),
 });
 
 export type MetaArgs = z.infer<typeof metaSchema>;
@@ -405,6 +411,8 @@ export async function meta(args: MetaArgs): Promise<any> {
           "2. Me passa esse código que eu conecto a sua conta (rodo sapiens_meta action=login).",
         ],
         note: "Sem API key e sem cartão: você opera com as Sinapses que já tem na conta. Conectado, me peça 'o que você faz?' que eu te mostro os primeiros poderes.",
+        semConta:
+          "Sem conta já dá pra levar o que a casa tem aberto (projetos open source e modelos no Civitai): sapiens_meta action=biblioteca.",
       };
     }
     // best-effort: sem o whoami ainda dá pra entregar um onboarding útil.
@@ -680,6 +688,13 @@ export async function meta(args: MetaArgs): Promise<any> {
       voltaPraCasa:
         "sapiens_gallery action=ingest com externalEngine='<provedor>-<motor>', prompt VERBATIM, externalCost na moeda de lá, characterId e referenceImageIds. filePath (arquivo local, só no MCP instalado) ou sourceUrl (o render, que expira: ingira no mesmo turno). unfiltered=true quando o motor rodou sem filtro. Tetos: 12 MB imagem, 60 MB vídeo, 40 peças por dia.",
     };
+  }
+
+  // biblioteca: o que a casa tem aberto. Antes do getSessionToken de propósito:
+  // é pra quem ainda não tem conta também. O porquê de ler do site está em
+  // ./biblioteca.ts.
+  if (args.action === "biblioteca") {
+    return lerBiblioteca(args.idioma ?? "pt");
   }
 
   const sessionToken = getSessionToken();

@@ -784,3 +784,104 @@ test("a prévia da imagem vai pro chat como bloco image, fora do JSON, e só se 
   assert.deepEqual(imagemQueCabe("x".repeat(IMAGEM_NO_CHAT_MAX_B64 + 1), "image/webp"), []);
   assert.deepEqual(imagemQueCabe("UklGRg==", "image/svg+xml"), []);
 });
+
+// ---------- sapiens_meta action=biblioteca: o que a casa tem aberto ----------
+//
+// O catálogo mora no site (freeStuff.mjs + o filtro SFW do Civitai) e chega por
+// GET /api/biblioteca. Aqui se prova a leitura: uma língua só, campo ausente
+// vira null, e site fora do ar devolve o caminho humano em vez de erro.
+
+import { lerBiblioteca, montarBiblioteca, BIBLIOTECA_URL } from "../dist/tools/biblioteca.js";
+import { meta } from "../dist/tools/meta.js";
+
+const MAPA = {
+  versao: 1,
+  pagina: { pt: "https://www.sapiensinteticos.com/free-stuff", en: "https://www.sapiensinteticos.com/en/free-stuff" },
+  github: "https://github.com/inhabitants",
+  itens: [
+    {
+      slug: "fired-cv",
+      nome: { pt: "fired.cv", en: "fired.cv" },
+      tipo: { pt: "Skill", en: "Skill" },
+      linha: { pt: "Demissão pela IA, currículo pela IA.", en: "Fired by AI, CV by AI." },
+      licenca: "MIT",
+      repo: "https://github.com/inhabitants/fired-cv",
+      pagina: { pt: "https://www.sapiensinteticos.com/fired-cv?lang=pt", en: "https://www.sapiensinteticos.com/fired-cv?lang=en" },
+      instalar: {
+        onde: { pt: "Cola no seu agente", en: "Paste into your agent" },
+        texto: { pt: "Usa sapiensinteticos.com/fired-cv pra montar meu currículo.", en: "Use sapiensinteticos.com/fired-cv to build my resume." },
+      },
+      porta: "free",
+    },
+    { slug: "melodytree", nome: { pt: "Melodytree", en: "Melodytree" }, tipo: { pt: "Visualizador", en: "Visualizer" }, linha: { pt: "Solta uma música.", en: "Drop a song." }, licenca: "MIT", repo: null, pagina: { pt: "https://www.sapiensinteticos.com/melodytree?lang=pt", en: "https://www.sapiensinteticos.com/melodytree?lang=en" }, instalar: null, porta: "free" },
+  ],
+  modelos: [{ nome: "Aria Maiven", tipo: "LoRA", base: "Krea 2", linha: null, url: "https://civitai.com/models/1" }],
+};
+
+function comFetch(falso, fn) {
+  const original = globalThis.fetch;
+  globalThis.fetch = falso;
+  return fn().finally(() => {
+    globalThis.fetch = original;
+  });
+}
+
+test("biblioteca: monta numa língua só, com a frase de instalar do catálogo", () => {
+  const pt = montarBiblioteca(MAPA, "pt");
+  assert.equal(pt.ok, true);
+  assert.match(pt.resumo, /2 projetos abertos e 1 modelo no Civitai/);
+  assert.deepEqual(pt.projetos[0], {
+    nome: "fired.cv",
+    tipo: "Skill",
+    oQueE: "Demissão pela IA, currículo pela IA.",
+    licenca: "MIT",
+    repo: "https://github.com/inhabitants/fired-cv",
+    pagina: "https://www.sapiensinteticos.com/fired-cv?lang=pt",
+    instalar: { onde: "Cola no seu agente", texto: "Usa sapiensinteticos.com/fired-cv pra montar meu currículo." },
+  });
+  assert.equal(pt.projetos[1].instalar, null, "o que roda no navegador vai sem frase");
+  assert.equal(pt.modelosNota, undefined);
+
+  const en = montarBiblioteca(MAPA, "en");
+  assert.equal(en.pagina, "https://www.sapiensinteticos.com/en/free-stuff");
+  assert.equal(en.projetos[0].instalar.texto, "Use sapiensinteticos.com/fired-cv to build my resume.");
+  assert.match(en.resumo, /2 open projects and 1 model on Civitai/);
+  assert.ok(!JSON.stringify([pt, en]).includes("—"), "sem em-dash");
+});
+
+test("biblioteca: Civitai fora devolve os projetos e avisa dos modelos", () => {
+  const out = montarBiblioteca({ ...MAPA, modelos: [] }, "pt");
+  assert.equal(out.projetos.length, 2);
+  assert.match(out.modelosNota, /Civitai não respondeu/);
+});
+
+test("biblioteca: lê do endpoint do site, sem sessão", async () => {
+  let pedido = null;
+  const out = await comFetch(
+    async (url) => {
+      pedido = String(url);
+      return new Response(JSON.stringify(MAPA), { status: 200, headers: { "content-type": "application/json" } });
+    },
+    // Pela porta da tool: sem login nenhum no ambiente de teste, tem que responder.
+    () => meta({ action: "biblioteca", idioma: "en" }),
+  );
+  assert.equal(pedido, BIBLIOTECA_URL);
+  assert.match(BIBLIOTECA_URL, /^https:\/\/www\.sapiensinteticos\.com\//, "www: o apex responde 308");
+  assert.equal(out.ok, true);
+  assert.equal(out.projetos[0].oQueE, "Fired by AI, CV by AI.");
+});
+
+test("biblioteca: site fora (ou pacote na frente do push) devolve o caminho humano", async () => {
+  for (const falso of [
+    async () => new Response("not found", { status: 404 }),
+    async () => {
+      throw new Error("offline");
+    },
+    async () => new Response("{}", { status: 200 }),
+  ]) {
+    const out = await comFetch(falso, () => lerBiblioteca("pt"));
+    assert.equal(out.ok, false);
+    assert.equal(out.pagina, "https://www.sapiensinteticos.com/free-stuff");
+    assert.equal(out.github, "https://github.com/inhabitants");
+  }
+});
