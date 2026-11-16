@@ -112,12 +112,17 @@ function startServer(extraEnv = {}) {
   function send(msg) {
     child.stdin.write(JSON.stringify(msg) + "\n");
   }
+  // 60 s, não 15: o boot do binário leva ~7 s com a máquina parada e passa
+  // de 20 s com os seis arquivos de teste subindo servidor em paralelo (e algum
+  // tsc de outra sessão por cima). Com 15 s o `initialize` estourava num teste
+  // diferente a cada rodada e o release.sh parava antes do publish (16/11/2026).
+  // O teto só pesa quando o servidor não responde; o contrato é o que se testa.
   function request(id, method, params) {
     return new Promise((resolve, reject) => {
       const timer = setTimeout(() => {
         pending.delete(id);
         reject(new Error(`timeout esperando resposta de ${method}`));
-      }, 15000);
+      }, 60000);
       pending.set(id, (m) => {
         clearTimeout(timer);
         resolve(m);

@@ -22,8 +22,8 @@ import { need } from "../schema.js";
  *   AULA LEGADA (sem source): o `slides` É a fonte, e o caminho é get/upsert
  *   com o objeto inteiro.
  *
- * `meta` (título, série, data, duração, draft/published) e `delete` valem pras
- * duas.
+ * `meta` (título, série, data, duração, nível, draft/published) e `delete`
+ * valem pras duas.
  */
 
 export const aulaSchema = z.object({
@@ -127,6 +127,14 @@ export const aulaSchema = z.object({
     .enum(["draft", "published"])
     .optional()
     .describe("action=meta: 'draft' tira do ar (só admin vê), 'published' põe no ar."),
+  // O vocabulário mora em apps/sapiens/convex/shared/aulaNivel.ts; o servidor
+  // valida de novo, então nível novo lá só pede esta lista acompanhando.
+  nivel: z
+    .enum(["iniciante", "intermediario", "avancado", ""])
+    .optional()
+    .describe(
+      "action=meta: complexidade da aula. A vitrine /aulas ordena cada série do mais fácil pro mais difícil (parte 'N de M' da tag manda antes) e aula sem nível vai pro fim da série. '' limpa. Juízo do dono: na dúvida, pergunte em vez de chutar.",
+    ),
   force: z
     .boolean()
     .optional()
@@ -218,6 +226,7 @@ export async function aula(args: AulaArgs): Promise<any> {
         data: args.data,
         duration: args.duration,
         status: args.status,
+        nivel: args.nivel,
       });
 
     case "upsert": {
