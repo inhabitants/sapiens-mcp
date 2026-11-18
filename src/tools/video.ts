@@ -108,6 +108,12 @@ import { httpUrl } from "../schema.js";
  *                                   (30s em 720p passa de 40 mil Sinapses). Quem precisa de 1080p
  *                                   continua no 2.0 padrão, que a 2.5 NÃO substitui.
  *   - sapiens-video-kling          Kling 3.0 Pro — dá vida a uma imagem, 3-15s, sound opcional (i2v/t2v)
+ *   - sapiens-video-kling-4        Kling 4.0 — o plano-sequência: 3-30s num take só, som nativo SEMPRE
+ *                                   ligado (está no preço, o toggle não muda nada), 720p ou 1080p,
+ *                                   frame inicial e final no i2v (t2v/i2v). Sem referência de imagem.
+ *                                   Mande resolution explícito: sem ele o servidor cobra e gera 1080p.
+ *                                   Câmera contínua que atravessa o lugar é o forte dele: escreva o
+ *                                   percurso inteiro, do primeiro ao último segundo.
  *   - sapiens-video-hailuo         Hailuo 2.3 (MiniMax) — física e movimento em 768p, 6 ou 10s (t2v/i2v).
  *                                   Motor puro: SEM áudio, SEM referência, SEM frame final.
  *   - sapiens-video-hailuo-pro     Hailuo 2.3 Pro — o mesmo em 1080p, 5s fixo (duração não é param).
@@ -235,6 +241,7 @@ const VIDEO_MODELS = [
   "sapiens-video-seedance-2-mini",
   "sapiens-video-seedance-25",
   "sapiens-video-kling",
+  "sapiens-video-kling-4",
   "sapiens-video-hailuo",
   "sapiens-video-hailuo-pro",
   "sapiens-video-h3",
