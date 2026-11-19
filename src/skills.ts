@@ -754,7 +754,7 @@ Voz é da PESSOA. Soul é do Sintético dela (a skill é outra: minha-soul). Nã
 ## Passo a passo
 
 1. \`sapiens_profile action=voz\` devolve o contrato \`sapiens.voz/v1\`. Não cobra Sinapse.
-2. Escreva \`.claude/skills/sapiens-voz/SKILL.md\` na raiz do projeto atual, no molde abaixo. Pasta que não existe, você cria. Arquivo que já existe, você sobrescreve: é o retrato de hoje. (Projeto que ainda tem \`.claude/skills/sapiens-soul/SKILL.md\` com o retrato da pessoa, de antes do rename: apague, porque esse caminho agora é da soul do Sintético.)
+2. Escreva \`.claude/skills/sapiens-voz/SKILL.md\` na raiz do projeto atual, no molde abaixo. Pasta que não existe, você cria. Arquivo que já existe, você sobrescreve: é o retrato de hoje. Só o SKILL.md: \`VOZ.md\` e \`RESPOSTAS.md\` na mesma pasta são da entrevista de voz (skill \`entrevista-de-voz\`), a voz dita pela própria pessoa, e nunca se apagam nem se reescrevem por aqui. (Projeto que ainda tem \`.claude/skills/sapiens-soul/SKILL.md\` com o retrato da pessoa, de antes do rename: apague, porque esse caminho agora é da soul do Sintético.)
 3. Confirme em UMA linha: o caminho do arquivo e a data do retrato. Não despeje o JSON na conversa.
 
 Se a pessoa não estiver dentro de um projeto (conversa sem pasta, claude.ai), diga onde o arquivo deveria morar e ofereça o conteúdo pra ela colar.
@@ -791,6 +791,8 @@ Retrato de <data legível do generatedAt>, contrato sapiens.voz/v1. É um instan
 ## Como usar isto
 Escrevendo pra essa pessoa ou no lugar dela: puxe a referência do repertório dela antes de inventar uma. O jeito de decidir está nos eixos. Na dúvida entre duas opções, escolha a que combina com o que já está aqui.
 
+Se existir VOZ.md nesta pasta, leia antes de escrever: é a voz dita por ela numa entrevista, e vence este retrato em qualquer conflito.
+
 ## Dados brutos
 \`\`\`json
 <o contrato inteiro, como veio>
@@ -804,6 +806,141 @@ O retrato envelhece. Quando a pessoa pedir, rode a action de novo e sobrescreva 
 ## O que nunca entra
 
 A voz é derivada e já sai filtrada da casa: saldo, transações, e-mail, contatos, conversas e criações privadas não viajam. Não tente completar o retrato com dado de outra tool.`,
+  },
+
+  {
+    name: "entrevista-de-voz",
+    title: "Entrevista de voz (a voz que sai da boca da pessoa)",
+    description:
+      "Entrevista longa, uma pergunta por vez em 7 blocos, que tira a voz e o gosto da própria pessoa e compila num arquivo de voz que a IA segue: o que ela defende, o que recusa, as contradições dela e exemplos bons e ruins. Puxe quando ela disser 'me entrevista', 'quero que a IA escreva como eu', 'a IA não soa como eu', 'captura meu gosto', 'faz meu arquivo de voz', ou quando ela ainda não tem rastro na casa pra voz sair dele. Sem custo de Sinapse.",
+    body: `## O que você vai fazer
+
+Entrevistar a pessoa até a voz dela sair da boca DELA, e compilar o que ela disse num arquivo que muda o jeito de qualquer IA escrever, editar, julgar e recusar no lugar dela. A skill \`minha-voz\` instala o RETRATO (quem ela é, vindo do que a casa já viu dela). Esta aqui instala a VOZ DITA: o que ela defende, o que ela odeia, o que ela nunca faria. As duas moram na mesma pasta e se completam.
+
+A maioria das pessoas quer que a IA pule o pensamento. Aqui é o contrário: você existe pra EXTRAIR o pensamento dela. Nunca ofereça a resposta pronta pra ela concordar. Uma resposta que ela aceitou de você é a sua voz, não a dela, e contamina o arquivo inteiro.
+
+Custo: zero Sinapse. Quem entrevista e compila é você, no modelo do cliente dela. Nada desta conversa sobe pro Sapiens: as respostas e o arquivo ficam na máquina dela.
+
+## Antes da primeira pergunta
+
+1. Se o connector estiver logado, \`sapiens_profile action=voz\` (grátis) traz o retrato. Use pra NÃO perguntar o que a casa já sabe e pra apontar contradição entre o que ela diz e o que ela consome. Não leia o retrato pra ela.
+2. Procure \`.claude/skills/sapiens-voz/RESPOSTAS.md\` na raiz do projeto. Se existir, é uma entrevista em andamento: leia, diga em uma linha em que bloco ela parou e retome do próximo. Não refaça bloco fechado sem ela pedir.
+3. Ofereça os dois tamanhos, em uma frase cada, e deixe ela escolher:
+   - **Completa**: umas 100 perguntas, os 7 blocos inteiros. Rende o arquivo mais afiado. Dá pra fazer em várias sessões: cada bloco fecha e salva sozinho.
+   - **Curta**: umas 35 perguntas, 5 por bloco, numa sessão de 30 a 40 minutos.
+4. Diga uma vez que dá pra parar no fim de qualquer bloco e retomar depois, e que as respostas ficam no projeto dela.
+
+## Como entrevistar (as leis)
+
+- **UMA pergunta por vez.** Espere a resposta. Nunca mande lista, nunca mande formulário.
+- **Vago não passa.** "Gosto de texto direto" vira "me mostra uma frase que é direta do jeito que você gosta, ou uma que finge ser e não é". Peça o exemplo concreto: uma frase, um post, uma peça, um nome.
+- **Contradição se aponta, com respeito.** "No bloco 2 você disse X, agora disse Y. Qual vale, e quando?" Se as duas valem em situações diferentes, anote como contradição produtiva: é das partes mais valiosas do arquivo.
+- **"Não sei" ganha uma segunda chance pelo avesso.** "O que você ODIARIA ler sobre isso?" costuma destravar. Se ainda não sabe, anote "não sabe" e siga. Entrevista, não interrogatório.
+- **Não sugira a resposta.** Se ela travar de verdade, dê dois polos extremos pra ela reagir ("frase de três palavras ou parágrafo de uma frase só?"), nunca a resposta do meio pronta pra ela assinar.
+- **Não elogie, não comente longo.** Uma linha de reação no máximo, e a próxima pergunta. O ritmo é o que faz ela falar sem pose.
+- **Na língua dela.** E o jeito dela de falar (gíria, palavrão, termo técnico em inglês) entra no arquivo como veio.
+- **Texto colado vale ouro.** Quando ela colar texto dela, guarde inteiro: é matéria-prima dos exemplos de ouro.
+
+## Os 7 blocos
+
+Os números são da versão completa; na curta, 5 por bloco, escolhendo as perguntas que mais rendem. As âncoras são ponto de partida: improvise o resto em cima do que ela responder, e use o retrato pra fugir do óbvio.
+
+1. **Crenças e opiniões contra a corrente** (15). O que ela acredita que a maioria do meio dela acha errado. Uma opinião que já custou algo. O que todo mundo repete e ela acha preguiça. Onde mudou de ideia e por quê.
+2. **Mecânica da escrita** (20). Frase curta ou longa, e quando quebra a própria regra. Como abre um texto, como fecha. Pontuação que ama e que odeia. Números, primeira pessoa, palavra que usa demais e não quer largar. Peça que ela cole de 3 a 5 textos dela que acha bons e 1 ou 2 dela que acha ruins, e pergunte o que separa um do outro.
+3. **Crimes estéticos** (15). O que faz ela parar de ler na segunda linha. Os vícios de texto de IA que ela reconhece de longe. Capa, imagem ou design que dá vergonha alheia. Uma obra famosa que ela acha superestimada, e por quê.
+4. **Voz e personalidade** (15). Como um amigo descreveria o jeito dela falar. Que humor ela usa, e onde ele não entra. Como ela discorda de alguém. Quanto dela aparece no texto. As palavras e expressões que são só dela.
+5. **Preferências de estrutura** (15). Lista ou prosa. Tamanho certo. Título. Exemplo antes ou depois da regra. Quantas ideias cabem numa peça. Como ela gosta de ser conduzida por um texto longo.
+6. **Nãos absolutos** (10). O que ela nunca escreveria, nem pago. Tema que ela não toca. Tom que ela nunca usaria. Palavras banidas.
+7. **Sinais de alerta** (10). Como ela saberia em três segundos que um texto "dela" foi feito por IA. O que faz ela jogar um rascunho fora inteiro. O erro que irrita mais do que deveria.
+
+## Salvar a cada bloco
+
+No fim de CADA bloco, escreva (ou atualize) \`.claude/skills/sapiens-voz/RESPOSTAS.md\` na raiz do projeto atual. Pasta que não existe, você cria.
+
+- No topo: o modo (completa ou curta), os blocos fechados e a data.
+- Depois, bloco a bloco: cada pergunta e a resposta dela VERBATIM, com os textos colados inteiros. Não resuma, não corrija, não limpe. O que você notou (contradição, recusa forte, expressão dela) vai numa linha \`nota:\` embaixo da resposta, separado da fala dela.
+
+Depois de salvar, uma linha: o bloco fechou, quantos faltam, segue ou para aqui. Se ela parar, diga que a próxima conversa retoma com "continua minha entrevista de voz".
+
+## Compilar (depois do último bloco)
+
+Escreva \`.claude/skills/sapiens-voz/VOZ.md\`. Teto: 5.000 tokens (umas 3.500 palavras). O crivo de CADA linha:
+
+> Se esta linha sumisse, a IA escreveria, editaria, julgaria, recusaria, estruturaria ou decidiria diferente? Se sim, fica. Se não, sai.
+
+Biografia que não muda a escrita sai. Elogio sai. Regra genérica que serve pra qualquer um ("seja claro") sai. O que é específico dela fica, de preferência com a palavra dela entre aspas.
+
+O arquivo segue esta estrutura (as tags são pra máquina ler; o conteúdo vai na língua dela):
+
+\`\`\`\`markdown
+# A voz de <nome>, dita por ela
+
+Entrevista de <data>, modo <completa|curta>. As respostas inteiras estão em RESPOSTAS.md, nesta pasta.
+
+## Cartão rápido
+<até 150 palavras: o essencial pra quem só tem tempo de ler isto>
+
+<usage>quando e como usar este arquivo</usage>
+<priority>
+1. A instrução atual dela na conversa.
+2. Verdade e segurança.
+3. hard_refusals.
+4. Um exemplo específico vence uma regra abstrata.
+5. Regra que ela disse vence regra que alguém inferiu.
+</priority>
+<identity_context>só o que muda a escrita</identity_context>
+<voice_fingerprint>ritmo, tom, temperatura, o que faz o texto soar como ela</voice_fingerprint>
+<writing_laws>regras de escrita, cada uma com a evidência (a fala dela)</writing_laws>
+<communication_laws>como ela discorda, pede, responde, conduz</communication_laws>
+<hard_refusals>o que nunca, em hipótese nenhuma</hard_refusals>
+<taste_loves>o que ela ama, com exemplo</taste_loves>
+<taste_disgusts>o que ela odeia, com exemplo</taste_disgusts>
+<phrase_bank>
+  <use>expressões dela, como ela fala</use>
+  <avoid>palavras e fórmulas que ela baniu</avoid>
+</phrase_bank>
+<signature_tells>o que denuncia que um texto é dela</signature_tells>
+<decision_rules>na dúvida entre A e B, ela escolhe…</decision_rules>
+<productive_contradictions>as duas coisas que valem ao mesmo tempo, e quando vale cada uma</productive_contradictions>
+<golden_examples>
+  de 3 a 6, cada um com:
+  <bad>como uma IA genérica escreveria</bad>
+  <good>como ela escreve</good>
+  <why>o que separa os dois, em uma linha</why>
+</golden_examples>
+<do_not_infer>o que a IA NÃO deve deduzir dela (opinião não dita, biografia, gosto que ela não confirmou)</do_not_infer>
+<final_instruction>a última linha que a IA lê antes de escrever</final_instruction>
+\`\`\`\`
+
+Os exemplos de ouro: o \`good\` sai do texto que ELA colou ou de uma frase dela na entrevista, nunca de você. Se ela não colou nada, peça agora de 3 a 5 textos curtos dela antes de fechar o arquivo. Exemplo bom inventado por você é a pior linha que o arquivo pode ter.
+
+Seção sem matéria vinda dela fica de fora. Seção vazia com rótulo é pior que arquivo curto.
+
+## Ligar o arquivo à skill
+
+Depois de escrever VOZ.md:
+
+- **Já existe \`.claude/skills/sapiens-voz/SKILL.md\`** (o retrato da \`minha-voz\`): acrescente no começo do corpo, logo depois do título, uma seção \`## A voz dita\` que manda ler VOZ.md antes de escrever e diz que ela vence o retrato em qualquer conflito. Se a seção já estiver lá, deixe como está. Não mexa no resto do arquivo.
+- **Não existe:** crie com este molde.
+
+\`\`\`\`markdown
+---
+name: sapiens-voz
+description: A voz de <nome>, dita por ela numa entrevista longa (o que defende, o que recusa, as contradições, exemplos bons e ruins). Puxe antes de escrever, editar ou julgar qualquer texto pra ela ou no lugar dela.
+---
+
+# A voz de <nome>
+
+Leia VOZ.md, nesta pasta, antes de escrever. As respostas inteiras da entrevista estão em RESPOSTAS.md, pra quando VOZ.md não cobrir o caso.
+\`\`\`\`
+
+Feche em UMA linha: o caminho dos arquivos e quantos exemplos de ouro entraram. Não despeje o VOZ.md na conversa. Se o connector estiver ativo e ela ainda não tiver o retrato instalado, ofereça a skill \`minha-voz\` numa frase.
+
+Se a pessoa não estiver dentro de um projeto (conversa sem pasta, claude.ai), mantenha as respostas na conversa e, no fim, entregue o VOZ.md inteiro pra ela colar nas instruções do projeto ou guardar como arquivo.
+
+## Atualizar
+
+Voz muda. Ela pode refazer um bloco só ("refaz o bloco 3"): pergunte de novo, troque aquele bloco no RESPOSTAS.md e recompile o VOZ.md inteiro com o crivo. Nunca apague resposta antiga sem ela pedir; resposta que mudou ganha a nova embaixo, com a data.`,
   },
 
   {

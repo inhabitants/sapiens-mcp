@@ -336,7 +336,7 @@ O passo a passo travado de cada fluxo mora na tool sapiens_skill, servida por es
 - sapiens_skill action=list -> o índice (slug + quando usar cada uma).
 - sapiens_skill action=get name=<slug> -> a skill inteira.
 Slugs: ${skillMenuLine()}
-Puxe a skill ANTES de: gerar música ou efeito sonoro (musica), escolher modelo de vídeo (video), gerar imagem (imagem), criar personagem ou prompt de Midjourney (personagem), criar na identidade do usuário (studio), postar no Fórum ou no chat (forum-comunidade), redigir qualquer texto publicável (voz-da-casa), incorporar o Sintético (companhia), missão de Desafio (trilhas), montar currículo (curriculo), guardar obra ou ferramenta no acervo (repertorio), gerar em motor de fora com crédito próprio e trazer a peça pro acervo (pontes), publicar peça nas redes da pessoa (publicar), escrever código que chama a API da conta (sapiens-api). Perdido no começo: primeiros-passos.
+Puxe a skill ANTES de: gerar música ou efeito sonoro (musica), escolher modelo de vídeo (video), gerar imagem (imagem), criar personagem ou prompt de Midjourney (personagem), criar na identidade do usuário (studio), postar no Fórum ou no chat (forum-comunidade), redigir qualquer texto publicável (voz-da-casa), incorporar o Sintético (companhia), missão de Desafio (trilhas), montar currículo (curriculo), entrevistar a pessoa pra IA escrever como ela (entrevista-de-voz), guardar obra ou ferramenta no acervo (repertorio), gerar em motor de fora com crédito próprio e trazer a peça pro acervo (pontes), publicar peça nas redes da pessoa (publicar), escrever código que chama a API da conta (sapiens-api). Perdido no começo: primeiros-passos.
 Cliente que lê resources MCP acha o MESMO conteúdo em skill://sapiens/<slug>/SKILL.md.
 
 REGRA DE OURO:

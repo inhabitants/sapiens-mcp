@@ -411,6 +411,7 @@ const EXPECTED_SKILLS = [
   "trilhas",
   "minha-soul",
   "minha-voz",
+  "entrevista-de-voz",
   "curriculo",
   "pontes",
   "repertorio",
