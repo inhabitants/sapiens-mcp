@@ -53,7 +53,7 @@ export const referenceSchema = z.object({
         "'favorites' (as que você curtiu), 'videos' (seus vídeos; idem), 'stock_video' (Banco de Vídeo da casa: clipes/B-roll prontos, aceita term/orientation/loopOnly), " +
         "'acervo' (stock + comunidade públicos de IMAGEM), 'characters' (personagens), " +
         "'depth_map' (guias de movimento: os SEUS com shadowSource='mine', ou o banco curado da casa por default), " +
-        "'pose_map' (seu banco privado de POSE: mapa de profundidade de corpo num quadro parado, mais de 8 mil poses organizadas por familia/vista/camera/enquadramento/leitura; aceita também term/orientation/people/hasObject/hasSuporte/objeto/favoritesOnly/collection/sort, grupo/porPose pra mesma pose em várias câmeras, mais semantic e similarTo pra busca por sentido).",
+        "'pose_map' (seu banco privado de POSE: mapa de profundidade de corpo num quadro parado, mais de 8 mil poses organizadas por familia/vista/camera/enquadramento/leitura; aceita também term/orientation/people/hasObject/hasSuporte/objeto/favoritesOnly/collection/sort, grupo/porPose pra mesma pose em várias câmeras, mais semantic e similarTo pra busca por sentido, e fonte='galeria' pra levar uma foto ao manequim da casa com as cinco câmeras).",
     ),
   handle: z
     .string()
@@ -145,6 +145,16 @@ export const referenceSchema = z.object({
     .describe(
       "Só bucket 'pose_map': o id de uma pose; devolve as MAIS PARECIDAS com ela. " +
         "Use quando o usuário gostou de uma e quer variações do mesmo gesto.",
+    ),
+  fonte: z
+    .enum(["galeria"])
+    .optional()
+    .describe(
+      "Só bucket 'pose_map', junto de similarTo ou semantic: 'galeria' busca SÓ nas poses do manequim da casa " +
+        "(60 poses, cada uma com cinco câmeras: frente, diagonal, lado, de cima, de baixo; `grupo` começa com " +
+        "'galeria:'). Use pra levar uma pose de FOTO (uma câmera só) ao manequim do mesmo gesto e ganhar a " +
+        "cobertura de câmera: volta uma câmera por pose, e grupo=<grupo> traz as outras quatro. Sem isso, as " +
+        "milhares de fotos do banco enterram o manequim na vizinhança.",
     ),
   sort: z
     .enum(["recent", "used"])
@@ -268,6 +278,7 @@ export async function reference(args: ReferenceArgs): Promise<any> {
         familia: args.familia,
         vista: args.vista,
         leitura: args.leitura,
+        fonte: args.fonte,
       });
       const itens = res?.items ?? [];
       return {
