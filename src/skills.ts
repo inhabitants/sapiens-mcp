@@ -305,7 +305,7 @@ O preço é pelo SEGUNDO DO ÁUDIO: o servidor mede o arquivo antes de cobrar, e
 - \`sapiens-video-flux-3-max\`: FLUX 3 Max, texto ou imagem, 5 a 20s em \`720p\` ou \`1080p\`, som nativo e frame final (só junto do inicial). Segue o prompt de perto e volta rápido. Não aceita referência de personagem nem vídeo de movimento.
 - \`sapiens-video-kling-motion\`: passa o movimento de um vídeo pra uma imagem. Precisa de pessoa com tronco visível na imagem E no vídeo.
 - \`sapiens-video-shot-mimic\`: recria o plano, a câmera e os cortes de um vídeo de referência como cena nova.
-- \`sapiens-video-omni-12\`: Gemini Omni 1.2, texto ou imagem vira clipe de 4, 6, 8, 10, 12 ou 15s (sem \`durationSec\`, 10s) com áudio nativo, de \`360p\` a \`4k\` (sem \`resolution\`, 720p). O preço é por segundo e por resolução: o take de 4s custa 40% do de 10s, o 360p custa 1/3 do 720p, o 1080p 1,5x e o 4k 3x. Aceita até 6 imagens de referência (3 por personagem, até 2 personagens, cada um descrito no prompt) além do frame inicial e do final, e até 3 vídeos de referência em \`referenceVideoUrls\`, de até 3 s cada (1 só no take de 11 a 15 s, e só em take novo, nunca na edição ou na extensão): o clipe dá a aparência de quem aparece nele (rosto, corpo, roupa), não o movimento, e não muda o preço. Pra copiar coreografia, Seedance. Edita e estende um vídeo SEU: \`sourceVideoId\` (da galeria) ou \`sourceVideoUrl\` (link da casa), mp4 até 15 s, com \`sourceVideoMode\` \`edit\` (o padrão: a mesma cena com a mudança pedida, cobrada pelo tamanho do clipe; é como se troca a pessoa de um vídeo pelo seu personagem, com a ficha dele em \`referenceImageIds\`) ou \`extend\` (o pedaço seguinte, até 10s por vez, cobrado pelo \`durationSec\`). A proporção sai a do clipe. O truque: \`editOfImageId\` aponta um vídeo Omni seu e o prompt vira instrução de edição sobre a MESMA cena (troca item ou personagem, preserva câmera e ambiente). É o caminho pra variações com continuidade: gera a base uma vez, edita N vezes. Cada edição debita como geração nova. Pra ir ADIANTE no tempo é \`action=extend\` (o pedaço seguinte, cobrado pela duração dele): o arquivo de cada parte já traz as anteriores na frente, então a última parte pronta é o filme inteiro. Não emende as partes, a abertura repete; \`action=chain\` aponta o \`filmeInteiro\`.
+- \`sapiens-video-omni-12\`: Gemini Omni 1.2, texto ou imagem vira clipe de 3, 4, 6, 8, 10, 12 ou 15s (sem \`durationSec\`, 10s) com áudio nativo, de \`360p\` a \`4k\` (sem \`resolution\`, 720p). O preço é por segundo e por resolução: o take de 4s custa 40% do de 10s, o 360p custa 1/3 do 720p, o 1080p 1,5x e o 4k 3x. Aceita até 6 imagens de referência (3 por personagem, até 2 personagens, cada um descrito no prompt) além do frame inicial e do final, e até 3 vídeos de referência em \`referenceVideoUrls\`, de até 3 s cada (1 só no take de 11 a 15 s, e só em take novo, nunca na edição ou na extensão): o clipe dá a aparência de quem aparece nele (rosto, corpo, roupa), não o movimento, e não muda o preço. Pra copiar coreografia, Seedance. Edita e estende um vídeo SEU: \`sourceVideoId\` (da galeria) ou \`sourceVideoUrl\` (link da casa), mp4 até 15 s, com \`sourceVideoMode\` \`edit\` (o padrão: a mesma cena com a mudança pedida, cobrada pelo tamanho do clipe; é como se troca a pessoa de um vídeo pelo seu personagem, com a ficha dele em \`referenceImageIds\`) ou \`extend\` (o pedaço seguinte, até 10s por vez, cobrado pelo \`durationSec\`). A proporção sai a do clipe. O truque: \`editOfImageId\` aponta um vídeo Omni seu e o prompt vira instrução de edição sobre a MESMA cena (troca item ou personagem, preserva câmera e ambiente). É o caminho pra variações com continuidade: gera a base uma vez, edita N vezes. Cada edição debita como geração nova. Pra ir ADIANTE no tempo é \`action=extend\` (o pedaço seguinte, cobrado pela duração dele): o arquivo de cada parte já traz as anteriores na frente, então a última parte pronta é o filme inteiro. Não emende as partes, a abertura repete; \`action=chain\` aponta o \`filmeInteiro\`.
 - \`sapiens-video-omni\` (Gemini Omni 1.0) e \`sapiens-video-lite\` / \`-fast\` / \`-quality\` (Veo 3.1): SAÍRAM. O Google apagou os quatro em 22/10/2026 e o pedido é recusado antes de cobrar. O sucessor é o \`sapiens-video-omni-12\`.
 - \`sapiens-video-omni-11\` (Gemini Omni 1.1): saiu da prateleira em 05/11/2026. Pedido novo com esse id roda no 1.2 e é cobrado como ele; take antigo do 1.1 continua nele.
 
@@ -336,6 +336,8 @@ Dá pra somar 1 vídeo de movimento via \`referenceVideoUrls\` (até 15s, host d
 
 Frame inicial e final: \`startImageId\`/\`endImageId\` (galeria) ou \`startImageUrl\`/\`endImageUrl\`. Arquivo local (\`startImagePath\`) só funciona no MCP instalado via stdio, nunca no remoto. Suporte a frame final varia por modelo.
 
+LOOP (o take de GIF de reação): a MESMA peça em \`startImageId\` e \`endImageId\`. No \`sapiens-video-omni-12\` ela entra como primeiro e como último frame, e o movimento sai dela e volta nela, sem emenda (conta duas no teto de imagens). Em \`360p\` e 3s é o vídeo mais barato da casa (cote em \`action=price\`); pronto o take, \`action=gif\` entrega o .gif.
+
 Frame de borda e referência são caminhos EXCLUSIVOS no Seedance 2.0/Fast/Mini/2.5 e no H3: ou o take nasce do frame (\`startImage*\`/\`endImage*\`), ou das referências (\`referenceImage*\`/\`referenceVideoUrls\`), nunca dos dois. No Seedance a mistura é recusada antes de cobrar; no H3 a referência troca o endpoint e o frame inicial fica de fora. Quer a pessoa da foto no take? Mande a foto como referência e descreva o primeiro quadro no prompt; quer o quadro exato? Só o frame inicial.
 
 ## É assíncrono
@@ -349,6 +351,7 @@ NÃO chame create de novo enquanto renderiza: cria outro vídeo e cobra de novo.
 As ações da ficha do site saem por aqui, e cada uma vira peça nova na galeria, com o original intacto:
 
 - \`trim\`: \`imageId\` + \`startSec\` (e \`endSec\`, sem ele vai até o fim). Corta o trecho. Grátis.
+- \`gif\`: \`imageId\`. O take em loop, mudo, num .gif (até 10 s, até 8 MB) que cola no chat, no Fórum e em qualquer rede. Esse não vira peça nova: fica gravado no take, e pedir de novo devolve o mesmo GIF na hora. Grátis.
 - \`join\`: \`imageIds\` com 2 a 8 vídeos seus, na ordem do compilado, até 180 s somados. Grátis.
 - \`fecho\`: \`imageId\` + \`ending\` (\`marca\` é a assinatura da casa, \`none\` sem vinheta), \`watermark\`, \`musicUrl\` (trilha do acervo da casa) e \`nameCard\` (o personagem se apresenta no fim). Grátis.
 - \`render-ref\`: \`imageId\` do take + \`refUrl\` da folha ou referência que gerou ele. Cobra Sinapses; o mesmo par já renderizado volta de graça.
@@ -1223,6 +1226,102 @@ Trazendo slides de outro editor: crie o carrossel, leia o catálogo no \`get\` e
 - \`generate\`, \`auto_images\` com \`generateMissing\` e \`generate_image\` são síncronas e pesadas: se voltar Timeout, confira em \`action=list\` antes de repetir. Pode ter gerado e cobrado.
 - O carrossel vai até 15 slides. A capa IA entra com dois.
 - Baixar é no editor (o arquivo sai do navegador dela). Aqui você entrega a receita pronta, não o arquivo.`,
+  },
+
+  {
+    name: "creditos",
+    title: "Crédito de startup: pedir sem queimar a conta",
+    description:
+      "Monta com a pessoa o mapa de programas de crédito e grant (Google, Microsoft, Anthropic, AWS, BytePlus, Alibaba, Basis, Nosana e os da prateleira), confere o kit de papel, rascunha as respostas e avalia oferta de parceiro que liga oferecendo crédito ou POC. Puxe quando ela falar de crédito de nuvem, grant, programa for Startups, 'como consigo crédito', ou quando alguém oferecer crédito em troca de acesso à conta dela.",
+    body: `## A ideia
+
+Crédito de startup é ficha de cassino: a bigtech paga o começo pra pessoa crescer dentro da nuvem dela. Ninguém faz caridade, e tudo bem: a jogada é pegar a ficha de todas e jogar onde o jogo é bom.
+
+Quem barra é o PAPEL, quase nunca a ideia. Um filtro, muitas vezes automático, confere se os dados batem entre si (nome, endereço, domínio, documento, conta). Projeto bom com papel torto é negado em três dias; o mesmo projeto com papel certo passa.
+
+A aula que conta isso com os casos reais é "Quem Paga a Conta" (sapiensinteticos.com/aulas/quem-paga-a-conta). Se a pessoa quiser o porquê inteiro, indique.
+
+## Regras duras (antes de tudo)
+
+- **Quem envia é a pessoa.** Você pesquisa, monta o mapa e rascunha. O formulário, a criação de conta, a senha, o cartão, o CAPTCHA e o envio ficam com ela. Nunca digite senha, número de cartão ou documento de identidade por ela.
+- **Conta, cartão e rede DELA.** Vários pedidos saindo da mesma máquina, do mesmo cartão ou da mesma rede pra empresas diferentes ligam as contas no filtro antifraude, e a nuvem recusa ou bane todas de uma vez. Nunca ajude a montar várias contas pra pedir o mesmo programa de novo.
+- **Só verdade.** Escolher QUAL lado verdadeiro do projeto mostrar pra cada programa é jogo limpo (o estúdio B2B pra um, o projeto pessoal pra outro). Inventar empresa, faturamento, time, investidor ou cliente não é: além de errado, é o que derruba a conta e queima a pessoa no programa pra sempre.
+- **Uma entidade por pedido.** Nome, endereço, CNPJ ou NIF e email de domínio de uma entidade não se misturam com os de outra no mesmo pedido.
+- **Crédito não se revende.** Quase todo programa proíbe transferir ou revender o crédito ou o que ele gera em volume. Ajudar outra pessoa a pedir o dela é consultoria e pode; vender crédito como mercadoria não.
+
+## O fluxo
+
+### 1. Entrevista curta (uma pergunta por vez)
+
+- Tem empresa registrada? Em que país, desde quando, com documento emitido nos últimos 12 meses?
+- Tem site no ar, com o produto explicado? Email no domínio desse site?
+- Já levantou investimento, ou está num programa de aceleração, incubadora ou fundo?
+- Qual motor ou nuvem ela mais usa hoje (é o primeiro programa a pedir)?
+- Já pediu algum programa antes? Qual, quando, e o que respondeu?
+- Tem mais de uma frente (um estúdio, um projeto pessoal, um negócio de balcão)? Cada uma pode ser a porta de um programa diferente.
+
+### 2. O kit de balcão
+
+Cinco papéis abrem quase todo balcão. Equity, nenhum dos programas abaixo pede. Diga o que falta antes de qualquer pedido:
+
+1. **Site no ar**, com o produto explicado. Página em construção reprova.
+2. **Email no domínio** do site. Gmail cai no filtro.
+3. **Empresa registrada**, com documento recente. Sem empresa, só os programas "pra pessoa" (seção 4).
+4. **Conta com histórico**: faturamento ativo e uso real. Conta criada no dia do pedido é o recusado clássico. Se a conta é nova, use por algumas semanas com cartão e gasto pequeno antes de pedir.
+5. **500 caracteres** do que o projeto faz, pra quem e com qual modelo. Você rascunha, ela corta.
+
+### 3. O mapa
+
+Monte uma lista ordenada pros programas que o perfil dela abre, nesta ordem: primeiro o do motor que ela mais usa, depois o que destrava mais crédito com o papel que ela já tem, por último o que pede papel que ela ainda não tem. Pra cada um: faixa, o que pede, link oficial, e o que falta no kit dela.
+
+Valores e regras mudam. Antes de afirmar um número, abra o link oficial e confira. Se não der pra abrir, diga que é o valor da última conferência, não o de hoje.
+
+### 4. Os balcões
+
+**Com empresa:**
+
+- **Google for Startups Cloud** (cloud.google.com/startup). Start até US$ 2 mil sem investimento; Scale até US$ 200 mil em dois anos com investimento de pre-seed a Série A; AI-first até US$ 350 mil quando a IA é o centro do produto. Pede conta de faturamento do Google Cloud ativa, email no domínio, empresa com até 5 anos. Paga o Gemini.
+- **Microsoft for Startups** (microsoft.com/startups). Escada por uso: US$ 5 mil com a empresa verificada, US$ 25 mil com 5 serviços da Azure em uso por 60 dias, US$ 150 mil no topo. Agência e consultoria ficam de fora. A VERIFICAÇÃO É NO DIA 1: o relógio corre desde a concessão e o crédito some calado se ninguém verificar. Formulário negado não é o fim: chamado no portal da Azure com contrato social e documento recente costuma virar.
+- **Claude for Startups** (claude.com/programs/startups). Pela via direta: US$ 1 mil de API, 1 ano de Claude Team, desconto em parceiros, office hours. Com VC parceiro, até US$ 100 mil. O crédito vale só na organização do Console que pediu. O Team volta a cobrar depois de 12 meses: anote pra cancelar ou decidir antes.
+- **AWS Activate** (aws.amazon.com/activate). Founders: US$ 1 mil pra quem é bootstrapped, sem código. Portfolio: muito mais, mas só com o Org ID de um Activate Provider (aceleradora, VC, incubadora ou parceiro). Conta nova pedindo no mesmo dia é recusa quase certa.
+- **BytePlus V-Start** (byteplus.com/en/activity/vstart). Até US$ 100 mil em cupom na nuvem da ByteDance, onde mora o Seedance. Pede empresa e plano de uso.
+- **Alibaba Cloud AI Catalyst** (alibabacloud.com/en/startup/ai). Até US$ 120 mil de nuvem e tokens no Model Studio (Wan, Qwen). Pede empresa com até 10 anos e plano técnico; costuma pedir conta Enterprise de pessoa jurídica.
+
+**Pra pessoa (sem empresa):**
+
+- **Basis Fellowship** (basisfellowship.org). Dinheiro pra pessoa, sem equity nem relatório, sempre aberto, formulário curto, aceita atualização depois. Valoriza quem constrói coisa grande sozinho.
+- **Nosana Grants** (grants.nosana.com). Pago por marco em stablecoin, token e crédito de GPU descentralizada. Pede deck, demo e roadmap; conta a favor já usar a GPU deles.
+
+**Na prateleira** (valem conforme o caso): NVIDIA Inception (sem dinheiro direto, abre desconto e crédito de parceiro, pede empresa e alguém técnico no time), Microsoft ISV Success (Azure extra pra app B2B que vai pro Marketplace), Scaleway Startup Program (nuvem europeia, boa pra modelo aberto em GPU).
+
+### 5. O rascunho
+
+Pra cada programa escolhido, rascunhe as respostas campo a campo, no idioma do formulário (quase sempre inglês), na frente certa do projeto. Curto, concreto, com número verdadeiro quando houver (usuários, peças, horas economizadas, contrato). Estimativa vai marcada como estimativa. Ela lê, corta e envia.
+
+Antes de enviar, confira com ela, letra por letra: nome, endereço e site no formulário batem com o documento da empresa e com o domínio do email.
+
+### 6. Depois do sim
+
+- Verificação, ativação ou "complete seu perfil" é tarefa do mesmo dia.
+- Anote a data em que cada crédito vence e queime primeiro o que vence antes, antes de gastar dinheiro de verdade.
+- Crédito não vira histórico de gasto: plataforma que sobe limite de uso por gasto acumulado normalmente não conta o crédito.
+- Assinatura grátis de 12 meses volta cheia no 13º: lembrete antes.
+
+## Quando alguém LIGA oferecendo crédito
+
+Muita oferta chega por LinkedIn ou email: "subsídio de até US$ 10 mil pra POC", "conseguimos US$ 100 mil de AWS pra você de graça". Quase sempre quem liga é um PARCEIRO da nuvem, não a nuvem. O modelo dele:
+
+- **A isca** é paga pela nuvem: crédito de startup pelo código de provider dele, ou fundo de prova de conceito.
+- **O lucro** vem depois: a consultoria que a nuvem banca, a margem de revenda com a fatura da pessoa passando por ele, e o bônus por cliente novo.
+
+Pode valer a pena. Antes do sim, as perguntas que importam:
+
+1. **O crédito cai numa conta que ela criou?** Conta criada DENTRO da organização do parceiro dá a ele acesso de administrador total por padrão. O caminho saudável é ela criar a conta no próprio email e só aceitar convite pra organização dele.
+2. **Tem gasto mínimo ou fidelidade depois** do crédito ou do POC?
+3. **Quem vira admin**, e como ela sai (prazo de aviso, a conta vai junto)?
+4. **Pediram um usuário no domínio dela** (Google Workspace, Microsoft 365) pra eles operarem? Sinal amarelo: esse usuário recebe o reset de senha de tudo ligado a ele, enxerga o que estiver compartilhado com o domínio inteiro e entra em todo app com "Entrar com Google" que aceita o domínio. Se for inevitável: unidade organizacional separada, compartilhamento de Drive desligado, login em apps de terceiros desligado, nome funcional (cloud@, aws@) em vez de pessoa inventada, e ela, como admin, pode trocar a senha e retomar quando quiser.
+
+Diga isso em português de gente, sem alarme: a decisão é dela.`,
   },
 
   {

@@ -151,7 +151,7 @@ export const gallerySchema = z.object({
     .string()
     .optional()
     .describe(
-      "action=ingest: qual motor renderizou, sempre no formato provedor-motor ('kie-kling-3.0', 'fal-krea-2', 'magnific-minimax-h3', 'sogni-minimax-h3', 'bancada-ltx-2.5'). É ESTE campo que a ficha da peça mostra em 'Motor', então a marca sozinha ('kie', 'magnific') é recusada pelo servidor: provedor é a loja, não o motor. O provedor decide o carimbo +18 na entrada: peso aberto (sogni-, replicate-, hf-, fal-, wavespeed-, civitai-, bancada-, comfy-, local-) ou provedor que a casa não conhece entra com o carimbo por classe (publica e fica no perfil, só não vai pra vitrine anônima); serviço com moderação (kie-, magnific-, freepik-, faceless-, krea-, midjourney-, runway-, higgsfield-, modelark-) entra sem.",
+      "action=ingest: qual motor renderizou, sempre no formato provedor-motor ('kie-kling-3.0', 'fal-krea-2', 'magnific-minimax-h3', 'sogni-minimax-h3', 'bancada-ltx-2.5'). É ESTE campo que a ficha da peça mostra em 'Motor', então a marca sozinha ('kie', 'magnific') é recusada pelo servidor: provedor é a loja, não o motor. O provedor decide o carimbo +18 na entrada: peso aberto (sogni-, replicate-, hf-, fal-, wavespeed-, civitai-, bancada-, comfy-, local-) ou provedor que a casa não conhece entra com o carimbo por classe (publica e fica no perfil, só não vai pra vitrine anônima); serviço com moderação (kie-, magnific-, freepik-, faceless-, krea-, midjourney-, runway-, higgsfield-, modelark-, openart-) entra sem.",
     ),
   externalCost: z
     .string()

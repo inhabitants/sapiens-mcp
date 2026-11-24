@@ -77,9 +77,9 @@ export const forumSchema = z.object({
     .optional()
     .describe("Pra post: anexa vídeo/imagem por URL como card. Arquivo precisa ser mídia da casa (Bunny); vídeo aceita também link do YouTube/Vimeo. Use junto com mediaKind. (Música é via mediaTrackId, não aqui.)"),
   mediaKind: z
-    .enum(["video", "image"])
+    .enum(["video", "image", "gif"])
     .optional()
-    .describe("Pra post com mediaUrl: 'video' ou 'image'."),
+    .describe("Pra post com mediaUrl: 'video', 'image' ou 'gif' (o GIF de um take seu, de sapiens_video action=gif, ou do Tenor/Giphy; toca em loop no card)."),
   mediaTitle: z
     .string()
     .optional()
@@ -135,7 +135,7 @@ export async function forum(args: ForumArgs): Promise<any> {
       mediaArgs.mediaTrackId = args.mediaTrackId.trim();
     } else if (args.mediaUrl?.trim()) {
       if (!args.mediaKind) {
-        throw new Error("Com mediaUrl, informe mediaKind ('video' ou 'image'). Música é via mediaTrackId.");
+        throw new Error("Com mediaUrl, informe mediaKind ('video', 'image' ou 'gif'). Música é via mediaTrackId.");
       }
       mediaArgs.media = {
         kind: args.mediaKind,

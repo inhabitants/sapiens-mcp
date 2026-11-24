@@ -417,6 +417,7 @@ const EXPECTED_SKILLS = [
   "repertorio",
   "carrossel",
   "publicar",
+  "creditos",
   "sapiens-api",
 ].sort();
 

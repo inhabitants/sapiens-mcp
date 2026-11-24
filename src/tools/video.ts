@@ -325,6 +325,7 @@ export const videoSchema = z.object({
     "sonorize",
     "upscale",
     "trim",
+    "gif",
     "join",
     "fecho",
     "render-ref",
@@ -1099,6 +1100,13 @@ export async function video(args: VideoArgs): Promise<any> {
       startSec: args.startSec,
       ...(args.endSec != null ? { endSec: args.endSec } : {}),
     });
+  }
+
+  // O GIF do take: loop mudo num .gif, gravado na row do vídeo (não é peça
+  // nova). Grátis; o GIF já feito volta na hora.
+  if (args.action === "gif") {
+    if (!args.imageId) throw new Error("action=gif exige imageId (o vídeo SEU, pronto).");
+    return await convexAction("mcpExtrasActions:mcpVideoGif", { sessionToken, sourceImageId: args.imageId });
   }
 
   if (args.action === "join") {
