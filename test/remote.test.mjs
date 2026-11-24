@@ -113,6 +113,38 @@ test("remoto: resources servem as skills mesmo com o backend fora", async () => 
   assert.match(text, /travessão/, "a régua editorial está no corpo");
 });
 
+// Extensão Skills over MCP no remoto: capability no initialize e skills/list
+// com digest que bate com o resources/read (o host recusa a skill se não bater).
+test("remoto: extensão de skills declarada e skills/list verificável", async () => {
+  const init = await readRpcResponse(await handler(rpc(INIT)), 1);
+  assert.deepEqual(
+    init.result?.capabilities?.extensions?.["io.modelcontextprotocol/skills"],
+    {},
+    "capability da extensão no initialize",
+  );
+
+  const listed = await readRpcResponse(
+    await handler(rpc({ jsonrpc: "2.0", id: 30, method: "skills/list", params: {} })),
+    30,
+  );
+  const skill = listed.result?.skills?.find((s) => s.frontmatter?.name === "voz-da-casa");
+  assert.ok(skill, "voz-da-casa no skills/list");
+  const read = await readRpcResponse(
+    await handler(
+      rpc({ jsonrpc: "2.0", id: 31, method: "resources/read", params: { uri: skill.uri } }),
+    ),
+    31,
+  );
+  const bytes = Buffer.from(read.result.contents[0].text, "utf8");
+  const { createHash } = await import("node:crypto");
+  assert.equal(skill.resources[0].size, bytes.length, "size bate com o read");
+  assert.equal(
+    skill.resources[0].digest,
+    `sha256:${createHash("sha256").update(bytes).digest("hex")}`,
+    "digest bate com o read",
+  );
+});
+
 test("remoto: tools/list com token não-verificável = lista cheia (fail-open)", async () => {
   const res = await handler(
     rpc({ jsonrpc: "2.0", id: 2, method: "tools/list", params: {} }),

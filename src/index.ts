@@ -28,7 +28,12 @@ import {
   probeTierInBackground,
 } from "./tier.js";
 import { getPrompt, listPrompts } from "./prompts.js";
-import { listSkillResources, readSkillResource } from "./skills.js";
+import {
+  listSkillResources,
+  readSkillResource,
+  registerSkillsExtension,
+  SKILLS_EXTENSION_CAPABILITY,
+} from "./skills.js";
 import { convexMutation, getSessionToken } from "./convexClient.js";
 import { runWithClientHint } from "./clientIdentity.js";
 
@@ -73,6 +78,8 @@ const server = new Server(
       tools: { listChanged: true },
       prompts: {},
       resources: {},
+      // O SDK v1 não tipa `extensions`, mas devolve o objeto cru no initialize.
+      ...({ extensions: SKILLS_EXTENSION_CAPABILITY } as object),
     },
     instructions: SAPIENS_INSTRUCTIONS,
   },
@@ -94,6 +101,10 @@ server.setRequestHandler(ReadResourceRequestSchema, async (req) => {
   if (!found) throw new Error(`Resource desconhecido: ${req.params.uri}`);
   return found;
 });
+
+// Extensão Skills over MCP: as mesmas skills, agora como skill do host
+// (/sapiens:<slug> no Claude Code). Mesmo conteúdo, verificado por digest.
+registerSkillsExtension(server);
 
 server.setRequestHandler(ListPromptsRequestSchema, async () => ({
   prompts: listPrompts(),

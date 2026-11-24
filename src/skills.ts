@@ -24,6 +24,10 @@
  * isso é do plugin local do dono, não do connector público.
  */
 
+import { createHash } from "node:crypto";
+import { z } from "zod";
+import { ErrorCode, McpError } from "@modelcontextprotocol/sdk/types.js";
+
 export type SapiensSkill = {
   /** slug estável: entra na URI do resource e no arg `name` da tool. */
   name: string;
@@ -1421,12 +1425,14 @@ export const SKILLS: Record<string, SapiensSkill> = Object.fromEntries(
  * entre aspas (um ": " no meio quebrava a leitura) e campo que o spec não tem
  * mora em `metadata`.
  */
+const SKILL_SOURCE = "sapiens-mcp (sapiensinteticos.com)";
+
 export function renderSkill(skill: SapiensSkill): string {
   return `---
 name: ${skill.name}
 description: ${JSON.stringify(skill.description)}
 metadata:
-  source: sapiens-mcp (sapiensinteticos.com)
+  source: ${SKILL_SOURCE}
 ---
 
 # ${skill.title}
@@ -1489,4 +1495,112 @@ export function readSkillResource(
   const text = getSkillMd(name);
   if (!text) return null;
   return { contents: [{ uri, mimeType: "text/markdown", text }] };
+}
+
+// ---------- extensão Skills over MCP (io.modelcontextprotocol/skills) ----------
+//
+// A terceira porta, a que o Claude Code lê como skill de verdade: vira
+// `/sapiens:<slug>` e carrega sozinha, sem o modelo lembrar de chamar
+// sapiens_skill. Spec: ext-skills (SEP-2640), specification/beta/skills.mdx.
+// As URIs já eram as do spec (último segmento = name do frontmatter); o que a
+// extensão soma é o skills/list com digest e tamanho de cada arquivo, que o
+// host confere contra o resources/read. Por isso o digest sai do MESMO
+// renderSkill que o resources/read devolve: mudar um sem o outro quebra a
+// verificação do host e a skill não carrega.
+
+/** Id da extensão: vai em capabilities.extensions do servidor. */
+export const SKILLS_EXTENSION_ID = "io.modelcontextprotocol/skills";
+
+/** O que o servidor declara. Sem directoryRead: cada skill é um SKILL.md só. */
+export const SKILLS_EXTENSION_CAPABILITY = { [SKILLS_EXTENSION_ID]: {} };
+
+/** Conteúdo estático do pacote: igual pra todo mundo, muda só com versão nova. */
+const SKILLS_CACHE = { ttlMs: 300_000, cacheScope: "public" as const };
+
+function skillEntry(s: SapiensSkill) {
+  const uri = skillUri(s.name);
+  const bytes = Buffer.from(renderSkill(s), "utf8");
+  return {
+    uri,
+    // O frontmatter do SKILL.md, campo a campo: o host compara os dois.
+    frontmatter: {
+      name: s.name,
+      description: s.description,
+      metadata: { source: SKILL_SOURCE },
+    },
+    resources: [
+      {
+        uri,
+        digest: `sha256:${createHash("sha256").update(bytes).digest("hex")}`,
+        size: bytes.length,
+      },
+    ],
+  };
+}
+
+/** Payload do skills/list. Todas cabem numa página (teto do Claude: 100). */
+export function listSkillsExtension() {
+  return {
+    resultType: "complete" as const,
+    skills: SKILL_LIST.map(skillEntry),
+    ...SKILLS_CACHE,
+  };
+}
+
+/**
+ * Payload do skills/get. O spec só aceita a URI do SKILL.md, então a forma
+ * frouxa que o resources/read tolera (sem /SKILL.md, barra no fim) aqui é null,
+ * e o caller responde -32602.
+ */
+export function getSkillExtension(uri: string) {
+  const name = skillNameFromUri(uri);
+  if (!name || uri !== skillUri(name)) return null;
+  return {
+    resultType: "complete" as const,
+    skill: skillEntry(SKILLS[name]!),
+    ...SKILLS_CACHE,
+  };
+}
+
+/**
+ * Os dois métodos da extensão, no formato que o setRequestHandler do SDK pede.
+ * Sem .passthrough(): com ele a inferência de tipo do SDK estoura (TS2589), e
+ * o _meta que o cliente manda não é lido aqui.
+ */
+export const ListSkillsRequestSchema = z.object({
+  method: z.literal("skills/list"),
+  params: z.object({ cursor: z.string().optional() }).optional(),
+});
+
+export const GetSkillRequestSchema = z.object({
+  method: z.literal("skills/get"),
+  params: z.object({ uri: z.string() }),
+});
+
+/**
+ * O pedaço do Server que o registro usa, tipado frouxo de propósito: com o
+ * tipo inteiro do SDK, a inferência de schema próprio estoura (TS2589). O
+ * schema zod continua validando a request em runtime.
+ */
+type RequestHandlerHost = {
+  setRequestHandler(
+    schema: unknown,
+    handler: (req: { params: { uri: string } }) => unknown,
+  ): void;
+};
+
+/**
+ * Registra skills/list e skills/get num Server. Um lugar só pros dois
+ * transportes (stdio e remoto), igual ao listSkillResources.
+ */
+export function registerSkillsExtension(server: object): void {
+  const s = server as RequestHandlerHost;
+  s.setRequestHandler(ListSkillsRequestSchema, async () => listSkillsExtension());
+  s.setRequestHandler(GetSkillRequestSchema, async (req) => {
+    const found = getSkillExtension(req.params.uri);
+    if (!found) {
+      throw new McpError(ErrorCode.InvalidParams, `Skill desconhecida: ${req.params.uri}`);
+    }
+    return found;
+  });
 }

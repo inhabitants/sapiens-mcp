@@ -463,6 +463,76 @@ test("skills: resources/list + resources/read servem o SKILL.md", async () => {
   }
 });
 
+// Extensão Skills over MCP (io.modelcontextprotocol/skills): o Claude Code lê
+// o skills/list, confere digest e tamanho contra o resources/read e só então
+// carrega a skill como /sapiens:<slug>. Qualquer divergência e ela não aparece.
+test("skills: extensão Skills over MCP (capability, skills/list, skills/get)", async () => {
+  const srv = startServer();
+  try {
+    const init = await srv.request(1, "initialize", {
+      protocolVersion: "2025-11-25",
+      capabilities: {},
+      clientInfo: { name: "contract-test", version: "0" },
+    });
+    srv.notify("notifications/initialized", {});
+    assert.deepEqual(
+      init.result?.capabilities?.extensions?.["io.modelcontextprotocol/skills"],
+      {},
+      "capability da extensão no initialize",
+    );
+    assert.ok(init.result?.capabilities?.resources, "a extensão exige resources");
+
+    const list = await srv.request(2, "skills/list", {});
+    const skills = list.result?.skills;
+    assert.equal(list.result?.resultType, "complete");
+    assert.equal(typeof list.result?.ttlMs, "number");
+    assert.deepEqual(
+      skills.map((s) => s.frontmatter.name).sort(),
+      EXPECTED_SKILLS,
+      "skills/list cobre o mesmo conjunto do resources/list",
+    );
+
+    const { createHash } = await import("node:crypto");
+    let id = 10;
+    for (const s of skills) {
+      // Último segmento do caminho = name do frontmatter (regra do spec).
+      assert.equal(s.uri, `skill://sapiens/${s.frontmatter.name}/SKILL.md`);
+      assert.ok(s.frontmatter.description?.length > 0);
+      assert.equal(s.resources.length, 1, "um arquivo por skill");
+      assert.equal(s.resources[0].uri, s.uri, "o próprio SKILL.md está nos resources");
+
+      const read = await srv.request(id++, "resources/read", { uri: s.uri });
+      const text = read.result.contents[0].text;
+      const bytes = Buffer.from(text, "utf8");
+      assert.equal(s.resources[0].size, bytes.length, `size de ${s.frontmatter.name}`);
+      assert.equal(
+        s.resources[0].digest,
+        `sha256:${createHash("sha256").update(bytes).digest("hex")}`,
+        `digest de ${s.frontmatter.name}`,
+      );
+      // O frontmatter da lista é o do arquivo, campo a campo.
+      assert.ok(text.startsWith(`---\nname: ${s.frontmatter.name}\n`));
+      assert.ok(
+        text.includes(`description: ${JSON.stringify(s.frontmatter.description)}\n`),
+        `description de ${s.frontmatter.name} igual à do arquivo`,
+      );
+      assert.ok(text.includes(`  source: ${s.frontmatter.metadata.source}\n`));
+    }
+
+    const got = await srv.request(100, "skills/get", { uri: "skill://sapiens/musica/SKILL.md" });
+    assert.equal(got.result?.skill?.frontmatter?.name, "musica");
+    assert.deepEqual(got.result.skill, skills.find((s) => s.frontmatter.name === "musica"));
+
+    // skills/get só aceita a URI do SKILL.md; o resto é -32602.
+    for (const uri of ["skill://sapiens/nao-existe/SKILL.md", "skill://sapiens/musica"]) {
+      const bad = await srv.request(id++, "skills/get", { uri });
+      assert.equal(bad.error?.code, -32602, `skills/get ${uri} vira InvalidParams`);
+    }
+  } finally {
+    srv.child.kill();
+  }
+});
+
 test("skills: tool sapiens_skill lista e entrega o mesmo conteúdo", async () => {
   const srv = startServer();
   try {

@@ -22,7 +22,12 @@ import {
   CARROSSEL_INSTRUCTIONS,
   CARROSSEL_SERVER_NAME,
 } from "./carrosselConnector.js";
-import { listSkillResources, readSkillResource } from "./skills.js";
+import {
+  listSkillResources,
+  readSkillResource,
+  registerSkillsExtension,
+  SKILLS_EXTENSION_CAPABILITY,
+} from "./skills.js";
 import {
   convexMutation,
   convexQuery,
@@ -112,6 +117,7 @@ const ANONYMOUS_METHODS = new Set([
   "tools/list",
   "prompts/list",
   "resources/list",
+  "skills/list",
 ]);
 
 /** POST sem Authorization cujas mensagens JSON-RPC são todas de descoberta. */
@@ -343,6 +349,9 @@ function initServer(mcp: McpServer): void {
     return found;
   });
 
+  // Extensão Skills over MCP, em paridade com o stdio (ver index.ts).
+  registerSkillsExtension(s);
+
   s.setRequestHandler(GetPromptRequestSchema, async (req) =>
     getPrompt(
       req.params.name,
@@ -479,7 +488,13 @@ export function createSapiensRemoteHandler(
         }
       : {
           serverInfo: { name: "mcp-sapiens", version: MCP_VERSION },
-          capabilities: { tools: {}, prompts: {}, resources: {} },
+          capabilities: {
+            tools: {},
+            prompts: {},
+            resources: {},
+            // O SDK v1 não tipa `extensions`, mas devolve o objeto cru no initialize.
+            ...({ extensions: SKILLS_EXTENSION_CAPABILITY } as object),
+          },
           instructions: SAPIENS_INSTRUCTIONS,
         },
     {
