@@ -4,6 +4,8 @@
 
 **On the official [MCP registry](https://registry.modelcontextprotocol.io) as `com.sapiensinteticos/sapiens`.**
 
+[![inhabitants/sapiens-mcp MCP server](https://glama.ai/mcp/servers/inhabitants/sapiens-mcp/badges/score.svg)](https://glama.ai/mcp/servers/inhabitants/sapiens-mcp)
+
 <p align="center">
   <a href="https://sapiensinteticos.b-cdn.net/videos/films/abre-alas/sapiens-mcp-intro-en-e17d0673.mp4"><img src="https://sapiensinteticos.b-cdn.net/videos/films/abre-alas/sapiens-mcp-intro-en-db494de3.jpg" width="720" alt="sapiens-mcp in 15 seconds: you talk, your AI does it"></a><br>
   <a href="https://sapiensinteticos.b-cdn.net/videos/films/abre-alas/sapiens-mcp-intro-en-e17d0673.mp4"><b>Watch it in 15 seconds, sound on</b></a> · <a href="https://sapiensinteticos.b-cdn.net/videos/films/abre-alas/sapiens-mcp-intro-9x16-en-2e67ed46.mp4">vertical cut</a> · <a href="https://sapiensinteticos.b-cdn.net/videos/films/abre-alas/sapiens-mcp-intro-pt-3e96346c.mp4">em português</a>
